@@ -1,0 +1,8 @@
+{
+  "files.associations": { "*.dc.html": "html" },
+  "files.exclude": { "**/__pycache__": true, "tools/lib": true },
+  "search.exclude": { "site/support.js": true, "tools/lib": true, "*.zip": true },
+  "editor.wordWrap": "on",
+  "files.encoding": "utf8",
+  "files.eol": "\n"
+}

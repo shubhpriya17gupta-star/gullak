@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "registry_last_verified": "2026-11-04",
+  "verification_policy": "Changes to any entry with status 'primary_verified' require human review and approval before production content or rules are updated. Automated checks may only open review issues.",
+  "status_values": {
+    "primary_verified": "Primary text read and checked",
+    "listing_only": "Official listing/metadata confirmed; operative text not yet read",
+    "official_secondary": "Cited in an official document; primary text not read",
+    "secondary_only": "Secondary sources only; must not be relied on",
+    "unverified": "No accessible source"
+  },
+  "sources": [
+    {
+      "id": "sebi-ia-regs-2013",
+      "title": "SEBI (Investment Advisers) Regulations, 2013 (consolidated, amended up to 25 Nov 2025)",
+      "issuer": "SEBI",
+      "type": "regulation",
+      "page_url": "https://www.sebi.gov.in/legal/regulations/nov-2025/securities-and-exchange-board-of-india-investment-advisers-regulations-2013-and-securities-last-amended-on-november-25-2025-_98246.html",
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/aug-2026/1785912187595.pdf",
+      "issued": "2013-01-21",
+      "last_amended": "2025-11-25",
+      "amendment_marker": "Last amended on November 25, 2025",
+      "content_sha256": "b8abeb57380fb43c1aede7b890c9a17a805ac02912ad13f0d4b7aba650e7139d",
+      "status": "primary_verified",
+      "clauses_relied_on": [
+        "2(1)(g)",
+        "2(1)(h)",
+        "2(1)(l) and provisos",
+        "2(1)(m)",
+        "3(1)",
+        "4(a)",
+        "15(14)",
+        "16",
+        "17"
+      ],
+      "affects": [
+        "research.regulatory-analysis",
+        "methodology.risk",
+        "module-2",
+        "module-5",
+        "ai-layer"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation",
+      "note": "As of 2026-11-02 SEBI listing still shows last amended 2025-11-25; no 2026 IA amendment found. Watch for accredited-investor follow-on amendment (secondary report only)."
+    },
+    {
+      "id": "sebi-cir-2025-11-association",
+      "title": "Details/clarifications on provisions related to association of persons regulated by the Board, MIIs, and their agents with persons engaged in prohibited activities",
+      "issuer": "SEBI",
+      "type": "circular",
+      "reference": "SEBI/HO/MIRSD/MIRSD-PoD-1/P/CIR/2025/11",
+      "page_url": "https://www.sebi.gov.in/legal/circulars/jan-2025/details-clarifications-on-provisions-related-to-association-of-persons-regulated-by-the-board-miis-and-their-agents-with-persons-engaged-in-prohibited-activities_91356.html",
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/jul-2026/1784884437684.pdf",
+      "issued": "2025-01-29",
+      "last_amended": "2026-05-08",
+      "amendment_marker": "Updated on May 8, 2026",
+      "content_sha256": "664839516b0e7edd6f90e9449b635f2c973f17097208ddda62b3c2d4c9f0de32",
+      "status": "primary_verified",
+      "affects": [
+        "module-4",
+        "research.data-sources",
+        "business-model"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "sebi-cir-2026-price-data-education",
+      "title": "Norms for sharing and usage of price data for educational purposes",
+      "issuer": "SEBI",
+      "type": "circular",
+      "reference": "HO/47/17/12(11)2025-MRD-POD3/I/11107/2026",
+      "page_url": "https://www.sebi.gov.in/legal/circulars/may-2026/norms-for-sharing-and-usage-of-price-data-for-educational-purposes_101293.html",
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/may-2026/1778242522289.pdf",
+      "issued": "2026-05-08",
+      "effective": "2026-07-01",
+      "content_sha256": "1bcc99b2b316f1506c20c9527f0eb2b5dca13db39c32fc328d58b70358aa653d",
+      "status": "primary_verified",
+      "supersedes_note": "Replaces the three-month usage lag in FAQ 8 of CIR/2025/11 with a 30-day lag",
+      "affects": [
+        "module-4"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "sebi-ia-master-circular",
+      "title": "Master Circular for Investment Advisers (6 Feb 2026)",
+      "issuer": "SEBI",
+      "type": "master_circular",
+      "page_url": "https://www.sebi.gov.in/legal/master-circulars/feb-2026/master-circular-for-investment-advisers_99569.html",
+      "status": "primary_verified",
+      "affects": [
+        "research.regulatory-analysis"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation",
+      "reference": "HO/38/12/11(2)2026-MIRSD-POD/I/4300/2026",
+      "issued": "2026-02-06",
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/feb-2026/1770375291405.pdf",
+      "content_sha256": "ab1d6f24e184cc2766052b9c3a0fc28ee237b9c2e02fae8d5129f5dd1970cdce",
+      "supersedes": "Master Circular of 2025-06-27 (SEBI/HO/MIRSD/MIRSD-PoD/P/CIR/2025/94)",
+      "clauses_relied_on": [
+        "para (xi) scope of investment advice",
+        "para (xii) AI tools"
+      ]
+    },
+    {
+      "id": "sebi-ra-regs-2014",
+      "title": "SEBI (Research Analysts) Regulations, 2014",
+      "issuer": "SEBI",
+      "type": "regulation",
+      "page_url": "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=3",
+      "last_amended": "2026-10-10",
+      "status": "primary_verified",
+      "affects": [
+        "research.regulatory-analysis"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": null,
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/oct-2026/1792127227860.pdf",
+      "next_effective": "2026-11-09",
+      "content_sha256": "6742f804494b7304adb860fa1c27d050e54c260efa2da37fb972d41e9de64bbf",
+      "note": "Amendment SEBI/LAD-NRO/GN/2026/321 effective 2026-11-09; text of the change not yet analysed"
+    },
+    {
+      "id": "sebi-investor-calculators",
+      "title": "SEBI Investor Website - Financial calculators and disclaimer",
+      "issuer": "SEBI",
+      "type": "investor_education",
+      "page_url": "https://investor.sebi.gov.in/calculators/index.html",
+      "status": "primary_verified",
+      "affects": [
+        "disclaimers",
+        "module-3"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "sebi-money-matters",
+      "title": "SEBI Investor Website - Money matters (income and expenses)",
+      "issuer": "SEBI",
+      "type": "investor_education",
+      "page_url": "https://investor.sebi.gov.in/moneymatters-inc-exp.html",
+      "status": "primary_verified",
+      "note": "Recommends an emergency fund; gives no number of months",
+      "affects": [
+        "module-1"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "nse-indices-terms",
+      "title": "NSE Indices Ltd - Website Terms of Use",
+      "issuer": "NSE Indices Limited",
+      "type": "data_terms",
+      "page_url": "https://www.niftyindices.com/terms-of-use",
+      "status": "primary_verified",
+      "note": "No reproduction/redistribution without prior written permission; no automated data collection without written consent. Page includes a live ticker, so monitor by hashing the extracted terms text, not the raw HTML.",
+      "affects": [
+        "module-4",
+        "methodology.scenarios"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "moneycontrol-terms",
+      "title": "Moneycontrol - Terms of Use",
+      "issuer": "Network18 / Moneycontrol",
+      "type": "data_terms",
+      "page_url": "https://www.moneycontrol.com/terms-use/",
+      "status": "unverified",
+      "note": "Returned 403 / edge error to automated and in-app browser access on 2026-11-02. Owner to review manually.",
+      "affects": [
+        "module-4"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": null
+    },
+    {
+      "id": "goi-inflation-target-2026-31",
+      "title": "Inflation target notification under RBI Act s.45ZA, 1 Apr 2026 - 31 Mar 2031 (S.O.1580(E))",
+      "issuer": "Ministry of Finance (DEA), Government of India",
+      "type": "gazette_notification",
+      "issued": "2026-03-25",
+      "values": {
+        "target_pct": 4,
+        "lower_pct": 2,
+        "upper_pct": 6
+      },
+      "citing_document_url": "https://rbidocs.rbi.org.in/rdocs/Speeches/PDFs/ITNCAER05052026D577FDFF9E9D4BA7913E41BAD5F00A93.PDF",
+      "status": "official_secondary",
+      "affects": [
+        "module-3",
+        "methodology.inflation-reference"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": null
+    },
+    {
+      "id": "dpdp-rules-2025",
+      "title": "Digital Personal Data Protection Rules, 2025",
+      "issuer": "MeitY, Government of India",
+      "type": "rules",
+      "issued": "2025-11-13",
+      "status": "secondary_only",
+      "affects": [
+        "privacy"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": null
+    },
+    {
+      "id": "sebi-intermediaries-regs-2008",
+      "title": "SEBI (Intermediaries) Regulations, 2008 (amended up to 10 Oct 2026)",
+      "issuer": "SEBI",
+      "type": "regulation",
+      "page_url": "https://www.sebi.gov.in/legal/regulations/oct-2026/securities-and-exchange-board-of-india-intermediaries-regulations-2008-last-amended-on-october-10-2026-_105373.html",
+      "document_url": "https://www.sebi.gov.in/sebi_data/attachdocs/oct-2026/1792753250139.pdf",
+      "last_amended": "2026-10-10",
+      "amendments_2026": [
+        "2026-04-16 SEBI/LAD-NRO/GN/2026/300",
+        "2026-10-10 SEBI/LAD-NRO/GN/2026/323"
+      ],
+      "content_sha256": "276c39033b61b3162661e0173b6b777841b5e21adfe212f22d7e9de7f3aa37b9",
+      "status": "primary_verified",
+      "clauses_relied_on": [
+        "16A (+specified digital platform proviso, Expl. 4 investor education)",
+        "16C AI",
+        "Ch. IIIC 16D-16F past risk/return",
+        "Ch. IIID 16G-16N advertisement code (effective 2027-04-08)"
+      ],
+      "affects": [
+        "module-4",
+        "ui-rules",
+        "business-model",
+        "ai-layer"
+      ],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "sebi-cir-2026-jagrook",
+      "title": "Display of investor awareness messages by stock brokers (Project Jagrook)",
+      "issuer": "SEBI",
+      "type": "circular",
+      "reference": "HO/38/24/(15)2026-MIRSD-PODMMC/I/22872/2026",
+      "issued": "2026-10-01",
+      "content_sha256": "32fb02a8ba1e640c9b6cf74f85f3a7fc049163c73b8ab03e2aa9f75b98dbb2cd",
+      "status": "primary_verified",
+      "note": "Broker-only; context",
+      "affects": [],
+      "last_verified_at": "2026-11-02",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "feed-sebi-rss",
+      "title": "SEBI RSS feed",
+      "issuer": "SEBI",
+      "type": "feed",
+      "page_url": "https://www.sebi.gov.in/sebirss.xml",
+      "status": "primary_verified",
+      "note": "Published by SEBI for syndication (see sebi.gov.in/rss.html); roughly the latest ~100 items",
+      "last_verified_at": "2026-11-02"
+    },
+    {
+      "id": "feed-nse-circulars",
+      "title": "NSE Circulars RSS",
+      "issuer": "NSE",
+      "type": "feed",
+      "page_url": "https://nsearchives.nseindia.com/content/RSS/Circulars.xml",
+      "status": "primary_verified",
+      "note": "Linked from NSE's RSS page; NSE website terms prohibit systematic automated collection from the website, so use only the published feed, once daily, and confirm with NSE in writing",
+      "last_verified_at": "2026-11-02"
+    },
+    {
+      "id": "feed-bse-notices",
+      "title": "BSE Notices RSS",
+      "issuer": "BSE",
+      "type": "feed",
+      "page_url": "https://www.bseindia.com/data/xml/notices.xml",
+      "status": "primary_verified",
+      "note": "Terms of use not yet read; confirm before production use",
+      "last_verified_at": "2026-11-02"
+    },
+    {
+      "id": "nse-website-terms",
+      "title": "NSE website Terms of Use",
+      "issuer": "NSE",
+      "type": "data_terms",
+      "page_url": "https://www.nseindia.com/static/nse-terms-of-use",
+      "status": "primary_verified",
+      "note": "Prohibits systematic/automated data collection and reproduction/redistribution without prior written permission",
+      "last_verified_at": "2026-11-02",
+      "affects": [
+        "module-4"
+      ]
+    },
+    {
+      "id": "cbdt-faq-capital-gains-2024",
+      "title": "CBDT FAQs on the new capital gains regime (Budget 2024-25)",
+      "issuer": "Government of India (PIB / CBDT)",
+      "type": "faq",
+      "page_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2036604&reg=48&lang=2",
+      "status": "primary_verified",
+      "note": "20% (s.111A) and 12.5% (s.112A) on listed equity; 1-year holding period; 1.25 lakh LTCG exemption (not applied in trade-cost calculator)",
+      "affects": [
+        "trade-cost-calculator"
+      ],
+      "last_verified_at": "2026-11-04",
+      "verified_by": "Claude (draft) - pending human confirmation"
+    },
+    {
+      "id": "itd-tax-rates-cess",
+      "title": "Income Tax Department: tax rates, surcharge and cess",
+      "issuer": "Income Tax Department",
+      "type": "tax_rates",
+      "page_url": "https://www.incometaxindia.gov.in/w/tax-rates%E2%80%8B",
+      "status": "official_secondary",
+      "note": "Cess 4% on tax plus surcharge (seen in search results of the official page; direct fetch blocked)",
+      "affects": [
+        "trade-cost-calculator"
+      ],
+      "last_verified_at": "2026-11-04",
+      "verified_by": null
+    },
+    {
+      "id": "income-tax-act-2025",
+      "title": "Income-tax Act, 2025 as amended by Finance Act 2026 (ss.196, 198)",
+      "issuer": "Government of India",
+      "type": "act",
+      "page_url": "https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf",
+      "status": "official_secondary",
+      "note": "Direct access returned HTTP 403. Rates seen only via search snippets. CA review required.",
+      "affects": [
+        "trade-cost-calculator"
+      ],
+      "last_verified_at": "2026-11-04",
+      "verified_by": null
+    },
+    {
+      "id": "gst-broking-18",
+      "title": "GST at 18% on stock broking services",
+      "issuer": "CBIC",
+      "type": "tax_rate",
+      "status": "secondary_only",
+      "note": "Supplied by product owner; secondary sources agree; no CBIC notification retrieved",
+      "affects": [
+        "trade-cost-calculator"
+      ],
+      "last_verified_at": "2026-11-04",
+      "verified_by": null
+    }
+  ]
+}

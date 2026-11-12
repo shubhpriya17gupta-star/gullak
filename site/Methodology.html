@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#111316">
+<style>html,body{background:#111316}@view-transition{navigation:auto}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gullak · How the maths works</title>
+<meta name="description" content="Every formula Gullak uses, in plain words, with a worked example. Fixed, checkable maths on the numbers you enter. Not investment advice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&amp;family=Geist:wght@400;500;600;700&amp;family=Geist+Mono:wght@400;500&amp;display=swap">
+<style>
+:root{--ink:#111316;--ink2:#191B1F;--ivory:#F4F1EA;--paper:#FBF9F4;--gold:#D2B47C;--goldD:#8A6A2B;--muted:#55585E;--mutedD:#B0B3B8;--line:rgba(17,19,22,.12);--lineD:rgba(244,241,234,.12);--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+.serif{font-family:'Source Serif 4',Georgia,serif;font-weight:400}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.eyebrow{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.wrap{max-width:1180px;margin:0 auto;padding-left:clamp(16px,4vw,56px);padding-right:clamp(16px,4vw,56px)}
+
+/* nav (same look as the home page) */
+.nav{position:sticky;top:0;z-index:50;background:rgba(17,19,22,.94);border-bottom:1px solid var(--lineD);color:var(--ivory)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:68px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.nav-links{display:flex;flex-wrap:wrap;gap:4px 28px;font-size:14.5px}
+.nl{position:relative;color:#D2D4D8;padding:8px 0}
+.nl[aria-current="page"]{color:#fff}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nl:hover{color:#fff}.nl:hover::after,.nl[aria-current="page"]::after{transform:scaleX(1);transform-origin:left}
+.menu-btn{display:none;align-items:center;gap:10px;background:transparent;border:1px solid rgba(244,241,234,.28);color:var(--ivory);border-radius:999px;min-height:42px;padding:0 16px;font:inherit;font-size:14px;cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;font-weight:500;font-size:15.5px;transition:background-color .25s ease,color .25s ease}
+.btn-gold{background:var(--gold);color:var(--ink)}.btn-gold:hover{background:#E2C894}
+@media (max-width:900px){
+  .nav-in{flex-wrap:nowrap;min-height:60px}
+  .nav-in{justify-content:flex-start}
+  .menu-btn{display:inline-flex;order:-1}
+  .nav-cta{display:none}
+  .nav-links{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;gap:0;background:rgba(17,19,22,.97);border-bottom:1px solid var(--lineD);padding:8px clamp(16px,4vw,56px) 18px}
+  .nav-links.open{display:flex}
+  .nav-links .nl{padding:14px 0;font-size:17px;border-bottom:1px solid var(--lineD)}
+}
+
+/* hero */
+.hero{background:var(--ink);color:var(--ivory);padding:clamp(48px,7vw,96px) 0 clamp(40px,5vw,64px)}
+.hero h1{margin:14px 0 0;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(36px,5vw,64px);line-height:1.04;letter-spacing:-0.02em;max-width:18ch}
+.hero h1 em{color:var(--gold);font-weight:400}
+.hero p.lead{margin:20px 0 0;max-width:62ch;font-size:17px;line-height:1.65;color:var(--mutedD)}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.jump a{padding:8px 14px;border:1px solid var(--lineD);border-radius:999px;font-size:14px;color:#D2D4D8;transition:border-color .2s,color .2s}
+.jump a:hover{border-color:var(--gold);color:#fff}
+.jump a:focus-visible,.nl:focus-visible,.btn:focus-visible,.menu-btn:focus-visible,.back:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* body */
+main{padding:clamp(40px,6vw,80px) 0}
+.sample{margin:0 0 clamp(36px,5vw,56px);padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-size:14.5px;line-height:1.6;color:var(--muted)}
+.sample>span{margin-right:12px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldD)}
+.grp{margin:0 0 clamp(40px,5vw,64px)}
+.grp>h2{margin:0;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(26px,3vw,36px);letter-spacing:-0.015em;line-height:1.1}
+.grp>p{margin:8px 0 0;max-width:62ch;font-size:15.5px;line-height:1.6;color:var(--muted)}
+.cards{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{display:flex;flex-direction:column;padding:22px;border-radius:16px;background:var(--paper);border:1px solid var(--line);min-width:0}
+.card:target{border-color:var(--goldD);box-shadow:0 0 0 3px rgba(210,180,124,.35)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fid{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;color:#111316;background:var(--gold);border-radius:6px;padding:3px 8px}
+.where{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:right}
+.card h3{margin:16px 0 0;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:22px;line-height:1.2}
+.eq{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--ink);border-left:2px solid var(--gold);font-family:'Geist Mono',monospace;font-size:13.5px;line-height:1.6;color:#F4F1EA;overflow-wrap:anywhere}
+.plain{margin:12px 0 0;font-size:15px;line-height:1.6;color:#34363B;flex:1 1 auto}
+.ex{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+.exl{display:block;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldD)}
+.exv{margin-top:6px;font-size:14.5px;line-height:1.55;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.card.wide{grid-column:1/-1}
+.card .go{margin-top:14px;font-size:14.5px;font-weight:500;color:var(--goldD);border-bottom:1px solid currentColor;align-self:flex-start}
+.card .go:hover{color:var(--ink)}
+.notes{margin-top:8px;padding:clamp(20px,3vw,32px);border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+.notes h2{margin:0 0 12px;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:24px}
+.notes ul{margin:0;padding-left:20px;font-size:15px;line-height:1.7;color:#34363B}
+.notes li+li{margin-top:6px}
+.cta{margin-top:clamp(32px,4vw,48px);display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:clamp(20px,3vw,32px);border-radius:16px;background:var(--ink);color:var(--ivory)}
+.cta p{margin:0;max-width:52ch;font-size:16px;line-height:1.6;color:var(--mutedD)}
+.back{display:inline-block;margin-bottom:22px;font-size:14.5px;color:var(--mutedD);border-bottom:1px solid transparent}
+.back:hover{color:#fff;border-bottom-color:var(--gold)}
+@media (max-width:760px){.cards{grid-template-columns:minmax(0,1fr)}}
+
+.foot{background:#0B0C0E;color:#B0B3B8;font-size:13px;line-height:1.6;padding:28px 0 36px}
+.foot a{color:#D2D4D8;border-bottom:1px solid rgba(210,180,124,.5)}
+.foot a:hover{color:#fff}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="Main.dc.html" aria-label="Gullak home" style="display:flex;align-items:center;gap:12px">
+      <svg width="40" height="40" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>
+      <span class="serif" style="font-size:24px;letter-spacing:-0.01em">Gullak</span>
+    </a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="main-nav"><span>Menu</span></button>
+    <nav id="main-nav" aria-label="Main" class="nav-links">
+      <a class="nl" href="Workspace.dc.html">Planner</a>
+      <a class="nl" href="Recovery.dc.html">Break-even</a>
+      <a class="nl" href="TradeCost.dc.html">Charges</a>
+      <a class="nl" href="Candlesticks.dc.html">Candlesticks</a>
+      <a class="nl" href="Practice.dc.html">Practice desk</a>
+      <a class="nl" href="Methodology.html" aria-current="page">Methodology</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <a class="back" href="Main.dc.html">← Back to home</a>
+    <p class="eyebrow" style="margin:0;color:var(--gold)">Methodology</p>
+    <h1>Simple maths you can <em>check.</em></h1>
+    <p class="lead">Every figure in Gullak comes from one of the formulas below, applied only to the numbers you enter. There are no hidden inputs, no predictions, and no stock or fund recommendations. Inside the Planner, each result also has a “How was this calculated?” panel that shows the same working with your own numbers, so you never need to come here to get an answer.</p>
+    <nav class="jump" aria-label="Jump to a topic">
+      <a href="#budget">Your budget</a>
+      <a href="#growth">Growth</a>
+      <a href="#falls">Falls and recovery</a>
+      <a href="#costs">Trade costs</a>
+      <a href="#returns">Returns</a>
+      <a href="#limits">What is not included</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <div class="wrap">
+    <p class="sample"><span>Sample used</span>Income ₹80,000 · essentials ₹45,000 · EMIs ₹15,000 · emergency savings ₹2,40,000 · ₹1,00,000 for 10 years at an assumed 10% · inflation 4%. The IDs (F1, F4 …) match the ones in the Planner’s “How was this calculated?” panels.</p>
+
+    <section class="grp" id="budget" aria-labelledby="budget-h">
+      <h2 id="budget-h">Your budget</h2>
+      <p>Two plain descriptions of your monthly position. Neither is a target.</p>
+      <div class="cards">
+        <article class="card" id="f1">
+          <div class="card-top"><span class="fid">F1</span><span class="where">Planner · budget</span></div>
+          <h3>Monthly surplus</h3>
+          <div class="eq">surplus = income − essentials − EMIs</div>
+          <p class="plain">What is left each month after essential spending and loan repayments. A negative result is shown as a deficit, with no further judgement.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">₹80,000 − ₹45,000 − ₹15,000 = ₹20,000 a month</div></div>
+        </article>
+        <article class="card" id="f2">
+          <div class="card-top"><span class="fid">F2</span><span class="where">Planner · budget</span></div>
+          <h3>Emergency cover</h3>
+          <div class="eq">cover = emergency savings ÷ (essentials + EMIs)</div>
+          <p class="plain">How many months your emergency savings would pay for essentials and EMIs. A description, not a target. If you enter no essentials or EMIs, it shows “n/a”.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">₹2,40,000 ÷ ₹60,000 = 4.00 months</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grp" id="growth" aria-labelledby="growth-h">
+      <h2 id="growth-h">Growth</h2>
+      <p>The rates are always your own assumptions, applied once a year. They are illustrations, not forecasts.</p>
+      <div class="cards">
+        <article class="card" id="f4">
+          <div class="card-top"><span class="fid">F4</span><span class="where">Planner · results</span></div>
+          <h3>Future value</h3>
+          <div class="eq">value = amount × (1 + rate) ^ years</div>
+          <p class="plain">One amount growing at an assumed yearly rate, with each year’s gain left invested. The year-by-year table (F5) applies the same formula to each year, and its last row equals this value. If you enter the horizon in months or days, the whole years compound as above and the leftover part of a year earns the rate as simple interest, e.g. 18 months = 1 whole year, then 6/12 of a year (a year is taken as 365 days).</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">₹1,00,000 × 1.10 ^ 10 = ₹2,59,374<br>18 months: ₹1,00,000 × 1.10 × (1 + 0.10 × 6/12) = ₹1,15,500</div></div>
+        </article>
+        <article class="card" id="f6">
+          <div class="card-top"><span class="fid">F6</span><span class="where">Planner · results</span></div>
+          <h3>Gain, and growth on growth</h3>
+          <div class="eq">gain = value − amount<br>simple = amount × (1 + rate × years)<br>growth on growth = value − simple</div>
+          <p class="plain">The part of the gain that comes from earning returns on earlier returns, compared with the same rate added as simple interest.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">Gain ₹2,59,374 − ₹1,00,000 = ₹1,59,374<br>Simple ₹1,00,000 × (1 + 0.10 × 10) = ₹2,00,000<br>Growth on growth ₹2,59,374 − ₹2,00,000 = ₹59,374</div></div>
+        </article>
+        <article class="card" id="f7">
+          <div class="card-top"><span class="fid">F7</span><span class="where">Consistency check</span></div>
+          <h3>Compound annual growth rate</h3>
+          <div class="eq">CAGR = (end value ÷ start value) ^ (1 ÷ years) − 1</div>
+          <p class="plain">The single steady yearly rate that links a start and an end value. It is used to confirm that a projection really grows at the rate you assumed.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">(₹2,59,374 ÷ ₹1,00,000) ^ (1 ÷ 10) − 1 = 10.00% a year</div></div>
+        </article>
+        <article class="card" id="f8">
+          <div class="card-top"><span class="fid">F8</span><span class="where">Planner · results</span></div>
+          <h3>Real rate and real value</h3>
+          <div class="eq">real rate = (1 + rate) ÷ (1 + inflation) − 1<br>real value = value ÷ (1 + inflation) ^ years</div>
+          <p class="plain">Growth after rising prices are taken out, so you see what the money would buy, not just its rupee value. The exact form is used, not the shortcut “rate − inflation”.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">1.10 ÷ 1.04 − 1 = 5.77% a year<br>₹2,59,374 ÷ 1.04 ^ 10 = ₹1,75,224 in today’s money</div></div>
+        </article>
+        <article class="card" id="f9">
+          <div class="card-top"><span class="fid">F9</span><span class="where">Planner · risk</span></div>
+          <h3>Return a goal would need</h3>
+          <div class="eq">required rate = (goal ÷ amount) ^ (1 ÷ years) − 1</div>
+          <p class="plain">The steady yearly rate needed to reach a goal you set. It is the reverse of F4 and feeds the risk-requirement score. It does not say any investment can deliver that rate.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">Goal ₹2,00,000 from ₹1,00,000 in 10 years: (2) ^ (1 ÷ 10) − 1 = 7.18% a year</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grp" id="falls" aria-labelledby="falls-h">
+      <h2 id="falls-h">Falls and recovery</h2>
+      <p>What a fall does to a value, and what it takes to get back. The falls are hypothetical sizes you choose, not past events.</p>
+      <div class="cards">
+        <article class="card" id="f10">
+          <div class="card-top"><span class="fid">F10</span><span class="where">Planner · results</span></div>
+          <h3>Hypothetical fall</h3>
+          <div class="eq">after fall = value × (1 − fall)</div>
+          <p class="plain">What a value would be straight after a fall of the size you choose. Shown for today’s amount and for the end of the horizon.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">₹2,59,374 × (1 − 25%) = ₹1,94,531</div></div>
+        </article>
+        <article class="card" id="f11">
+          <div class="card-top"><span class="fid">F11</span><span class="where">Break-even calculator</span></div>
+          <h3>Gain needed to recover</h3>
+          <div class="eq">gain needed = fall ÷ (100% − fall)</div>
+          <p class="plain">A fall is measured on the bigger starting amount, but the recovery is measured on the smaller amount left, so the gain needed is always larger than the fall.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">25% ÷ (100% − 25%) = 33.33%</div></div>
+          <a class="go" href="Recovery.dc.html">Open the break-even calculator</a>
+        </article>
+        <article class="card wide" id="f12">
+          <div class="card-top"><span class="fid">F12</span><span class="where">Break-even calculator</span></div>
+          <h3>Years to recover at an assumed rate</h3>
+          <div class="eq">smallest whole k where (1 + rate) ^ k ≥ start ÷ now</div>
+          <p class="plain">Assumes returns resume at a steady rate after the fall. It is arithmetic only, not a statement about how markets behave, and recovery is never promised. If the rate is 0% or less, it never recovers at that rate.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">After a 25% fall, start ÷ now = 1.3333. At 10%: 1.10 ^ 3 = 1.331 (just short), 1.10 ^ 4 = 1.464 (enough) → 4 years (about 3.02 on a decimal estimate)</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grp" id="costs" aria-labelledby="costs-h">
+      <h2 id="costs-h">Trade costs</h2>
+      <p>One buy and one sell of listed shares held as delivery on NSE, worked the way a contract note shows it.</p>
+      <div class="cards">
+        <article class="card wide" id="f13">
+          <div class="card-top"><span class="fid">F13</span><span class="where">Charges calculator</span></div>
+          <h3>Cost of one stock trade</h3>
+          <div class="eq">you pay = buy value + buy-side charges<br>you receive = sell value − sell-side charges<br>you keep = (you receive − you pay) − tax − cess</div>
+          <p class="plain">Charges include brokerage, exchange charges, the SEBI fee, GST, STT and stamp duty, each with its own rate. Tax applies only if the taxable gain is above zero. The rates are labelled with the date they were checked, and the full list is on the Charges page.</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">Enter your own buy and sell prices on the Charges page to see every line, to the paisa.</div></div>
+          <a class="go" href="TradeCost.dc.html">Open the charges calculator</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="grp" id="returns" aria-labelledby="returns-h">
+      <h2 id="returns-h">Returns</h2>
+      <div class="cards">
+        <article class="card wide" id="f14">
+          <div class="card-top"><span class="fid">F14</span><span class="where">Planner · results</span></div>
+          <h3>Investment return</h3>
+          <div class="eq">return = [(current value − investment) ÷ investment] × 100</div>
+          <p class="plain">The gain or loss as a share of what was invested, over the whole period. It is not a yearly rate. For a yearly rate over several years, use the compound annual growth rate (F7).</p>
+          <div class="ex"><span class="exl">Worked example</span><div class="exv">(₹2,59,374 − ₹1,00,000) ÷ ₹1,00,000 × 100 = 159.37%</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="notes" id="limits" aria-labelledby="limits-h">
+      <h2 id="limits-h">How the numbers are handled, and what is not included</h2>
+      <ul>
+        <li>Money is calculated exactly in whole paise and rounded (half-up) only for display.</li>
+        <li>Rates are your own assumptions, applied once a year. Gullak does not forecast returns.</li>
+        <li>Costs, charges and taxes are not included in the growth figures. The Charges calculator is the one place that covers them.</li>
+        <li>The Charges calculator does not include depository charges, BSE trades, intraday trades, surcharge, the annual long-term gains exemption, or loss set-off.</li>
+        <li>No prices, index history or ticker are shown, because exchange and index data need a licence we do not hold.</li>
+      </ul>
+    </section>
+
+    <div class="cta">
+      <p>Prefer to see it with your own numbers? The Planner shows the working beside each result.</p>
+      <a class="btn btn-gold" href="Workspace.dc.html">Start planning</a>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">Investments in securities markets are subject to market risks. This site provides education and illustrative calculations only. It does not provide investment advice or recommend any product. <a href="Main.dc.html#sources">Sources we rely on</a></div>
+</footer>
+
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script>
+(function(){
+  var b=document.getElementById('menu-btn'),n=document.getElementById('main-nav');
+  if(!b||!n)return;
+  b.addEventListener('click',function(){
+    var open=n.classList.toggle('open');
+    b.setAttribute('aria-expanded',open?'true':'false');
+    b.firstElementChild.textContent=open?'Close':'Menu';
+  });
+  n.addEventListener('click',function(e){ if(e.target.closest('a')){ n.classList.remove('open'); b.setAttribute('aria-expanded','false'); b.firstElementChild.textContent='Menu'; } });
+})();
+</script>
+</body>
+</html>

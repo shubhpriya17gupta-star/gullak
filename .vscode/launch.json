@@ -1,0 +1,28 @@
+{
+  // Press F5: starts the local server, then opens the site in a browser you can debug from VS Code.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Open Gullak in Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:5173/",
+      "webRoot": "${workspaceFolder}/site",
+      "preLaunchTask": "Gullak: start local server"
+    },
+    {
+      "name": "Open Gullak in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173/",
+      "webRoot": "${workspaceFolder}/site",
+      "preLaunchTask": "Gullak: start local server"
+    },
+    {
+      "name": "Debug the open test file",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}"
+    }
+  ]
+}

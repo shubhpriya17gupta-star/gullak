@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#111316">
+<style>html,body{background:#111316}@view-transition{navigation:auto}@media (max-width:640px){header.hd>div{flex-wrap:nowrap!important;padding:10px 16px!important;gap:16px!important}header.hd>div>a:first-child span{font-size:20px!important}header.hd nav{flex:1 1 auto;min-width:0;flex-wrap:nowrap!important;justify-content:flex-start;overflow-x:auto;white-space:nowrap;gap:0 18px!important;font-size:14.5px!important;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);padding:0 16px 0 6px}header.hd nav::-webkit-scrollbar{display:none}header.hd nav a{padding:10px 0}}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gullak break-even calculator</title>
+<link rel="stylesheet" href="./lattice-loader.css"><script src="./net-status.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="./arth-ui.js" defer></script>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./arth-valley.js" defer></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{--navy:#111316;--navy2:#24272C;--ink:#15171A;--muted:#5C5A55;--line:#E6E1D6;--bg:#F4F1EA;--green:#0A7A55;--greenBright:#17A673;--greenTint:#E7F5EF;--amber:#8A4B00;--amberTint:#FFF4DE;--red:#A12A2A;--redTint:#FCEDED}
+body{margin:0;background:#F4F1EA;color:var(--ink);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:'Source Serif 4', Georgia,serif!important;font-weight:600!important;letter-spacing:-0.012em!important}
+h1 em,h2 em{font-weight:400}
+.ap-nav a{padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
+.ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2);box-shadow:0 8px 20px rgba(17,19,22,.2)}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #B8913F;outline-offset:2px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px}
+.num{font-variant-numeric:tabular-nums}
+.lbl{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px}
+.inp{width:100%;height:56px;border:1.5px solid #D3CEC3;border-radius:10px;padding:0 14px 0 34px;font:inherit;font-size:22px;font-weight:600;color:var(--ink);background:#fff;font-variant-numeric:tabular-nums}
+.inp.sfx{padding-left:14px;padding-right:40px}
+.inp:hover{border-color:#A39E92}
+.inp[aria-invalid="true"]{border-color:var(--red);background:#FFFAFA}
+.pre{position:absolute;left:14px;top:0;height:56px;display:flex;align-items:center;color:var(--muted);font-weight:600;font-size:20px;pointer-events:none}
+.suf{position:absolute;right:14px;top:0;height:56px;display:flex;align-items:center;color:var(--muted);font-weight:600;font-size:20px;pointer-events:none}
+.err{margin-top:6px;font-size:14px;color:var(--red);font-weight:500}
+.hint{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.45}
+.opt{border:1.5px solid #D3CEC3;border-radius:10px;padding:10px 16px;background:#fff;font-size:15.5px;font-weight:500;cursor:pointer;color:var(--ink);min-height:46px}
+.opt:hover{border-color:#A39E92}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:#F3EEE3;box-shadow:inset 0 0 0 1px var(--navy);font-weight:700}
+.mini{font-size:14px;line-height:1.55;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
+.fade{animation:fade .3s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.bar{height:100%;border-radius:8px;transition:width .35s ease}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}.bar{transition:none}.btn{transition:none}}
+@media (max-width:640px){
+nav[aria-label="Main"]{gap:2px 16px!important;font-size:14.5px!important}
+[style*="px 32px"],[style*="padding:0 32px"]{padding-left:16px!important;padding-right:16px!important}
+[style*="padding:32px"],[style*="padding:30px"],[style*="padding:28px"]{padding:20px!important}
+[style*="padding:24px 28px"]{padding:18px!important}
+h1{font-size:34px!important;line-height:1.12!important}
+h2[style*="font-size:40px"],h2[style*="font-size:36px"],h2[style*="font-size:44px"]{font-size:28px!important}
+[style*="font-size:76px"],[style*="font-size:60px"]{font-size:48px!important}
+[style*="font-size:46px"]{font-size:34px!important}
+p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]{font-size:17px!important}
+}
+
+/* ---------- The Valley ---------- */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.stage{background:#111316;color:#F4F1EA;position:relative;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 0%,rgba(210,180,124,.10),rgba(210,180,124,0) 70%);pointer-events:none}
+.wrap{max-width:1280px;margin:0 auto;padding-left:clamp(16px,4vw,48px);padding-right:clamp(16px,4vw,48px)}
+.eyb{font-family:'Geist Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.st-head{position:relative;padding-top:clamp(28px,3.6vw,48px);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.st-h1{margin:12px 0 0;font-size:clamp(36px,4vw,58px)!important;line-height:1.02!important;max-width:19ch;color:#F4F1EA}
+.st-h1 em{font-style:italic;color:#D2B47C}
+.st-lede{margin:0;max-width:420px;font-size:17px;line-height:1.65;color:#C4C6CA}
+.st-grid{position:relative;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:stretch;padding:26px 0 clamp(48px,6vw,80px)}
+.inputs{background:#FBF9F4;color:var(--ink);border-radius:24px;padding:clamp(22px,2.4vw,32px);box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.lab-h{margin:0!important;font-family:'Geist Mono',ui-monospace,monospace!important;font-size:12px!important;font-weight:500!important;letter-spacing:.16em!important;text-transform:uppercase;color:#8F7444}
+.scene{position:relative;border-radius:24px;border:1px solid rgba(244,241,234,.12);background:#111316;overflow:hidden;display:flex;flex-direction:column;min-height:620px}
+#valley{position:relative;flex:1 1 auto;min-height:400px;outline:none;touch-action:none}
+#valley canvas{position:absolute;inset:0;display:block}
+#valley:focus-visible{box-shadow:inset 0 0 0 2px #D2B47C}
+.readout{position:absolute;left:clamp(18px,2.4vw,30px);top:clamp(18px,2.4vw,26px);pointer-events:none;z-index:2}
+.readout .k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B0B3B8}
+.readout .v{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(56px,6.4vw,96px);line-height:.95;letter-spacing:-0.03em;color:#D2B47C;font-variant-numeric:tabular-nums}
+.readout .v.dim{color:rgba(244,241,234,.28)}
+.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
+.legend2 i{display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle}
+.res{position:relative;z-index:2;padding:20px clamp(18px,2.4vw,30px) 24px;border-top:1px solid rgba(244,241,234,.12);background:linear-gradient(180deg,rgba(17,19,22,0),#15171A)}
+.res-s{margin:0;font-size:17px;line-height:1.55;color:#EDE8DD;max-width:62ch}
+.chips{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.chip{border:1px solid rgba(244,241,234,.12);border-radius:14px;padding:12px 14px;background:rgba(244,241,234,.03)}
+.chip .l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
+.chip .n{margin-top:6px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:#F4F1EA}
+.yrs{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(210,180,124,.35);background:rgba(210,180,124,.06)}
+.yrs .h{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.yrs .t{margin-top:6px;font-size:17px;line-height:1.5;color:#F4F1EA}
+.yrs .n2{margin-top:6px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
+.res-note{margin-top:12px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
+.res-empty{margin:0;font-size:19px;line-height:1.5;color:#CFCABE;max-width:46ch}
+.res-msg{margin:0;font-size:18px;line-height:1.55;color:#F4F1EA;max-width:60ch}
+.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#8A8E94}
+
+.below{padding:clamp(56px,8vw,110px) 0}
+.why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
+.why-h{margin:12px 0 0;font-size:clamp(32px,3.8vw,52px)!important;line-height:1.04!important;color:var(--ink)}
+.why p{font-size:17px;line-height:1.7;color:#34363B}
+.formula{margin-top:20px;border-radius:16px;background:#111316;color:#F4F1EA;padding:20px 22px;font-family:'Geist Mono',monospace;font-size:15px;line-height:1.8}
+.formula b{color:#D2B47C;font-weight:500}
+.why details summary{cursor:pointer;color:#8F7444;font-weight:600;font-size:14.5px;padding:10px 0;list-style:none}
+.why details summary::before{content:"+";display:inline-block;width:18px;font-family:'Geist Mono',monospace}
+.why details[open] summary::before{content:"−"}
+.gauge{background:#FBF9F4;border:1px solid var(--line);border-radius:24px;padding:clamp(22px,2.6vw,34px)}
+.g-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.g-h{margin:0;font-size:clamp(26px,2.6vw,34px)!important;line-height:1.1!important;color:var(--ink)}
+.g-sub{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#5C5A55}
+.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:11.5px;color:#5C5A55}
+.g-key i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.g-rows{margin-top:18px;display:flex;flex-direction:column}
+.g-row{display:grid;grid-template-columns:64px minmax(0,1fr) 98px;gap:14px;align-items:center;width:100%;padding:10px 8px;margin:0 -8px;border:0;border-top:1px solid var(--line);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px;transition:background .2s}
+.g-row:hover{background:#F1EDE4}
+.g-row:focus-visible{outline:2px solid #B8913F;outline-offset:0}
+.g-fall{font-variant-numeric:tabular-nums;font-size:15.5px;color:#34363B}
+.g-bars{display:flex;flex-direction:column;gap:4px}
+.g-bars span{display:block;height:7px;border-radius:4px;transform-origin:left;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+[data-in] .g-bars span{transform:scaleX(1)}
+.g-gain{font-variant-numeric:tabular-nums;font-weight:700;font-size:15.5px;text-align:right;color:var(--ink)}
+.warn{margin-top:clamp(28px,4vw,48px);display:flex;gap:14px;align-items:flex-start;background:#FBF1DC;border:1px solid #E3C48C;border-left:6px solid #8A4B00;border-radius:16px;padding:18px 20px;color:#2B1A00;font-size:15.5px;line-height:1.6;font-weight:500}
+.cta{margin-top:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;background:#111316;color:#F4F1EA;border-radius:20px;padding:26px 30px}
+.cta .t{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(22px,2.4vw,30px);line-height:1.2}
+.btn-gold{background:#D2B47C;color:#111316}
+.btn-gold:hover{background:#E2C894}
+[data-reveal]{opacity:0;transform:translate3d(0,24px,0);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+[data-reveal][data-in]{opacity:1;transform:none}
+@media (max-width:900px){
+  .st-grid{grid-template-columns:minmax(0,1fr)}
+  .scene{min-height:0}
+  #valley{min-height:340px;flex:0 0 340px}
+  .why{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .chips{grid-template-columns:minmax(0,1fr)}
+  .legend2{display:none}
+  .readout .v{font-size:52px}
+  #valley{min-height:300px;flex-basis:300px}
+  .g-row{grid-template-columns:54px minmax(0,1fr) 86px;gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  .g-bars span{transform:scaleX(1);transition:none}
+}
+</style>
+</helmet>
+
+<div style="width:100%;min-height:100%;background:var(--bg)">
+
+<header class="hd" style="position:sticky;top:0;z-index:60;background:rgba(17,19,22,.96);border-bottom:1px solid rgba(244,241,234,.12);color:#F4F1EA">
+  <div style="max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+    <a href="Main.dc.html" aria-label="Gullak home" style="display:flex;align-items:center;gap:12px">
+      <svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>
+      <span style="font-family:'Source Serif 4',Georgia,serif;font-size:23px;letter-spacing:-0.01em;color:#F4F1EA">Gullak</span>
+    </a>
+    <nav aria-label="Main" class="ap-nav" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;font-size:15px;font-weight:500;color:#D2D4D8">
+      <a href="Workspace.dc.html">Planner</a>
+      <a href="Recovery.dc.html" aria-current="page" style="color:#D2B47C;font-weight:600">Break-even</a>
+      <a href="TradeCost.dc.html">Charges</a>
+      <a href="Candlesticks.dc.html">Candlesticks</a>
+      <a href="Practice.dc.html">Practice desk</a>
+    </nav>
+  </div>
+</header>
+
+<main data-arth-ready="1">
+<section class="stage" aria-labelledby="page-h">
+  <div class="wrap">
+    <div class="st-head">
+      <div>
+        <p class="eyb" style="margin:0;color:#D2B47C">Recovery calculator</p>
+        <h1 id="page-h" class="st-h1">The climb back is always <em>longer</em> than the fall.</h1>
+      </div>
+      <p class="st-lede">When an investment falls, it has to grow by more than it fell to return to where it started. Enter a fall, or drag the valley floor, and see the gain needed.</p>
+    </div>
+
+    <div class="st-grid">
+      <!-- inputs -->
+      <section class="inputs" aria-labelledby="left-h">
+        <h2 id="left-h" class="lab-h">What happened</h2>
+        <div role="group" aria-label="How do you want to enter the fall?" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px">
+          <button class="opt" id="mode-pct" type="button" aria-pressed="{{pctOn}}" onClick="{{setPct}}">I know the percentage</button>
+          <button class="opt" type="button" aria-pressed="{{amtOn}}" onClick="{{setAmt}}">I know the amounts</button>
+        </div>
+
+        <sc-if value="{{isPct}}" hint-placeholder-val="{{true}}">
+        <div style="margin-top:24px">
+          <label class="lbl" for="in-loss">By how much did the value fall?</label>
+          <div style="position:relative">
+            <input id="in-loss" class="inp sfx" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 25" value="{{loss}}" onInput="{{onLoss}}" aria-invalid="{{lossInvalid}}" aria-describedby="d-loss">
+            <span class="suf" aria-hidden="true">%</span>
+          </div>
+          <div id="d-loss">
+            <sc-if value="{{lossHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{lossErr}}</div></sc-if>
+            <div class="hint">A fall from the amount you started with, up to 99.99%. Example: 25 means your value is down by a quarter.</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{isAmt}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top:24px;display:flex;flex-direction:column;gap:20px">
+          <div>
+            <label class="lbl" for="in-orig">What was the amount at the start?</label>
+            <div style="position:relative"><span class="pre" aria-hidden="true">₹</span>
+              <input id="in-orig" class="inp" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 1,00,000" value="{{orig}}" onInput="{{onOrig}}" aria-invalid="{{origInvalid}}" aria-describedby="d-orig"></div>
+            <div id="d-orig"><sc-if value="{{origHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{origErr}}</div></sc-if></div>
+          </div>
+          <div>
+            <label class="lbl" for="in-cur">What is it worth now?</label>
+            <div style="position:relative"><span class="pre" aria-hidden="true">₹</span>
+              <input id="in-cur" class="inp" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 75,000" value="{{cur}}" onInput="{{onCur}}" aria-invalid="{{curInvalid}}" aria-describedby="d-cur"></div>
+            <div id="d-cur"><sc-if value="{{curHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{curErr}}</div></sc-if>
+            <div class="hint">The current value of the same investment, not the amount you have added since.</div></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--line)">
+          <label class="lbl" for="in-rate">Optional: your assumed yearly return</label>
+          <div style="position:relative;max-width:260px">
+            <input id="in-rate" class="inp sfx" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 10" value="{{rate}}" onInput="{{onRate}}" aria-invalid="{{rateInvalid}}" aria-describedby="d-rate" style="font-size:19px">
+            <span class="suf" aria-hidden="true" style="font-size:17px">% a year</span>
+          </div>
+          <div id="d-rate">
+            <sc-if value="{{rateHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{rateErr}}</div></sc-if>
+            <div class="hint">A rate of your own choosing, never a suggestion. Used only to estimate how long recovery would take if returns resumed steadily. The years then appear along the climb.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- the valley -->
+      <section class="scene" aria-labelledby="right-h" aria-live="polite">
+        <h2 id="right-h" class="sr-only">What it takes to recover</h2>
+        <div id="valley" tabindex="0" role="slider" aria-label="Valley depth: the fall in percent. Use the arrow keys to change it." aria-valuemin="0" aria-valuemax="99" aria-valuenow="0" data-state="{{vState}}" data-mode="{{vMode}}" data-fall="{{vFall}}" data-gain="{{vGain}}" data-years="{{vYears}}" data-rate="{{vRate}}" data-start="{{vStart}}" data-floor="{{vFloor}}" data-falltext="{{fallText}}" data-gaintext="{{gainText}}">
+          <div class="readout">
+            <div class="k">Gain needed to get back to even</div>
+            <sc-if value="{{stOk}}" hint-placeholder-val="{{false}}"><div class="v">{{gainText}}</div></sc-if>
+            <sc-if value="{{notOk}}" hint-placeholder-val="{{true}}"><div class="v dim">—</div></sc-if>
+          </div>
+          <div class="legend2" aria-hidden="true"><span><i style="background:#E9A0A0"></i>THE FALL</span><span><i style="background:#D2B47C"></i>THE CLIMB BACK</span></div>
+        </div>
+        <div class="res">
+          <sc-if value="{{stEmpty}}" hint-placeholder-val="{{true}}">
+            <p class="res-empty">Enter a fall, or drag the floor of the valley, to see the gain needed to get back to your starting value.</p>
+            <p class="hint-drag">The faint valley shows a 25% example until you enter your own.</p>
+          </sc-if>
+          <sc-if value="{{stMessage}}" hint-placeholder-val="{{false}}">
+            <p class="res-msg fade">{{message}}</p>
+          </sc-if>
+          <sc-if value="{{stOk}}" hint-placeholder-val="{{false}}">
+          <div class="fade">
+            <p class="res-s">{{sentence}}</p>
+            <div class="chips">
+              <sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+                <div class="chip"><div class="l">{{s.label}}</div><div class="n">{{s.value}}</div></div>
+              </sc-for>
+            </div>
+            <div class="res-note">{{illusNote}}</div>
+            <sc-if value="{{hasYears}}" hint-placeholder-val="{{false}}">
+            <div class="yrs">
+              <div class="h">At your assumed return of {{rateText}} a year</div>
+              <div class="t">{{yearsText}}</div>
+              <div class="n2">This is arithmetic that assumes returns resume at a steady rate after the fall. Real markets do not behave steadily, and recovery is never guaranteed.</div>
+            </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="below" aria-label="How it works">
+  <div class="wrap">
+    <div class="why">
+      <div data-reveal="1">
+        <p class="eyb" style="margin:0;color:#8F7444">Why the climb is longer</p>
+        <h2 class="why-h">The gain is measured on what is left.</h2>
+        <p style="margin:18px 0 0">Say ₹100 falls 25% and becomes ₹75. A 25% gain on ₹75 is only ₹18.75, which gets you to ₹93.75. To get back to ₹100 you need ₹25 on top of ₹75, and ₹25 is one third of ₹75, a 33.33% gain.</p>
+        <p style="margin:12px 0 0">The deeper the fall, the more lopsided it gets. That is why the climb in the valley grows longer than the fall.</p>
+        <div class="formula">Gain needed = <b>fall ÷ (100% − fall)</b><br>25% ÷ 75% = <b>33.33%</b></div>
+        <details style="margin-top:10px"><summary>How was this calculated?</summary>
+          <div class="mini" style="margin-top:6px">Formula F11 in the project methodology. With amounts, the gain is (start − now) ÷ now, worked from your amounts directly. Calculations use exact whole-number arithmetic on paise and basis points, and results are rounded half-up to 2 decimals for display only. The optional recovery time (F12) finds the first whole year in which (1 + rate)^years reaches start ÷ now, and also shows a decimal estimate. Not included: costs, charges, taxes.</div>
+        </details>
+      </div>
+
+      <div class="gauge" data-reveal="1" id="gauge">
+        <div class="g-top">
+          <div>
+            <h2 class="g-h">Common falls, side by side</h2>
+            <p class="g-sub">Round numbers for reference, not past market events. Both bars use the same scale. Choose a row to load it into the valley.</p>
+          </div>
+        </div>
+        <div class="g-key" style="margin-top:12px" aria-hidden="true"><span><i style="background:#E9A0A0"></i>Fall</span><span><i style="background:#D2B47C"></i>Gain needed</span></div>
+        <div class="g-rows">
+          <sc-for list="{{table}}" as="r" hint-placeholder-count="10">
+            <button type="button" class="g-row" data-setfall="{{r.v}}" aria-label="Load a {{r.fall}} fall. Gain needed {{r.gain}}.">
+              <span class="g-fall">{{r.fall}}</span>
+              <span class="g-bars" aria-hidden="true"><span style="width:{{r.fw}};background:#E9A0A0"></span><span style="width:{{r.gw}};background:#D2B47C"></span></span>
+              <span class="g-gain">{{r.gain}}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn" role="note"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="flex:0 0 auto;margin-top:1px"><path d="M12 3 2.5 20h19L12 3z" fill="#8A4B00"></path><path d="M12 9.5v5" stroke="#FBF1DC" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="17.3" r="1.2" fill="#FBF1DC"></circle></svg><span>These figures are illustrations based only on the numbers you entered. They are not predictions, not guaranteed, and not investment advice. Markets do not have a fixed or predictable rate of return, and you can lose money. Costs, charges and taxes are not included.</span></div>
+
+    <div class="cta">
+      <div class="t">Want to see your whole picture: budget, risk and outcomes?</div>
+      <a class="btn btn-gold" href="Workspace.dc.html">Open the planning workspace</a>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+/* ---------- exact arithmetic (BigInt). Money in paise, percentages in hundredths of a percent ---------- */
+const D = 10000n;
+const IN = new Intl.NumberFormat('en-IN');
+const half = (num, den) => (2n * num + den) / (2n * den); // round half up, non-negative
+function rs0(p) { let r = p / 100n; if (p % 100n >= 50n) r += 1n; return '₹' + IN.format(r); }
+function pctText(h) { return IN.format(h / 100n) + '.' + String(h % 100n).padStart(2, '0') + '%'; }
+function parseMoney(s, maxRupees) {
+  const t = String(s == null ? '' : s).replace(/[₹,\s]/g, '');
+  if (t === '') return { empty: true };
+  if (!/^\d+(\.\d{1,2})?$/.test(t)) return { err: 'Use numbers only, with up to 2 decimals.' };
+  const x = t.split('.');
+  const p = BigInt(x[0]) * 100n + BigInt(((x[1] || '') + '00').slice(0, 2));
+  if (p > BigInt(maxRupees) * 100n) return { err: 'That amount is larger than this tool accepts.' };
+  return { v: p };
+}
+function parseLoss(s) { // -> hundredths of a percent (0..9999) or message
+  const t = String(s == null ? '' : s).replace(/[%\s]/g, '');
+  if (t === '') return { empty: true };
+  if (!/^\d+(\.\d{1,2})?$/.test(t)) return { err: 'Use numbers only, with up to 2 decimals. A fall cannot be negative.' };
+  const x = t.split('.');
+  const h = BigInt(x[0]) * 100n + BigInt(((x[1] || '') + '00').slice(0, 2));
+  return { v: h };
+}
+function parseRate(s) { // -> basis points
+  const t = String(s == null ? '' : s).replace(/[%\s]/g, '');
+  if (t === '') return { empty: true };
+  if (!/^-?\d+(\.\d{1,2})?$/.test(t)) return { err: 'Use numbers only, with up to 2 decimals.' };
+  const neg = t[0] === '-';
+  const x = t.replace('-', '').split('.');
+  let n = Number(BigInt(x[0]) * 100n + BigInt(((x[1] || '') + '00').slice(0, 2)));
+  if (neg) n = -n;
+  if (n < -9900 || n > 5000) return { err: 'Enter a rate between −99% and 50%.' };
+  return { v: n };
+}
+/* F11: gain needed = (O - C) / C, as hundredths of a percent, half-up */
+function recoveryGain(O, C) { return half(10000n * (O - C), C); }
+/* F12: smallest whole k with (1 + r)^k >= O / C, exact; null = never; 'over' = beyond 1,000 years */
+function yearsToRecover(O, C, bp) {
+  if (bp <= 0) return null;
+  let a = 1n, b = 1n;
+  for (let k = 1; k <= 1000; k++) {
+    a *= D + BigInt(bp); b *= D;
+    if (a * C >= O * b) return k;
+  }
+  return 'over';
+}
+const REF_FALLS = [5, 10, 20, 25, 30, 40, 50, 60, 75, 90];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'pct', loss: '', orig: '', cur: '', rate: '' };
+  }
+  renderVals() {
+    const s = this.state;
+    const set = (k) => (e) => this.setState({ [k]: e.target.value });
+
+    // resolve O and C (as an exact fraction of what is left) from whichever mode is active
+    let O = null, C = null, money = false, errs = { loss: '', orig: '', cur: '' };
+    let message = '';
+    if (s.mode === 'pct') {
+      const r = parseLoss(s.loss);
+      if (r.err) errs.loss = r.err;
+      else if (!r.empty) {
+        if (r.v >= 10000n) {
+          if (r.v === 10000n) message = 'A 100% fall means nothing is left. No gain on zero can bring the value back, so recovery is not possible.';
+          else errs.loss = 'A fall cannot be more than 100%.';
+        } else { O = 10000n; C = 10000n - r.v; }
+      }
+    } else {
+      const a = parseMoney(s.orig, 1e12), b = parseMoney(s.cur, 1e12);
+      if (a.err) errs.orig = a.err; else if (!a.empty && a.v === 0n) errs.orig = 'The starting amount must be more than 0.';
+      if (b.err) errs.cur = b.err;
+      if (!a.empty && !a.err && a.v > 0n && !b.empty && !b.err) {
+        money = true;
+        if (b.v === 0n) message = 'The investment is worth nothing now. No gain on zero can bring the value back, so recovery is not possible.';
+        else if (b.v > a.v) message = 'It is worth more than the starting amount, so there is no fall to recover from. It is up ' + pctText(half(10000n * (b.v - a.v), a.v)) + '.';
+        else { O = a.v; C = b.v; }
+      }
+    }
+    const rr = parseRate(s.rate);
+    const rateErr = rr.err || '';
+
+    const ok = O !== null;
+    let out = { gainText: '', sentence: '', fallText: '', fallBar: '0%', gainBar: '0%', steps: [], illusNote: '', barsAria: '', hasYears: false, yearsText: '', rateText: '' };
+    let zeroFall = false;
+    const vis = { fall: '', gain: '', years: '', rate: '', start: '', floor: '' };
+    if (ok) {
+      const gain = recoveryGain(O, C);                // hundredths of a percent
+      const fall = half(10000n * (O - C), O);         // hundredths of a percent
+      zeroFall = O === C;
+      out.gainText = pctText(gain);
+      vis.fall = (Number(fall) / 100).toFixed(2); vis.gain = (Number(gain) / 100).toFixed(2);
+      out.fallText = pctText(fall);
+      const f = Number(fall) / 100, g = Number(gain) / 100, mx = Math.max(f, g, 1);
+      out.fallBar = (f / mx * 100).toFixed(2) + '%';
+      out.gainBar = (g / mx * 100).toFixed(2) + '%';
+      out.barsAria = 'The fall is ' + out.fallText + ' and the gain needed to recover is ' + out.gainText + '.';
+      // rupee illustration: real amounts, or ₹1,00,000 when only a percentage was entered
+      const baseO = money ? O : 10000000n;
+      const baseC = money ? C : half(10000000n * C, 10000n);
+      out.steps = [
+        { label: money ? 'You started with' : 'Starting with (example)', value: rs0(baseO) },
+        { label: 'After the fall', value: rs0(baseC) },
+        { label: 'Needed to get back', value: rs0(baseO - baseC) },
+      ];
+      vis.start = rs0(baseO); vis.floor = rs0(baseC);
+      out.illusNote = money ? 'Worked from your own amounts.' : 'Rupee amounts use ₹1,00,000 as an example. Switch to "I know the amounts" to use your own.';
+      out.sentence = zeroFall
+        ? 'There is no fall, so there is nothing to recover.'
+        : 'A ' + out.fallText + ' fall leaves you with ' + pctText(half(10000n * C, O)) + ' of your money. That smaller amount must grow by ' + out.gainText + ' to return to the start.';
+      if (!rr.empty && !rr.err && !zeroFall) {
+        out.hasYears = true;
+        out.rateText = (rr.v / 100).toFixed(2) + '%';
+        const k = yearsToRecover(O, C, rr.v);
+        if (k === null) out.yearsText = 'The return is zero or negative, so the value would never get back to the start at that rate.';
+        else if (k === 'over') out.yearsText = 'It would take more than 1,000 years at that rate.';
+        else {
+          vis.years = String(k); vis.rate = (rr.v / 100).toFixed(2);
+          const est = Math.log(Number(O) / Number(C)) / Math.log(1 + rr.v / 10000);
+          out.yearsText = 'About ' + est.toFixed(1) + ' years. The value gets back to the starting amount during year ' + k + '.';
+        }
+      }
+    }
+    const stMessage = !ok && !!message;
+    const stOk = ok;
+    const stEmpty = !ok && !message;
+
+    const table = REF_FALLS.map((d) => { const gh = recoveryGain(100n, BigInt(100 - d)); return { v: String(d), fall: d + '%', gain: pctText(gh), fw: (d / 9).toFixed(2) + '%', gw: Math.min(100, Number(gh) / 900).toFixed(2) + '%' }; });
+
+    return {
+      pctOn: s.mode === 'pct' ? 'true' : 'false', amtOn: s.mode === 'amt' ? 'true' : 'false',
+      isPct: s.mode === 'pct', isAmt: s.mode === 'amt',
+      setPct: () => this.setState({ mode: 'pct' }), setAmt: () => this.setState({ mode: 'amt' }),
+      loss: s.loss, onLoss: set('loss'), lossErr: errs.loss, lossHasErr: !!errs.loss, lossInvalid: errs.loss ? 'true' : 'false',
+      orig: s.orig, onOrig: set('orig'), origErr: errs.orig, origHasErr: !!errs.orig, origInvalid: errs.orig ? 'true' : 'false',
+      cur: s.cur, onCur: set('cur'), curErr: errs.cur, curHasErr: !!errs.cur, curInvalid: errs.cur ? 'true' : 'false',
+      rate: s.rate, onRate: set('rate'), rateErr, rateHasErr: !!rateErr, rateInvalid: rateErr ? 'true' : 'false',
+      stEmpty, stMessage, stOk, message,
+      gainText: out.gainText, sentence: out.sentence, fallText: out.fallText, fallBar: out.fallBar, gainBar: out.gainBar, barsAria: out.barsAria,
+      steps: out.steps.length ? out.steps : [{ label: '', value: '' }, { label: '', value: '' }, { label: '', value: '' }],
+      illusNote: out.illusNote, hasYears: out.hasYears, yearsText: out.yearsText, rateText: out.rateText,
+      table,
+      notOk: !ok, vState: ok ? 'ok' : (message ? 'message' : 'empty'), vMode: s.mode,
+      vFall: vis.fall, vGain: vis.gain, vYears: vis.years, vRate: vis.rate, vStart: vis.start, vFloor: vis.floor,
+    };
+  }
+}
+</script>
+</body>
+</html>

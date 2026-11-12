@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111316">
+<title>Sign in or sign up · Gullak</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=Geist:wght@400;500;600&display=swap">
+<style>
+:root{--ink:#111316;--ink2:#191B1F;--ivory:#F4F1EA;--gold:#D2B47C;--mutedD:#B0B3B8;--lineD:rgba(244,241,234,.14);--err:#E58B7E;--ok:#7BD3A8}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--ink);color:var(--ivory);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased;padding:24px 16px}
+.card{width:100%;max-width:440px;background:var(--ink2);border:1px solid var(--lineD);border-radius:18px;padding:clamp(24px,5vw,40px)}
+.brand{font-family:'Source Serif 4',Georgia,serif;font-size:20px;color:var(--gold);text-decoration:none;display:inline-flex;align-items:center;gap:10px}
+h1{font-family:'Source Serif 4',Georgia,serif;font-weight:400;font-size:clamp(30px,6vw,38px);line-height:1.08;letter-spacing:-.02em;margin:22px 0 10px}
+h1 em{color:var(--gold)}
+p.lead{color:var(--mutedD);line-height:1.55;margin:0 0 20px;font-size:15.5px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--lineD);border-radius:999px;margin-bottom:20px}
+.tabs button{min-height:42px;border:0;border-radius:999px;background:transparent;color:var(--mutedD);font:500 15px 'Geist',sans-serif;cursor:pointer;margin:0;width:auto}
+.tabs button[aria-selected="true"]{background:var(--ivory);color:var(--ink)}
+.tabs button:focus-visible,.g:focus-visible,.go:focus-visible,.pw-t:focus-visible,.lnk:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.g{width:100%;min-height:50px;display:flex;align-items:center;justify-content:center;gap:12px;border:1px solid var(--lineD);border-radius:999px;background:#fff;color:#1f1f1f;font:500 15.5px 'Geist',sans-serif;cursor:pointer}
+.g:hover{background:#f4f4f4}.g:disabled,.go:disabled{opacity:.6;cursor:wait}
+.or{display:flex;align-items:center;gap:12px;margin:18px 0;color:#8b8f96;font-size:13px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--lineD)}
+label.f{display:block;font-size:13px;letter-spacing:.04em;margin:14px 0 8px}
+input[type=email],input[type=password],input[type=text]{width:100%;min-height:50px;border-radius:10px;border:1px solid var(--lineD);background:#0F1114;color:var(--ivory);font:inherit;font-size:16px;padding:0 14px}
+input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.pw{position:relative}.pw input{padding-right:70px}
+.pw-t{position:absolute;right:6px;top:6px;height:38px;padding:0 12px;border:0;border-radius:8px;background:transparent;color:var(--mutedD);font:500 13.5px 'Geist',sans-serif;cursor:pointer}
+.pw-t:hover{color:#fff}
+.hint{font-size:12.5px;color:#8b8f96;margin-top:6px}
+.consent{display:flex;gap:10px;align-items:flex-start;margin:16px 0 4px;font-size:13.5px;color:var(--mutedD);line-height:1.5}
+.consent input{margin-top:3px;accent-color:var(--gold);width:16px;height:16px;flex:none}
+.go{width:100%;min-height:50px;margin-top:18px;border:0;border-radius:999px;background:var(--gold);color:var(--ink);font:600 15.5px 'Geist',sans-serif;cursor:pointer}
+.go:hover{background:#E2C894}
+.msg{font-size:13.5px;min-height:20px;margin-top:12px;line-height:1.5}
+.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.lnk{background:none;border:0;padding:0;margin:10px 0 0;color:var(--mutedD);font:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;width:auto}
+.lnk:hover{color:#fff}
+.skip{display:block;text-align:center;margin-top:16px;color:var(--mutedD);font-size:14px}
+.note{font-size:12.5px;color:#8b8f96;margin-top:18px;line-height:1.5}
+.why{border:1px solid rgba(210,180,124,.4);background:rgba(210,180,124,.1);border-radius:12px;padding:12px 14px;font-size:14.5px;line-height:1.5;color:var(--ivory);margin-bottom:18px}
+.off{border:1px solid rgba(210,180,124,.4);background:rgba(210,180,124,.08);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5;color:var(--ivory);margin-bottom:18px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="card">
+  <a class="brand" href="Main.dc.html"><svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>Gullak</a>
+  <h1 id="h">Welcome <em>back</em></h1>
+  <p class="lead" id="lead">Sign in to pick up where you left off.</p>
+
+  <div class="why" id="why" hidden></div>
+  <div class="off" id="off" hidden>Accounts are not switched on for this site yet, so sign-in is unavailable. You can still use every tool without an account.</div>
+
+  <div class="tabs" role="tablist" aria-label="Sign in or sign up">
+    <button type="button" role="tab" id="t-in" aria-selected="true" aria-controls="panel">Sign in</button>
+    <button type="button" role="tab" id="t-up" aria-selected="false" aria-controls="panel">Sign up</button>
+  </div>
+
+  <div id="panel" role="tabpanel">
+    <button type="button" class="g" id="gbtn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span id="gtxt">Continue with Google</span></button>
+    <div class="or">or use your email</div>
+
+    <form id="f" novalidate>
+      <div id="name-row" hidden>
+        <label class="f" for="nm" style="margin-top:0">Your name</label>
+        <input id="nm" type="text" autocomplete="name" placeholder="e.g. Asha" maxlength="60">
+      </div>
+      <label class="f" for="em" id="em-l">Email address</label>
+      <input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+      <label class="f" for="pw">Password</label>
+      <div class="pw"><input id="pw" type="password" autocomplete="current-password" required><button type="button" class="pw-t" id="pwt" aria-label="Show password" aria-pressed="false">Show</button></div>
+      <div class="hint" id="pw-h" hidden>At least 8 characters.</div>
+
+      <label class="consent" id="consent-row" hidden><input id="ck" type="checkbox"> <span>I agree that Gullak may store my name and email address to run my account and to send occasional updates about Gullak. I can ask for them to be deleted at any time.</span></label>
+
+      <div class="msg" id="msg" role="alert" aria-live="polite"></div>
+      <button class="go" id="go" type="submit">Sign in</button>
+      <button type="button" class="lnk" id="forgot">Forgot your password?</button>
+    </form>
+  </div>
+
+  <a class="skip" id="skip" href="Main.dc.html">Look around first</a>
+  <div class="note">Use a real email only. Never enter PAN, Aadhaar, bank or phone details anywhere on Gullak. Gullak is investor education, not investment advice.</div>
+</main>
+<script src="./auth-config.js"></script>
+<script src="./arth-auth.js"></script>
+<script>
+(function () {
+  var A = window.ArthAuth, cfg = window.ARTH_AUTH || {};
+  var q = new URLSearchParams(location.search);
+  var next = q.get('next') || 'Main.dc.html';
+  if (!/^[A-Za-z0-9_.\-]+\.html(\?[^\s]*)?$/.test(next)) next = 'Main.dc.html';
+  var $ = function (id) { return document.getElementById(id); };
+  var mode = q.get('mode') === 'signup' ? 'up' : 'in';
+  var busy = false;
+
+  $('skip').href = next;
+  // arrived from a tool that needs an account: say so, and make "back" go home instead of into a loop
+  var toolName = A && A.tools && cfg.gate ? A.tools[next.split('?')[0]] : null;
+  if (toolName) {
+    $('why').textContent = 'Sign in or create a free account to use ' + toolName + '.'; $('why').hidden = false;
+    $('skip').textContent = 'Back to home'; $('skip').href = 'Main.dc.html';
+  }
+  if (!A || !A.configured()) { $('off').hidden = false; }
+
+  function msg(text, kind) { var m = $('msg'); m.textContent = text || ''; m.className = 'msg' + (kind ? ' ' + kind : ''); }
+  function setBusy(b) { busy = b; $('go').disabled = b; $('gbtn').disabled = b; }
+
+  function setMode(m) {
+    mode = m; msg('');
+    var up = m === 'up';
+    $('t-in').setAttribute('aria-selected', String(!up)); $('t-up').setAttribute('aria-selected', String(up));
+    $('h').innerHTML = up ? 'Join Gullak, <em>free</em>' : 'Welcome <em>back</em>';
+    $('lead').textContent = up ? 'Create an account in under a minute. It is free.' : 'Sign in to pick up where you left off.';
+    $('name-row').hidden = !up; $('consent-row').hidden = !up; $('pw-h').hidden = !up; $('forgot').hidden = up;
+    $('pw').setAttribute('autocomplete', up ? 'new-password' : 'current-password');
+    $('go').textContent = up ? 'Create account' : 'Sign in';
+    $('gtxt').textContent = up ? 'Sign up with Google' : 'Continue with Google';
+  }
+  $('t-in').addEventListener('click', function () { setMode('in'); });
+  $('t-up').addEventListener('click', function () { setMode('up'); });
+  setMode(mode);
+
+  $('pwt').addEventListener('click', function () {
+    var show = $('pw').type === 'password';
+    $('pw').type = show ? 'text' : 'password';
+    this.textContent = show ? 'Hide' : 'Show'; this.setAttribute('aria-pressed', String(show)); this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  });
+
+  function go() { location.href = next; }
+  function fail(e) { setBusy(false); msg(A.friendly(e), 'err'); }
+  var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  // already signed in? go straight through (once Firebase has confirmed it)
+  if (A) A.ready.then(function (u) { if (u && A.configured()) go(); });
+
+  $('gbtn').addEventListener('click', function () {
+    if (busy) return; msg('');
+    if (!A.configured()) return msg(A.friendly({ code: 'arth/not-configured' }), 'err');
+    if (mode === 'up' && !$('ck').checked) return msg('Please tick the box to agree, then continue with Google.', 'err');
+    setBusy(true);
+    A.google(mode === 'up').then(go, fail);
+  });
+
+  $('f').addEventListener('submit', function (e) {
+    e.preventDefault(); if (busy) return; msg('');
+    if (!A.configured()) return msg(A.friendly({ code: 'arth/not-configured' }), 'err');
+    var email = $('em').value.trim().toLowerCase(), pw = $('pw').value, name = $('nm').value.trim();
+    if (!EMAIL.test(email) || email.length > 254) { msg('Please enter a valid email address.', 'err'); $('em').focus(); return; }
+    if (mode === 'up') {
+      if (!name) { msg('Please enter your name.', 'err'); $('nm').focus(); return; }
+      if (pw.length < 8) { msg('Choose a password of at least 8 characters.', 'err'); $('pw').focus(); return; }
+      if (!$('ck').checked) { msg('Please tick the box to agree, then continue.', 'err'); return; }
+      setBusy(true); A.signUp(name, email, pw, true).then(go, fail);
+    } else {
+      if (!pw) { msg('Please enter your password.', 'err'); $('pw').focus(); return; }
+      setBusy(true); A.signIn(email, pw).then(go, fail);
+    }
+  });
+
+  $('forgot').addEventListener('click', function () {
+    msg('');
+    var email = $('em').value.trim().toLowerCase();
+    if (!EMAIL.test(email)) { msg('Type your email address above first, then choose "Forgot your password?".', 'err'); $('em').focus(); return; }
+    if (!A.configured()) return msg(A.friendly({ code: 'arth/not-configured' }), 'err');
+    setBusy(true);
+    A.reset(email).then(function () { setBusy(false); msg('If an account exists for that email, a reset link is on its way. Check your inbox and spam folder.', 'ok'); }, function (err) {
+      setBusy(false);
+      // do not reveal whether an email has an account
+      if (err && err.code === 'auth/user-not-found') msg('If an account exists for that email, a reset link is on its way. Check your inbox and spam folder.', 'ok'); else msg(A.friendly(err), 'err');
+    });
+  });
+})();
+</script>
+</body>
+</html>

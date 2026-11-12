@@ -1,0 +1,21 @@
+// Runs the recovery engine from site/Recovery.dc.html against the methodology test values (G15-G23).
+const fs = require('fs'), path = require('path');
+const html = fs.readFileSync(path.join(__dirname, '../../site/Recovery.dc.html'), 'utf8');
+const js = html.match(/data-dc-script[^>]*>([\s\S]*?)<\/script>/)[1].split('class Component extends DCLogic')[0];
+const m = new Function(js + '\nreturn {recoveryGain,yearsToRecover,pctText,parseLoss,parseMoney,parseRate,half};')();
+let fail = 0;
+const eq = (n, a, b) => { const ok = String(a) === String(b); if (!ok) fail++; console.log(ok ? 'PASS' : 'FAIL', n, '| got', a, '| want', b); };
+const g = (O, C) => m.pctText(m.recoveryGain(BigInt(O), BigInt(C)));
+eq('G15 10%', g(100, 90), '11.11%'); eq('G16 25%', g(100, 75), '33.33%'); eq('G17 40%', g(100, 60), '66.67%');
+eq('G18 50%', g(100, 50), '100.00%'); eq('G19 90%', g(100, 10), '900.00%');
+eq('G20 amounts', g(10000000, 7500000), '33.33%');
+eq('0% fall', g(100, 100), '0.00%');
+eq('99.99%', m.pctText(m.recoveryGain(10000n, 1n)), '9,99,900.00%');
+eq('G21', m.yearsToRecover(100n, 75n, 1000), 4); eq('G22', m.yearsToRecover(100n, 50n, 5000), 2); eq('G23', m.yearsToRecover(100n, 75n, 0), null);
+eq('neg rate never', m.yearsToRecover(100n, 75n, -300), null);
+eq('tiny rate over', m.yearsToRecover(100n, 1n, 1), 'over');
+eq('loss parse 25', m.parseLoss('25').v, 2500n); eq('loss parse 12.5', m.parseLoss('12.5').v, 1250n);
+eq('loss neg rejected', !!m.parseLoss('-5').err, true); eq('loss text rejected', !!m.parseLoss('abc').err, true);
+eq('loss 3 decimals rejected', !!m.parseLoss('1.234').err, true); eq('loss empty', !!m.parseLoss('').empty, true);
+eq('rate 101 rejected', !!m.parseRate('51').err, true);
+console.log(fail ? 'FAILURES ' + fail : 'ALL PASS'); process.exit(fail ? 1 : 0);

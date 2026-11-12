@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+tools/lib/
+*.zip
+*.bak
+.netlify/
+.claude/

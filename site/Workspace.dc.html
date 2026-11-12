@@ -1,0 +1,1450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#111316">
+<style>html,body{background:#111316}@view-transition{navigation:auto}@media (max-width:640px){header.hd>div{flex-wrap:nowrap!important;padding:10px 16px!important;gap:16px!important}header.hd>div>a:first-child span{font-size:20px!important}header.hd nav{flex:1 1 auto;min-width:0;flex-wrap:nowrap!important;justify-content:flex-start;overflow-x:auto;white-space:nowrap;gap:0 18px!important;font-size:14.5px!important;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);padding:0 16px 0 6px}header.hd nav::-webkit-scrollbar{display:none}header.hd nav a{padding:10px 0}}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gullak planning workspace</title>
+<link rel="stylesheet" href="./lattice-loader.css"><script src="./net-status.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="./arth-ui.js" defer></script>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./arth-results.js" defer></script><script src="./arth-pdf.js" defer></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{--navy:#111316;--navy2:#24272C;--ink:#15171A;--muted:#5C5A55;--line:#E6E1D6;--bg:#F4F1EA;--green:#0A7A55;--greenBright:#17A673;--greenTint:#E7F5EF;--amber:#8A4B00;--amberTint:#FFF4DE;--red:#A12A2A;--redTint:#FCEDED}
+body{margin:0;background:#F4F1EA;color:var(--ink);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:'Source Serif 4', Georgia,serif!important;font-weight:600!important;letter-spacing:-0.012em!important}
+h1 em,h2 em{font-weight:400}
+.ap-nav a{padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
+.ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2);box-shadow:0 8px 20px rgba(17,19,22,.2)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid #D3CEC3}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn-text{background:none;border:0;color:var(--green);font-weight:600;font-size:15px;cursor:pointer;padding:8px 2px;min-height:44px}
+.btn-text:hover{text-decoration:underline}
+.btn:focus-visible,.opt:focus-visible,.btn-text:focus-visible,input:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #B8913F;outline-offset:2px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.lbl{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px}
+.inp{width:100%;height:50px;border:1.5px solid #D3CEC3;border-radius:10px;padding:0 14px 0 34px;font:inherit;font-size:17px;color:var(--ink);background:#fff;font-variant-numeric:tabular-nums}
+.inp.plain{padding-left:14px}
+.inp.sfx{padding-right:64px}
+.inp.unitpad{padding-right:122px}
+.unit-sel{position:absolute;right:6px;top:6px;height:38px;border:0;border-radius:8px;background:#F1EDE3;color:var(--ink);font:inherit;font-size:15px;padding:0 10px;cursor:pointer}
+.unit-sel:hover{background:#E9E3D4}
+.unit-sel:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.inp:hover{border-color:#A39E92}
+.inp[aria-invalid="true"]{border-color:var(--red);background:#FFFAFA}
+.pre{position:absolute;left:14px;top:0;height:50px;display:flex;align-items:center;color:var(--muted);font-weight:600;pointer-events:none}
+.suf{position:absolute;right:14px;top:0;height:50px;display:flex;align-items:center;color:var(--muted);font-size:14px;pointer-events:none}
+.err{margin-top:6px;font-size:14px;color:var(--red);font-weight:500}
+.hint{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.45}
+.opt{position:relative;text-align:left;border:1.5px solid #D3CEC3;border-radius:12px;padding:14px 16px 14px 52px;background:#fff;font-size:16px;line-height:1.4;cursor:pointer;color:var(--ink);min-height:56px;display:flex;align-items:center;width:100%;margin:0;transition:border-color .15s,background .15s,box-shadow .15s}
+.opt::before{content:"";position:absolute;left:16px;top:50%;width:22px;height:22px;margin-top:-11px;border-radius:50%;border:2px solid #B9B3A6;background:#fff;transition:border-color .15s,background .15s}
+.opt::after{content:"";position:absolute;left:23px;top:50%;width:6px;height:11px;margin-top:-7px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);transition:transform .15s}
+.opt:hover{border-color:var(--navy);background:#FAF8F3}
+.opt:hover::before{border-color:var(--navy)}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:#F3EEE3;box-shadow:inset 0 0 0 1px var(--navy);font-weight:600}
+.opt[aria-pressed="true"]::before{background:var(--navy);border-color:var(--navy)}
+.opt[aria-pressed="true"]::after{transform:rotate(45deg) scale(1)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px;align-items:stretch}
+.opts.opts-sm{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}
+details>summary{cursor:pointer;color:var(--green);font-weight:600;font-size:14px;list-style:none;padding:6px 0}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"+ ";font-weight:800}
+details[open]>summary::before{content:"− "}
+.mini{font-size:14px;line-height:1.55;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px;margin-top:4px}
+.fade{animation:fade .35s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}.btn{transition:none}}
+input[type=range]{width:100%;accent-color:#111316;height:32px}
+@media (max-width:640px){
+nav[aria-label="Main"]{gap:2px 16px!important;font-size:14.5px!important}
+[style*="px 32px"],[style*="padding:0 32px"]{padding-left:16px!important;padding-right:16px!important}
+[style*="padding:32px"],[style*="padding:30px"],[style*="padding:28px"]{padding:20px!important}
+[style*="padding:24px 28px"]{padding:18px!important}
+h1{font-size:34px!important;line-height:1.12!important}
+h2[style*="font-size:40px"],h2[style*="font-size:36px"],h2[style*="font-size:44px"]{font-size:28px!important}
+[style*="font-size:76px"],[style*="font-size:60px"]{font-size:48px!important}
+[style*="font-size:46px"]{font-size:34px!important}
+p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]{font-size:17px!important}
+}
+/* stage */
+.stage{background:#111316;color:#F4F1EA;position:relative;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 0%,rgba(210,180,124,.10),rgba(210,180,124,0) 70%);pointer-events:none}
+.wrap{max-width:1280px;margin:0 auto;padding-left:clamp(16px,4vw,48px);padding-right:clamp(16px,4vw,48px)}
+.eyb{font-family:'Geist Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.st-head{position:relative;padding-top:clamp(28px,3.6vw,48px);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.st-h1{margin:12px 0 0;font-size:clamp(36px,4vw,58px)!important;line-height:1.02!important;max-width:17ch;color:#F4F1EA}
+.st-h1 em{font-style:italic;color:#D2B47C}
+.st-lede{margin:0;max-width:430px;font-size:17px;line-height:1.65;color:#C4C6CA}
+.layers{position:relative;list-style:none;margin:clamp(28px,3.6vw,44px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(244,241,234,.14)}
+.layer{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:6px;align-items:baseline;padding:18px 4px 22px;border-bottom:2px solid transparent;color:#9A9DA3}
+.layer .ln{font-family:'Geist Mono',monospace;font-size:12.5px;letter-spacing:.12em;color:#8A8E94}
+.layer .ll{grid-column:1 / -1;grid-row:2;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(18px,1.8vw,24px);line-height:1.15}
+.layer .ls{grid-column:2;grid-row:1;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94}
+.layer.is-now{color:#F4F1EA;border-bottom-color:#D2B47C}
+.layer.is-now .ln,.layer.is-now .ls{color:#D2B47C}
+.layer.is-done{color:#D4D6DA}
+.layer.is-done .ls{color:#7FD3AE}
+.work{padding:clamp(28px,3.6vw,48px) 0 72px}
+.work .card{border-radius:20px}
+.work h2[style*="uppercase"]{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.14em!important;color:#8F7444!important}
+.work [style*="font-weight:800"],.work [style*="font-weight: 800"]{font-family:'Source Serif 4',Georgia,serif;font-weight:600!important;letter-spacing:-0.01em}
+
+/* the blueprint sheet */
+.sheet{position:sticky;top:calc(var(--hdr,68px) + 20px);flex:1 1 320px;min-width:0;align-self:flex-start;border-radius:20px;overflow:hidden;background-color:#15171A;color:#F4F1EA;
+  background-image:linear-gradient(rgba(210,180,124,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(210,180,124,.06) 1px,transparent 1px);background-size:24px 24px;
+  box-shadow:0 30px 60px -34px rgba(17,19,22,.6)}
+.sh-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid rgba(244,241,234,.1);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B0B3B8}
+.sh-top b{font-weight:500;color:#D2B47C}
+.sh-layers{padding:8px 22px 4px}
+.ly{position:relative;padding:16px 0 16px 40px;border-bottom:1px dashed rgba(244,241,234,.12)}
+.ly:last-child{border-bottom:0}
+.ly::before{content:"";position:absolute;left:13px;top:42px;bottom:-10px;width:1px;background:rgba(244,241,234,.12)}
+.ly:last-child::before{display:none}
+.ly-n{position:absolute;left:0;top:14px;width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;border:1px dashed rgba(244,241,234,.3);color:#9A9DA3;background:#15171A}
+.ly-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ly-name{font-family:'Source Serif 4',Georgia,serif;font-size:19px;line-height:1.2;color:#C4C6CA}
+.ly-st{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94;white-space:nowrap}
+.ly-rows{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.ly-r{display:flex;align-items:baseline;gap:8px;font-family:'Geist Mono',monospace;font-size:12.5px;color:#9A9DA3}
+.ly-r i{flex:1 1 10px;min-width:10px;border-bottom:1px dotted rgba(244,241,234,.2);transform:translateY(-4px)}
+.ly-r span:last-child{color:#E6E3DC;white-space:nowrap}
+.ly.is-now .ly-n{border:1px solid #D2B47C;color:#111316;background:#D2B47C}
+.ly.is-now .ly-name{color:#F4F1EA}
+.ly.is-now .ly-st{color:#D2B47C}
+.ly.is-done .ly-n{border:1px solid #7FD3AE;color:#7FD3AE}
+.ly.is-done .ly-name{color:#F4F1EA}
+.ly.is-done .ly-st{color:#7FD3AE}
+.ly.is-todo .ly-rows{opacity:.55}
+.sh-note{margin:0;padding:16px 22px 20px;border-top:1px solid rgba(244,241,234,.1);font-size:13.5px;line-height:1.6;color:#B0B3B8}
+.sh-note+.sh-note{border-top:0;padding-top:0}
+.sh-f{display:block;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:13px;color:#F4F1EA}
+/* ---------- step 4: results ---------- */
+.rz{margin-top:24px;display:flex;flex-direction:column;gap:24px}
+.rz-stage{position:relative;overflow:hidden;border-radius:24px;background:#111316;color:#F4F1EA;padding:clamp(20px,3vw,40px);box-shadow:0 40px 80px -50px rgba(17,19,22,.7)}
+.rz-stage::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(50% 60% at 85% 0%,rgba(210,180,124,.12),rgba(210,180,124,0) 70%)}
+.rz-stage>*{position:relative}
+.rz-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:18px}
+.rz-h1{margin:10px 0 0;font-size:clamp(30px,3.6vw,50px)!important;line-height:1.05!important;color:#F4F1EA;max-width:20ch}
+.rz-sub{margin:12px 0 0;max-width:640px;font-size:16px;line-height:1.6;color:#B0B3B8}
+.rz-edit{display:flex;flex-wrap:wrap;gap:10px}
+.rz-ghost{background:transparent;color:#F4F1EA;border:1px solid rgba(244,241,234,.28);min-height:44px;font-size:14.5px}
+.rz-ghost:hover{border-color:#D2B47C;color:#D2B47C}
+.rz-ctrl{margin-top:28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.3fr);gap:18px;padding:20px;border:1px solid rgba(244,241,234,.12);border-radius:16px;background:rgba(244,241,234,.03)}
+.rz-cl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#9A9DA3}
+.rz-cv{font-family:'Geist',sans-serif;font-size:15px;letter-spacing:0;text-transform:none;color:#F4F1EA;font-weight:600}
+.rz-pre{position:absolute;left:14px;top:0;height:46px;display:flex;align-items:center;color:#9A9DA3;font-weight:600;pointer-events:none}
+.rz-in{width:100%;height:46px;border:1px solid rgba(244,241,234,.22);border-radius:10px;padding:0 14px 0 32px;font:inherit;font-size:17px;font-weight:600;color:#F4F1EA;background:#181A1E;font-variant-numeric:tabular-nums}
+.rz-in:hover{border-color:rgba(244,241,234,.4)}
+.rz-in[aria-invalid="true"]{border-color:#E26A6A;background:#231A1B}
+.rz-err{margin-top:6px;font-size:13.5px;color:#F09A9A}
+.rz .rz-range{accent-color:#D2B47C;height:28px;margin:4px 0 0}
+.rz-scale{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10.5px;color:#6B6E74}
+.rz-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rz-sg{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:8px 10px;min-height:52px;border-radius:10px;border:1px solid rgba(244,241,234,.16);background:transparent;color:#C4C6CA;cursor:pointer;font-size:13px;text-align:left;transition:border-color .2s,background .2s}
+.rz-sg i{display:inline-block;width:18px;height:3px;border-radius:2px}
+.rz-sg b{font-weight:600;font-size:14.5px;color:#F4F1EA}
+.rz-sg:hover{border-color:rgba(244,241,234,.4)}
+.rz-sg[aria-pressed="true"]{border-color:#D2B47C;background:rgba(210,180,124,.1);color:#F4F1EA}
+.rz button:focus-visible,.rz input:focus-visible,.rz summary:focus-visible{outline:3px solid #D2B47C;outline-offset:2px}
+.rz-bad{margin-top:20px;padding:16px 18px;border-radius:12px;background:#2A1C1D;border:1px solid #6B3434;color:#F4D5D5;font-size:15px;line-height:1.6}
+.rz-bad strong{color:#fff}
+.rz-link{background:none;border:0;padding:0;color:#D2B47C;font:inherit;text-decoration:underline;cursor:pointer}
+
+.rz-ov{margin-top:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ov{padding:18px;border-radius:14px;background:#181A1E;border:1px solid rgba(244,241,234,.08);min-width:0}
+.ov-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ov-k{font-size:13.5px;color:#B0B3B8}
+.ov-tag{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.ov-tag.is-in{color:#C4C6CA;border:1px solid rgba(244,241,234,.22)}
+.ov-tag.is-est{color:#D2B47C;border:1px dashed rgba(210,180,124,.6)}
+.ov-v{margin-top:10px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(24px,2.4vw,34px);line-height:1.1;color:#F4F1EA;letter-spacing:-0.01em;overflow-wrap:anywhere}
+.ov-n{margin-top:6px;font-size:13px;line-height:1.5;color:#9A9DA3}
+.ov-d{margin-top:8px}
+.rz-stage details>summary{color:#D2B47C;font-size:13px}
+.ov-d p,.rz-stage .rz-fine{margin:6px 0 0;font-size:13px;line-height:1.6;color:#B0B3B8}
+
+.gx{margin-top:26px;padding-top:24px;border-top:1px solid rgba(244,241,234,.1)}
+.gx-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 24px}
+.rz-h2{margin:0;font-size:clamp(22px,2vw,28px)!important;color:#F4F1EA}
+.rz-p{margin:6px 0 0;max-width:560px;font-size:14.5px;line-height:1.6;color:#9A9DA3}
+.gx-key{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:#B0B3B8}
+.gx-key>span{display:inline-flex;align-items:center;gap:7px}
+.gx-key i{display:inline-block;width:16px;height:3px;border-radius:2px}
+.gx-dash{display:inline-block;width:18px;height:0!important;border-top:2px dashed #6B6D72;background:none!important;vertical-align:middle}
+.gx-wrap{margin-top:18px;display:grid;grid-template-columns:64px minmax(0,1fr)}
+.gx-y{position:relative;height:clamp(240px,30vw,340px)}
+.gx-y>span{position:absolute;right:10px;transform:translateY(-50%);font-family:'Geist Mono',monospace;font-size:11px;color:#6B6E74;white-space:nowrap}
+.gx-plot{position:relative;height:clamp(240px,30vw,340px);cursor:crosshair;touch-action:pan-y}
+.gx-grid{position:absolute;left:0;right:0;height:0;border-top:1px solid rgba(244,241,234,.07)}
+.gx-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:gxIn 1.2s cubic-bezier(.2,.7,.2,1) both}
+@keyframes gxIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.gx-cross{position:absolute;top:0;bottom:0;width:0;border-left:1px solid rgba(210,180,124,.45);pointer-events:none}
+.gx-dot{position:absolute;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(17,19,22,.9),0 0 0 5px rgba(244,241,234,.25);pointer-events:none}
+.gx-tip{position:absolute;top:8px;min-width:210px;padding:12px 14px;border-radius:12px;background:rgba(24,26,30,.96);border:1px solid rgba(244,241,234,.14);box-shadow:0 18px 40px -18px rgba(0,0,0,.8);pointer-events:none;font-size:13px}
+.gx-tt{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#D2B47C;margin-bottom:6px}
+.gx-tr{display:flex;justify-content:space-between;gap:14px;padding:3px 0;color:#B0B3B8}
+.gx-tr>span{display:inline-flex;align-items:center;gap:7px}
+.gx-tr i{width:10px;height:3px;border-radius:2px;display:inline-block}
+.gx-tr b{font-weight:600;color:#F4F1EA}
+.gx-tm{border-top:1px solid rgba(244,241,234,.08);margin-top:3px;padding-top:6px}
+.gx-tm+.gx-tm{border-top:0;margin-top:0;padding-top:3px}
+.gx-x{margin-left:64px;display:flex;justify-content:space-between;padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;color:#6B6E74}
+.gx-yr{margin:18px 0 0 64px;max-width:520px}
+.gx-yr .rz-cl{justify-content:flex-start}
+.rz-more{margin-top:14px}
+.tb{overflow-x:auto;margin-top:10px}
+.tb-in{min-width:640px}
+.tb-r{display:grid;grid-template-columns:70px repeat(4,minmax(0,1fr));gap:10px;padding:8px 0;border-bottom:1px solid rgba(244,241,234,.08);font-size:13.5px;color:#C4C6CA}
+.tb-r>span:not(:first-child){text-align:right}
+.tb-h{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A8E94}
+
+.rz-note{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:14px;background:#FFF4DE;border:1px solid #F0D9A8;color:#5A3A0A;font-size:14.5px;line-height:1.6}
+.rz-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.rz-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(20px,2.6vw,32px);min-width:0}
+.rz-h2d{margin:8px 0 0;font-size:clamp(22px,2vw,28px)!important;line-height:1.2!important;color:#111316}
+.rz-h2d em{color:#8F7444}
+.rz-card .rz-fine{margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--muted)}
+.rz-more-l>summary{color:var(--green)}
+
+.bk-bar{margin-top:22px;display:flex;height:22px;border-radius:6px;overflow:hidden;background:#F1EDE4}
+.bk-bar i{display:block;height:100%;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.bk-p{background:#111316}.bk-s{background:#C9B48A}.bk-c{background:#17A673}.bk-l{background:repeating-linear-gradient(135deg,#E26A6A 0 6px,#F2B3B3 6px 12px)}.bk-q{background:#8F7444}
+.bk-rows{margin-top:16px}
+.bk-r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--ink)}
+.bk-r>span{display:inline-flex;align-items:center;gap:9px;min-width:0}
+.bk-r>span>i{flex:none;width:12px;height:12px;border-radius:3px;display:inline-block}
+.bk-r b{font-weight:600;white-space:nowrap}
+.bk-t{border-bottom:0;font-weight:600}
+.bk-t b{font-family:'Source Serif 4',Georgia,serif;font-size:20px}
+.bk-real{margin-top:18px;padding:14px 16px;border-radius:12px;background:#F7F4EC}
+.bk-rl{display:flex;justify-content:space-between;gap:12px;font-size:14.5px}
+.bk-rl b{font-weight:600}
+.bk-bar2{margin-top:10px;height:10px}
+
+.pl{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pl-c{display:flex;flex-direction:column;align-items:stretch;gap:8px;padding:10px;border-radius:14px;border:1px solid transparent;background:none;cursor:pointer;color:var(--ink);text-align:center;transition:border-color .2s,background .2s}
+.pl-c:hover{background:#FAF8F3}
+.pl-c[aria-pressed="true"]{border-color:#111316;background:#FAF8F3}
+.pl-v{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(15px,1.4vw,19px);font-weight:600;white-space:nowrap}
+.pl-track{position:relative;height:clamp(150px,16vw,200px);border-radius:8px;background:#F4F1EA;overflow:hidden}
+.pl-bar{position:absolute;left:18%;right:18%;bottom:0;border-radius:6px 6px 0 0;transition:height .7s cubic-bezier(.2,.7,.2,1)}
+.pl-bl{position:absolute;left:0;right:0;height:0;border-top:2px dashed #111316;opacity:.55}
+.pl-n{font-weight:600;font-size:14.5px}
+.pl-r{font-size:13px;color:var(--muted)}
+.pl-key{margin:12px 0 0;font-size:13.5px;line-height:1.5;color:var(--muted)}
+.pl-key .gx-dash{border-top-color:#111316;opacity:.55;margin-right:8px}
+.pl-rows{margin-top:12px}
+.pl-row{display:grid;grid-template-columns:minmax(0,1.1fr) repeat(3,minmax(0,1fr));gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.pl-row>span:not(:first-child){text-align:right}
+.pl-row>span:first-child{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.pl-row i{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.pl-hd{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A867D}
+
+.rk-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+.rz-pd{margin:10px 0 0;font-size:15px;line-height:1.65;color:var(--muted)}
+.rk-bands{display:flex;flex-direction:column;gap:6px}
+.rk-b{display:grid;grid-template-columns:130px 70px minmax(0,1fr);gap:10px;align-items:baseline;padding:10px 12px;border-radius:10px;border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.rk-bn{font-weight:600;color:var(--ink)}
+.rk-br{font-family:'Geist Mono',monospace;font-size:11.5px}
+.rk-b[aria-current="true"]{border-color:#111316;background:#FAF8F3;box-shadow:inset 3px 0 0 #D2B47C}
+.rk-g{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ga{position:relative;padding:18px;border-radius:16px;background:#FAF8F3;border:1px solid var(--line);text-align:center}
+.ga-svg{display:block;width:100%;max-width:220px;margin:0 auto}
+.ga-arc{stroke-dasharray:var(--d) 100;animation:gaIn 1.3s cubic-bezier(.2,.7,.2,1) both}
+@keyframes gaIn{from{stroke-dasharray:0 100}}
+.ga-v{margin-top:-28px;font-size:13px;color:var(--muted)}
+.ga-v b{font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:600;color:#111316}
+.ga-n{margin-top:8px;font-weight:600;font-size:15.5px;color:#111316}
+.ga-bd{display:inline-block;margin-left:6px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:#8F7444;border:1px solid #E2D3B1;border-radius:999px;padding:2px 7px;vertical-align:2px}
+.ga-s{margin-top:2px;font-size:13px;color:var(--muted)}
+.ga-t{margin:10px 0 0;font-size:13.5px;line-height:1.55;color:var(--muted);text-align:left}
+.ga-min{display:flex;flex-direction:column;justify-content:center;background:#fff}
+.ga-eq{display:flex;align-items:baseline;justify-content:center;gap:12px;font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:600;color:#111316}
+.ga-eq i{font-family:'Geist Mono',monospace;font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
+.rk-warn{margin-top:18px;padding:12px 16px;border-left:3px solid #D2B47C;background:#F7F4EC;border-radius:0 10px 10px 0;font-size:14px;line-height:1.6;color:#4A4843}
+.rk-more{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.rk-req{font-size:14.5px;line-height:1.65;color:var(--ink)}
+.rk-flags{display:flex;flex-direction:column;gap:8px}
+.rk-f{display:flex;gap:10px;padding:10px 12px;border-radius:10px;font-size:14px;line-height:1.5}
+.it-r{display:grid;grid-template-columns:44px minmax(0,1.3fr) minmax(0,1.3fr) 40px;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+
+.rz-dark{background:#111316;border-color:#111316;color:#F4F1EA}
+.rz-h2l{margin:8px 0 0;font-size:clamp(22px,2vw,28px)!important;line-height:1.2!important;color:#F4F1EA}
+.rr{display:block;width:100%;margin-top:18px}
+.rr-x{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 4.4% 0 10.6%;text-align:center;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.08em}
+.rz-pl{margin:12px 0 0;font-size:14.5px;line-height:1.65;color:#B0B3B8}
+.rz-pl b{color:#F4F1EA;font-weight:600}
+.dn-chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.rz-chip{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #D3CEC3;background:#fff;cursor:pointer;font-size:14px;color:var(--ink)}
+.rz-chip[aria-pressed="true"]{background:#111316;border-color:#111316;color:#F4F1EA}
+.dn{margin-top:18px;display:flex;flex-direction:column;gap:16px}
+.dn-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14.5px}
+.dn-h>span{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.dn-h i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.dn-h b{font-family:'Source Serif 4',Georgia,serif;font-size:19px;font-weight:600}
+.dn-bar{margin-top:8px;display:flex;height:14px;border-radius:4px;overflow:hidden;background:#F4F1EA}
+.dn-bar i{display:block;height:100%;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.dn-lost{background:repeating-linear-gradient(135deg,#E26A6A 0 5px,#F6C9C9 5px 10px)}
+.dn-s{margin-top:6px;display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted)}
+.dn-s>span:last-child{color:var(--red)}
+
+.bg{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+.bg-l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
+.bg-bar{margin:10px 0 8px;display:flex;height:18px;border-radius:5px;overflow:hidden;background:#F4F1EA}
+.bg-bar i{display:block;height:100%}
+.cn{margin:16px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:10px;font-size:15.5px;line-height:1.6;color:var(--ink)}
+.cn li::marker{font-family:'Geist Mono',monospace;color:#8F7444;font-size:13px}
+.cn-src{margin-top:20px;padding:16px 18px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:14px;line-height:1.6;color:var(--muted)}
+.cn-src strong{color:var(--navy)}
+
+.rz-js .rz [data-rv]{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rz-js .rz [data-rv].in{opacity:1;transform:none}
+@media (max-width:1000px){.rz-ctrl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rz-c-wide{grid-column:1 / -1;order:3}.rz-ov{grid-template-columns:repeat(2,minmax(0,1fr))}.rz-two,.rk-top,.rk-more,.bg{grid-template-columns:minmax(0,1fr)}.rk-g{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ga-min{grid-column:1 / -1}}
+@media (max-width:640px){.rz-ctrl{grid-template-columns:minmax(0,1fr);padding:14px}.rz-c-wide{order:0}.rz-ov{grid-template-columns:minmax(0,1fr)}.rk-g{grid-template-columns:minmax(0,1fr)}.gx-wrap{grid-template-columns:48px minmax(0,1fr)}.gx-x,.gx-yr{margin-left:48px}.gx-y,.gx-plot{height:280px}.gx-tip{min-width:0;width:158px;left:4px!important;right:auto!important;top:2px;padding:8px 10px;font-size:11.5px;background:rgba(24,26,30,.88)}.gx-tr{gap:8px;padding:2px 0}.gx-tt{margin-bottom:3px}.gx-tm{display:none}.rk-b{grid-template-columns:minmax(0,1fr) auto}.rk-bt{grid-column:1 / -1}.pl{gap:6px}.pl-c{padding:6px 2px}.pl-v{font-size:13.5px}.pl-row{font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){.gx-svg,.ga-arc{animation:none}.bk-bar i,.pl-bar,.dn-bar i{transition:none}.rz-js .rz [data-rv]{opacity:1;transform:none;transition:none}}
+@media (max-width:900px){.layers{grid-template-columns:repeat(2,minmax(0,1fr))}.sheet{position:relative;top:0}}
+
+</style>
+</helmet>
+
+<div style="width:100%;min-height:100%;background:var(--bg)">
+
+<header class="hd" style="position:sticky;top:0;z-index:60;background:rgba(17,19,22,.96);border-bottom:1px solid rgba(244,241,234,.12);color:#F4F1EA">
+  <div style="max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+    <a href="Main.dc.html" aria-label="Gullak home" style="display:flex;align-items:center;gap:12px">
+      <svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>
+      <span style="font-family:'Source Serif 4',Georgia,serif;font-size:23px;letter-spacing:-0.01em;color:#F4F1EA">Gullak</span>
+    </a>
+    <nav aria-label="Main" class="ap-nav" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;font-size:15px;font-weight:500;color:#D2D4D8">
+      <a href="Workspace.dc.html" aria-current="page" style="color:#D2B47C;font-weight:600">Planner</a>
+      <a href="Recovery.dc.html">Break-even</a>
+      <a href="TradeCost.dc.html">Charges</a>
+      <a href="Candlesticks.dc.html">Candlesticks</a>
+      <a href="Practice.dc.html">Practice desk</a>
+    </nav>
+  </div>
+</header>
+
+<main data-arth-ready="1">
+<section class="stage" aria-labelledby="page-h">
+  <div class="wrap">
+    <div class="st-head">
+      <div>
+        <p class="eyb" style="margin:0;color:#D2B47C">Planner</p>
+        <h1 id="page-h" class="st-h1">Draw your plan <em>one layer at a time.</em></h1>
+      </div>
+      <p class="st-lede">Four steps, each one a layer of the plan. The plan sheet fills in with your own numbers as you go. Nothing you type leaves your browser.</p>
+    </div>
+    <ol class="layers" aria-label="Progress">
+      <sc-for list="{{stepper}}" as="p" hint-placeholder-count="4">
+        <li class="layer {{p.cls}}" aria-current="{{p.current}}"><span class="ln">0{{p.n}}</span><span class="ll">{{p.label}}</span><span class="ls">{{p.stateText}}</span></li>
+      </sc-for>
+    </ol>
+  </div>
+</section>
+
+<section class="work">
+<div class="wrap">
+
+  <!-- ============ STEP 1 ============ -->
+  <sc-if value="{{is1}}" hint-placeholder-val="{{true}}">
+  <div class="fade" style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px">
+    <section class="card" style="flex:2 1 560px;min-width:0;padding:32px">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <h1 style="margin:0;font-size:32px;color:var(--navy)">Your financial profile</h1>
+          <p style="margin:8px 0 0;font-size:17px;line-height:1.5;color:var(--muted)">Use rough, honest figures. Enter 0 where something does not apply.</p>
+        </div>
+        <button class="btn btn-ghost" type="button" onClick="{{loadSample}}" style="min-height:44px;font-size:14.5px">Fill with sample numbers</button>
+      </div>
+
+      <sc-for list="{{groups}}" as="g" hint-placeholder-count="3">
+        <div style="margin-top:32px">
+          <h2 style="margin:0 0 14px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green)">{{g.title}}</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:18px 20px">
+            <sc-for list="{{g.fields}}" as="fl" hint-placeholder-count="3">
+              <div style="flex:1 1 240px;min-width:0">
+                <label class="lbl" for="{{fl.id}}">{{fl.label}}<span style="font-weight:400;color:var(--muted)">{{fl.opt}}</span></label>
+                <div style="position:relative">
+                  <sc-if value="{{fl.hasPre}}" hint-placeholder-val="{{true}}"><span class="pre" aria-hidden="true">₹</span></sc-if>
+                  <input id="{{fl.id}}" class="{{fl.cls}}" type="text" inputmode="decimal" autocomplete="off" placeholder="{{fl.ph}}" value="{{fl.value}}" onInput="{{fl.onInput}}" aria-invalid="{{fl.invalid}}" aria-describedby="{{fl.descId}}">
+                  <sc-if value="{{fl.hasSuf}}" hint-placeholder-val="{{false}}"><span class="suf" aria-hidden="true">{{fl.suf}}</span></sc-if>
+                  <sc-if value="{{fl.hasUnit}}" hint-placeholder-val="{{false}}"><select class="unit-sel" aria-label="Unit of time" value="{{fl.unit}}" onChange="{{fl.onUnit}}"><option value="years">Years</option><option value="months">Months</option><option value="days">Days</option></select></sc-if>
+                </div>
+                <div id="{{fl.descId}}">
+                  <sc-if value="{{fl.hasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{fl.err}}</div></sc-if>
+                  <div class="hint">{{fl.hint}}</div>
+                </div>
+                <details><summary>What does this mean?</summary><div class="mini">{{fl.help}}</div></details>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="margin-top:32px">
+        <h2 style="margin:0 0 6px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green)">Main aim for the amount you are considering</h2>
+        <p class="hint" style="margin:0 0 12px">Used only to compare with your risk profile. It does not select any product.</p>
+        <div role="group" aria-label="Main aim" class="opts">
+          <sc-for list="{{objectives}}" as="o" hint-placeholder-count="5">
+            <button class="opt" type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}">{{o.label}}</button>
+          </sc-for>
+        </div>
+        <sc-if value="{{objErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">Choose the aim closest to yours.</div></sc-if>
+      </div>
+
+      <sc-if value="{{s1fail}}" hint-placeholder-val="{{false}}"><div role="alert" style="margin-top:24px;background:var(--redTint);color:var(--red);border-radius:10px;padding:12px 14px;font-weight:600">Please fix the highlighted fields to continue.</div></sc-if>
+
+      <div style="margin-top:32px;display:flex;justify-content:flex-end">
+        <button class="btn btn-primary" type="button" onClick="{{next1}}" style="min-height:52px;padding:0 30px">Continue to risk questions</button>
+      </div>
+    </section>
+
+    <aside class="sheet" aria-label="Your plan so far">
+      <div class="sh-top"><span>Plan sheet</span><b>{{bp.status}}</b></div>
+      <div class="sh-layers">
+        <sc-for list="{{bp.layers}}" as="ly" hint-placeholder-count="4">
+          <div class="ly {{ly.cls}}">
+            <span class="ly-n" aria-hidden="true">{{ly.mark}}</span>
+            <div class="ly-h"><span class="ly-name">{{ly.name}}</span><span class="ly-st">{{ly.state}}</span></div>
+            <div class="ly-rows">
+              <sc-for list="{{ly.rows}}" as="r" hint-placeholder-count="2"><div class="ly-r"><span>{{r.k}}</span><i aria-hidden="true"></i><span class="num">{{r.v}}</span></div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p class="sh-note">Savings, emergency money and investments are kept in separate pots. This tool does not say how much of any pot you should hold, and it does not assume you should invest your surplus.</p>
+    </aside>
+  </div>
+  </sc-if>
+
+  <!-- ============ STEP 2 ============ -->
+  <sc-if value="{{is2}}" hint-placeholder-val="{{false}}">
+  <div class="fade" style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px">
+    <section class="card" style="flex:2 1 560px;min-width:0;padding:32px">
+      <h1 style="margin:0;font-size:32px;color:var(--navy)">Your risk questions</h1>
+      <p style="margin:8px 0 0;font-size:17px;line-height:1.5;color:var(--muted)">There are no right or wrong answers. Part A is about what your finances can absorb. Part B is about what feels comfortable to you. They are scored separately.</p>
+
+      <sc-for list="{{qsections}}" as="sec" hint-placeholder-count="3">
+        <div style="margin-top:36px">
+          <h2 style="margin:0;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green)">{{sec.title}}</h2>
+          <p class="hint" style="margin:6px 0 0">{{sec.note}}</p>
+          <sc-for list="{{sec.qs}}" as="q" hint-placeholder-count="3">
+            <fieldset style="border:0;padding:0;margin:22px 0 0;min-width:0">
+              <legend style="font-weight:600;font-size:17px;line-height:1.4;color:var(--navy);padding:0 0 10px">{{q.text}}</legend>
+              <div class="opts">
+                <sc-for list="{{q.options}}" as="o" hint-placeholder-count="5">
+                  <button class="opt" type="button" aria-pressed="{{o.pressed}}" onClick="{{o.pick}}">{{o.label}}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{q.hasExpl}}" hint-placeholder-val="{{false}}"><div class="mini" style="margin-top:10px"><strong>{{q.result}}</strong> {{q.expl}}</div></sc-if>
+            </fieldset>
+          </sc-for>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{s2fail}}" hint-placeholder-val="{{false}}"><div role="alert" style="margin-top:24px;background:var(--redTint);color:var(--red);border-radius:10px;padding:12px 14px;font-weight:600">Please answer all of the questions in parts A and B to continue.</div></sc-if>
+
+      <div style="margin-top:32px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px">
+        <button class="btn btn-ghost" type="button" onClick="{{back2}}">Back</button>
+        <button class="btn btn-primary" type="button" onClick="{{next2}}" style="min-height:52px;padding:0 30px">Continue to assumptions</button>
+      </div>
+    </section>
+    <aside class="sheet" aria-label="Your plan so far">
+      <div class="sh-top"><span>Plan sheet</span><b>{{bp.status}}</b></div>
+      <div class="sh-layers">
+        <sc-for list="{{bp.layers}}" as="ly" hint-placeholder-count="4">
+          <div class="ly {{ly.cls}}">
+            <span class="ly-n" aria-hidden="true">{{ly.mark}}</span>
+            <div class="ly-h"><span class="ly-name">{{ly.name}}</span><span class="ly-st">{{ly.state}}</span></div>
+            <div class="ly-rows">
+              <sc-for list="{{ly.rows}}" as="r" hint-placeholder-count="2"><div class="ly-r"><span>{{r.k}}</span><i aria-hidden="true"></i><span class="num">{{r.v}}</span></div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p class="sh-note">This is the project's own educational method, with published weights. It is not a SEBI category or score, and it is not a suitability assessment. Numbers in the questions are hypothetical prompts, not statistics.</p>
+      <p class="sh-note">Part C is optional. It does not change your profile. It only checks whether a few basics might be worth reading about.</p>
+    </aside>
+  </div>
+  </sc-if>
+
+  <!-- ============ STEP 3 ============ -->
+  <sc-if value="{{is3}}" hint-placeholder-val="{{false}}">
+  <div class="fade" style="margin-top:24px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px">
+    <section class="card" style="flex:2 1 560px;min-width:0;padding:32px">
+      <h1 style="margin:0;font-size:32px;color:var(--navy)">Your assumptions</h1>
+      <p style="margin:8px 0 0;font-size:17px;line-height:1.5;color:var(--muted)">You are looking at a one-time amount of <strong class="num" style="color:var(--navy)">{{pvText}}</strong> for <strong style="color:var(--navy)">{{yearsText}}</strong>. <button class="btn-text" type="button" onClick="{{toStep1}}">Change</button></p>
+
+      <div style="margin-top:22px;background:var(--amberTint);color:var(--amber);border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.55"><strong>No suggested returns.</strong> A defensible range needs licensed historical index data, which this tool does not have yet. The three rates below are yours. They are illustrations, not forecasts.</div>
+
+      <div style="margin-top:28px">
+        <h2 style="margin:0 0 14px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green)">Three annual return assumptions, lowest to highest</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:18px 20px">
+          <sc-for list="{{rateFields}}" as="fl" hint-placeholder-count="3">
+            <div style="flex:1 1 180px;min-width:0">
+              <label class="lbl" for="{{fl.id}}">{{fl.label}}</label>
+              <div style="position:relative">
+                <input id="{{fl.id}}" class="inp plain sfx" type="text" inputmode="decimal" autocomplete="off" placeholder="{{fl.ph}}" value="{{fl.value}}" onInput="{{fl.onInput}}" aria-invalid="{{fl.invalid}}" aria-describedby="{{fl.descId}}">
+                <span class="suf" aria-hidden="true">% a year</span>
+              </div>
+              <div id="{{fl.descId}}"><sc-if value="{{fl.hasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{fl.err}}</div></sc-if></div>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{orderErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{orderErrText}}</div></sc-if>
+        <details><summary>What is an annual return, and why three?</summary><div class="mini">An annual return is how much an investment grows (or falls) each year, as a percentage. Real returns vary from year to year and cannot be known in advance, so comparing a lower, a middle and a higher assumption shows how sensitive the outcome is. Negative rates are allowed.</div></details>
+        <button class="btn-text" type="button" onClick="{{fillRates}}">Fill demo rates 8, 10, 12 (demo only, not suggestions)</button>
+      </div>
+
+      <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:18px 20px">
+        <div style="flex:1 1 260px;min-width:0">
+          <label class="lbl" for="in-infl">Assumed yearly inflation</label>
+          <div style="position:relative">
+            <input id="in-infl" class="inp plain sfx" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 6.08" value="{{inflValue}}" onInput="{{onInfl}}" aria-invalid="{{inflInvalid}}" aria-describedby="d-infl">
+            <span class="suf" aria-hidden="true">% a year</span>
+          </div>
+          <div id="d-infl"><sc-if value="{{inflHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{inflErr}}</div></sc-if>
+          <div class="hint">Used to show values in today's rupees.</div></div>
+          <details><summary>What is inflation?</summary><div class="mini">Inflation is the general rise in prices, usually measured by the Consumer Price Index (CPI). If prices rise faster than your money grows, you can buy less with it. "Real" values remove this effect.</div></details>
+          <button class="btn-text" type="button" onClick="{{fillInfl}}">Use 6.08% (latest CPI inflation, till 12 Nov 2026, per MOSPL)</button>
+        </div>
+        <div style="flex:1 1 260px;min-width:0">
+          <label class="lbl" for="in-goal">Goal amount you want in the future<span style="font-weight:400;color:var(--muted)"> (optional)</span></label>
+          <div style="position:relative">
+            <span class="pre" aria-hidden="true">₹</span>
+            <input id="in-goal" class="inp" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 5,00,000" value="{{goalValue}}" onInput="{{onGoal}}" aria-invalid="{{goalInvalid}}" aria-describedby="d-goal">
+          </div>
+          <div id="d-goal"><sc-if value="{{goalHasErr}}" hint-placeholder-val="{{false}}"><div class="err" role="alert">{{goalErr}}</div></sc-if>
+          <div class="hint">If you enter one, the dashboard shows the yearly growth it would need.</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:28px">
+        <h2 style="margin:0 0 6px;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green)">Hypothetical fall to illustrate</h2>
+        <p class="hint" style="margin:0 0 12px">Round numbers for illustration. They are not past market events and not forecasts.</p>
+        <div role="group" aria-label="Hypothetical fall" class="opts opts-sm">
+          <sc-for list="{{drops}}" as="d" hint-placeholder-count="3">
+            <button class="opt" type="button" aria-pressed="{{d.pressed}}" onClick="{{d.pick}}">{{d.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{s3fail}}" hint-placeholder-val="{{false}}"><div role="alert" style="margin-top:24px;background:var(--redTint);color:var(--red);border-radius:10px;padding:12px 14px;font-weight:600">Please fix the highlighted fields to see your dashboard.</div></sc-if>
+
+      <div style="margin-top:32px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px">
+        <button class="btn btn-ghost" type="button" onClick="{{back3}}">Back</button>
+        <button class="btn btn-primary" type="button" onClick="{{next3}}" style="min-height:52px;padding:0 30px">See my dashboard</button>
+      </div>
+    </section>
+    <aside class="sheet" aria-label="Your plan so far">
+      <div class="sh-top"><span>Plan sheet</span><b>{{bp.status}}</b></div>
+      <div class="sh-layers">
+        <sc-for list="{{bp.layers}}" as="ly" hint-placeholder-count="4">
+          <div class="ly {{ly.cls}}">
+            <span class="ly-n" aria-hidden="true">{{ly.mark}}</span>
+            <div class="ly-h"><span class="ly-name">{{ly.name}}</span><span class="ly-st">{{ly.state}}</span></div>
+            <div class="ly-rows">
+              <sc-for list="{{ly.rows}}" as="r" hint-placeholder-count="2"><div class="ly-r"><span>{{r.k}}</span><i aria-hidden="true"></i><span class="num">{{r.v}}</span></div></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p class="sh-note"><span class="sh-f">Value = amount × (1 + rate) ^ years</span>The rate is applied once a year, with no withdrawals. Calculations use exact whole-number arithmetic on paise, so there is no floating-point drift. Values are rounded to the paisa only for display.</p>
+      <p class="sh-note">Not included: fund costs, brokerage, STT, stamp duty, exit loads, GST, capital-gains tax.</p>
+    </aside>
+  </div>
+  </sc-if>
+
+  <!-- ============ STEP 4: RESULTS ============ -->
+  <sc-if value="{{is4}}" hint-placeholder-val="{{false}}">
+  <div class="rz">
+
+    <!-- results stage: controls, overview, growth -->
+    <section class="rz-stage" aria-labelledby="rz-h">
+      <div class="rz-top">
+        <div>
+          <p class="eyb" style="margin:0;color:#D2B47C">Your results · layer 04</p>
+          <h1 id="rz-h" class="rz-h1">{{r.title}}</h1>
+          <p class="rz-sub">{{r.sub}}</p>
+        </div>
+        <div class="rz-edit"><button class="btn rz-ghost" type="button" onClick="{{back4}}">Edit assumptions</button><button class="btn rz-ghost" type="button" onClick="{{toStep1}}">Edit profile</button><button class="btn rz-ghost" type="button" data-rz-pdf="1">Download a PDF</button></div>
+      </div>
+
+      <div class="rz-ctrl">
+        <div class="rz-c">
+          <label class="rz-cl" for="rz-pv">Amount invested</label>
+          <div style="position:relative">
+            <span class="rz-pre" aria-hidden="true">₹</span>
+            <input id="rz-pv" class="rz-in" type="text" inputmode="decimal" autocomplete="off" value="{{r.pvValue}}" onInput="{{r.onPv}}" aria-invalid="{{r.pvInvalid}}" aria-describedby="rz-pv-d">
+          </div>
+          <div id="rz-pv-d"><sc-if value="{{r.pvHasErr}}" hint-placeholder-val="{{false}}"><div class="rz-err" role="alert">{{r.pvErr}}</div></sc-if></div>
+        </div>
+        <div class="rz-c rz-c-wide">
+          <label class="rz-cl" for="rz-yrs">Horizon <span class="num rz-cv">{{r.yearsLabel}}</span></label>
+          <input id="rz-yrs" class="rz-range" type="range" min="1" max="{{r.slMax}}" step="1" value="{{r.yearsValue}}" onInput="{{r.onYears}}" aria-valuetext="{{r.yearsLabel}}">
+          <div class="rz-scale" aria-hidden="true"><span>{{r.slLo}}</span><span>{{r.slMid}}</span><span>{{r.slHi}}</span></div>
+        </div>
+        <div class="rz-c">
+          <span class="rz-cl" id="rz-sc-l">Assumption shown</span>
+          <div class="rz-seg" role="group" aria-labelledby="rz-sc-l">
+            <sc-for list="{{r.tabs}}" as="t" hint-placeholder-count="3"><button class="rz-sg" type="button" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}"><i style="background:{{t.col}}"></i><span>{{t.name}}</span><b class="num">{{t.rate}}</b></button></sc-for>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{r.bad}}" hint-placeholder-val="{{false}}">
+        <div class="rz-bad" role="alert"><strong>Results paused.</strong> {{r.badText}} Fix the field above, or go back to <button class="rz-link" type="button" onClick="{{toStep1}}">your profile</button> or <button class="rz-link" type="button" onClick="{{back4}}">your assumptions</button>.</div>
+      </sc-if>
+
+      <sc-if value="{{r.ok}}" hint-placeholder-val="{{true}}">
+      <div class="rz-ov" data-rv="1">
+        <sc-for list="{{r.ov}}" as="k" hint-placeholder-count="4">
+          <div class="ov">
+            <div class="ov-h"><span class="ov-k">{{k.k}}</span><span class="ov-tag {{k.tagCls}}">{{k.tag}}</span></div>
+            <div class="ov-v num cu">{{k.v}}</div>
+            <div class="ov-n">{{k.note}}</div>
+            <details class="ov-d"><summary>How is this worked out?</summary><p>{{k.how}}</p></details>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="gx" data-rv="1">
+        <div class="gx-head">
+          <div><h2 class="rz-h2">How it could grow, year by year</h2><p class="rz-p">Move across the chart, or use the year slider, to read any year. The bold line is the assumption you picked above.</p></div>
+          <div class="gx-key" aria-hidden="true">
+            <sc-for list="{{r.tabs}}" as="t" hint-placeholder-count="3"><span><i style="background:{{t.col}}"></i>{{t.name}}</span></sc-for>
+            <span><i class="gx-dash"></i>Amount invested</span>
+          </div>
+        </div>
+        <div class="gx-wrap">
+          <div class="gx-y" aria-hidden="true">
+            <sc-for list="{{r.chart.yticks}}" as="y" hint-placeholder-count="5"><span class="num" style="top:{{y.top}}">{{y.label}}</span></sc-for>
+          </div>
+          <div class="gx-plot" data-t="{{r.t}}" data-times="{{r.timesAttr}}">
+            <sc-for list="{{r.chart.yticks}}" as="y" hint-placeholder-count="5"><i class="gx-grid" style="top:{{y.top}}"></i></sc-for>
+            <svg class="gx-svg" viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="{{r.chart.aria}}">
+              <defs><linearGradient id="gx-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{r.chart.selCol}}" stop-opacity=".28"></stop><stop offset="1" stop-color="{{r.chart.selCol}}" stop-opacity="0"></stop></linearGradient></defs>
+              <path d="{{r.chart.area}}" fill="url(#gx-fill)" stroke="none"></path>
+              <path d="{{r.chart.base}}" fill="none" stroke="#6B6D72" stroke-width="1.4" stroke-dasharray="4 5" vector-effect="non-scaling-stroke"></path>
+              <sc-for list="{{r.chart.lines}}" as="l" hint-placeholder-count="3"><path d="{{l.d}}" fill="none" stroke="{{l.col}}" stroke-width="{{l.w}}" stroke-opacity="{{l.op}}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path></sc-for>
+            </svg>
+            <i class="gx-cross" style="left:{{r.chart.selX}}%"></i>
+            <i class="gx-dot" style="left:{{r.chart.selX}}%;top:{{r.chart.dotY}}%;background:{{r.chart.selCol}}"></i>
+            <div class="gx-tip" style="{{r.chart.tipPos}}" aria-hidden="true">
+              <div class="gx-tt">{{r.tip.year}}</div>
+              <sc-for list="{{r.tip.rows}}" as="x" hint-placeholder-count="3"><div class="gx-tr"><span><i style="background:{{x.col}}"></i>{{x.name}}</span><b class="num">{{x.val}}</b></div></sc-for>
+              <div class="gx-tr gx-tm"><span>Amount invested</span><b class="num">{{r.tip.inv}}</b></div>
+              <div class="gx-tr gx-tm"><span>Picked, in today's ₹</span><b class="num">{{r.tip.real}}</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="gx-x" aria-hidden="true"><sc-for list="{{r.chart.xticks}}" as="x" hint-placeholder-count="5"><span>{{x}}</span></sc-for></div>
+        <div class="gx-yr">
+          <label for="yr" class="rz-cl"><span class="num rz-cv">{{r.selLabel}}</span></label>
+          <input id="yr" class="rz-range" type="range" min="1" max="{{v.maxYear}}" step="1" value="{{v.selYear}}" onInput="{{onYear}}" aria-valuetext="{{r.tip.aria}}">
+        </div>
+        <details class="rz-more"><summary>See the year-by-year table ({{r.selName}})</summary>
+          <div class="tb"><div class="tb-in">
+            <div class="tb-r tb-h"><span>Year</span><span>Estimated value</span><span>Gain in the year</span><span>Total gain so far</span><span>In today's ₹</span></div>
+            <sc-for list="{{v.table}}" as="row" hint-placeholder-count="10">
+              <div class="tb-r"><span class="num">{{row.year}}</span><span class="num">{{row.value}}</span><span class="num">{{row.yearGain}}</span><span class="num">{{row.totalGain}}</span><span class="num">{{row.real}}</span></div>
+            </sc-for>
+          </div></div>
+          <p class="rz-fine">{{v.howProjection}}</p>
+        </details>
+      </div>
+      </sc-if>
+    </section>
+
+    <sc-if value="{{r.ok}}" hint-placeholder-val="{{true}}">
+    <div class="rz-note" role="note"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" style="flex:0 0 auto;margin-top:1px"><path d="M12 3 2.5 20h19L12 3z" fill="#8A4B00"></path><path d="M12 9.5v5" stroke="#FBF1DC" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="17.3" r="1.2" fill="#FBF1DC"></circle></svg><span>{{v.disclaimer}}</span></div>
+
+    <!-- what the end value is made of, and the three assumptions side by side -->
+    <div class="rz-two">
+      <section class="rz-card" aria-labelledby="bk-h" data-rv="1">
+        <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">Breakdown · {{r.selName}}</p>
+        <h2 id="bk-h" class="rz-h2d">What {{r.fvText}} would be made of</h2>
+        <div class="bk-bar" role="img" aria-label="{{r.bk.aria}}">
+          <sc-for list="{{r.bk.parts}}" as="b" hint-placeholder-count="3"><i class="{{b.cls}}" style="width:{{b.w}}"></i></sc-for>
+        </div>
+        <div class="bk-rows">
+          <sc-for list="{{r.bk.parts}}" as="b" hint-placeholder-count="3">
+            <div class="bk-r"><span><i class="{{b.cls}}"></i>{{b.label}}</span><b class="num">{{b.v}}</b></div>
+          </sc-for>
+          <div class="bk-r bk-t"><span>Estimated value</span><b class="num">{{r.fvText}}</b></div>
+        </div>
+        <div class="bk-real">
+          <div class="bk-rl"><span>The same value in today's rupees</span><b class="num">{{r.bk.real}}</b></div>
+          <div class="bk-bar bk-bar2" aria-hidden="true"><i class="bk-q" style="width:{{r.bk.realW}}"></i></div>
+          <p class="rz-fine" style="margin:8px 0 0">{{r.bk.realNote}}</p>
+        </div>
+        <details class="rz-more rz-more-l"><summary>What is "growth on growth"?</summary><p class="rz-fine">{{r.bk.explain}}</p></details>
+      </section>
+
+      <section class="rz-card" aria-labelledby="pl-h" data-rv="1">
+        <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">Scenario comparison</p>
+        <h2 id="pl-h" class="rz-h2d">Your three assumptions after {{r.yearsLabel}}</h2>
+        <div class="pl">
+          <sc-for list="{{r.pillars}}" as="p" hint-placeholder-count="3">
+            <button class="pl-c" type="button" aria-pressed="{{p.pressed}}" onClick="{{p.pick}}" aria-label="{{p.aria}}">
+              <span class="pl-v num">{{p.fv}}</span>
+              <span class="pl-track"><span class="pl-bar" style="height:{{p.h}};background:{{p.col}}"></span><i class="pl-bl" style="bottom:{{p.base}}"></i></span>
+              <span class="pl-n">{{p.name}}</span>
+              <span class="pl-r num">{{p.rate}} a year</span>
+            </button>
+          </sc-for>
+        </div>
+        <p class="pl-key"><i class="gx-dash"></i>Dashed line: the {{r.pvText}} you invest. Select a column to show that assumption everywhere on this page.</p>
+        <div class="pl-rows">
+          <div class="pl-row pl-hd"><span></span><span>Gain</span><span>Return</span><span>In today's ₹</span></div>
+          <sc-for list="{{r.pillars}}" as="p" hint-placeholder-count="3">
+            <div class="pl-row"><span><i style="background:{{p.col}}"></i>{{p.name}}</span><span class="num">{{p.gain}}</span><span class="num">{{p.ret}}</span><span class="num">{{p.real}}</span></div>
+          </sc-for>
+        </div>
+        <p class="rz-fine">{{r.spread}}</p>
+      </section>
+    </div>
+
+    <!-- risk profile -->
+    <section class="rz-card rz-risk" aria-labelledby="rk-h" data-rv="1">
+      <div class="rk-top">
+        <div>
+          <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">Risk assessment · educational</p>
+          <h2 id="rk-h" class="rz-h2d">Your profile: <em>{{v.className}}</em></h2>
+          <p class="rz-pd">{{v.classText}}</p>
+        </div>
+        <div class="rk-bands" role="list" aria-label="Profile bands">
+          <sc-for list="{{r.bands}}" as="b" hint-placeholder-count="3">
+            <div class="rk-b" role="listitem" aria-current="{{b.cur}}"><span class="rk-bn">{{b.name}}</span><span class="rk-br num">{{b.range}}</span><span class="rk-bt">{{b.text}}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rk-g">
+        <sc-for list="{{r.gauges}}" as="g" hint-placeholder-count="2">
+          <div class="ga">
+            <svg viewBox="0 0 120 70" class="ga-svg" role="img" aria-label="{{g.aria}}">
+              <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#E6E1D6" stroke-width="9" pathLength="100" stroke-dasharray="39.4 100"></path>
+              <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#D6CDB8" stroke-width="9" pathLength="100" stroke-dasharray="0 40 29.4 100"></path>
+              <path d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#E9D9B5" stroke-width="9" pathLength="100" stroke-dasharray="0 70 30 100"></path>
+              <path class="ga-arc" d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#111316" stroke-width="9" stroke-linecap="round" pathLength="100" style="--d:{{g.dash}}"></path>
+            </svg>
+            <div class="ga-v"><b class="num cu">{{g.score}}</b><span> / 100</span></div>
+            <div class="ga-n">{{g.name}} <span class="ga-bd">{{g.band}}</span></div>
+            <div class="ga-s">{{g.sub}}</div>
+            <p class="ga-t">{{g.text}}</p>
+          </div>
+        </sc-for>
+        <div class="ga ga-min">
+          <div class="ga-eq" aria-hidden="true"><span class="num">{{r.capScore}}</span><i>and</i><span class="num">{{r.tolScore}}</span></div>
+          <div class="ga-n">The lower one sets the profile</div>
+          <p class="ga-t">Taking more risk than you can afford, or more than you are comfortable with, is what the profile tries to avoid. So the profile is the lower of the two scores: <b class="num">{{r.klassScore}}</b>, {{v.className}}.</p>
+        </div>
+      </div>
+      <div class="rk-warn">A profile describes your situation and your comfort today. It does not predict or guarantee how any investment will perform, and it is not a SEBI category or a suitability assessment.</div>
+      <div class="rk-more">
+        <div class="rk-req"><b>What your goal would need.</b> {{v.requirementText}}</div>
+        <div class="rk-flags">
+          <sc-for list="{{v.flags}}" as="fl" hint-placeholder-count="2">
+            <div class="rk-f" style="background:{{fl.bg}}"><span class="mono" style="color:{{fl.fg}}">{{fl.code}}</span><span>{{fl.text}}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <details class="rz-more rz-more-l"><summary>Which answers contributed to each score?</summary>
+        <div class="tb"><div class="tb-in" style="min-width:560px">
+          <sc-for list="{{v.items}}" as="it" hint-placeholder-count="10">
+            <div class="it-r"><span class="mono" style="color:#8F7444">{{it.id}}</span><span style="color:var(--muted)">{{it.name}}</span><span>{{it.answer}}</span><span class="num" style="text-align:right;font-weight:600">{{it.score}}</span></div>
+          </sc-for>
+        </div></div>
+        <p class="rz-fine">{{v.howRisk}}</p>
+      </details>
+      <details class="rz-more rz-more-l"><summary>Limitations of this profile</summary>
+        <p class="rz-fine">Weights and score bands are design choices and have not been calibrated against real outcomes. Answers can differ from real behaviour in an actual fall. The result reflects one moment and the inputs given. Age, dependants, insurance cover and health are not collected, so they are not reflected. This is not a suitability assessment and not advice about any product.</p>
+      </details>
+    </section>
+
+    <!-- risk vs return, and the hypothetical fall -->
+    <div class="rz-two">
+      <section class="rz-card rz-dark" aria-labelledby="rr-h" data-rv="1">
+        <p class="eyb" style="margin:0;color:#D2B47C">Risk and return · the idea</p>
+        <h2 id="rr-h" class="rz-h2l">More possible growth usually means bigger ups and downs</h2>
+        <svg viewBox="0 0 320 172" class="rr" role="img" aria-label="Concept diagram, not data: as possible return rises, the size of ups and downs rises too. Your profile, {{v.className}}, is highlighted.">
+          <line x1="34" y1="168" x2="306" y2="168" stroke="#3A3D43"></line>
+          <line x1="34" y1="168" x2="34" y2="14" stroke="#3A3D43"></line>
+          <sc-for list="{{r.rr}}" as="z" hint-placeholder-count="3">
+            <rect x="{{z.x}}" y="14" width="{{z.w}}" height="154" fill="{{z.fill}}"></rect>
+          </sc-for>
+          <path d="M40 160 C 120 150, 200 110, 300 30" fill="none" stroke="#D2B47C" stroke-width="2"></path>
+          <path d="M40 160 C 120 150, 200 110, 300 30" fill="none" stroke="#D2B47C" stroke-width="22" stroke-opacity=".10"></path>
+          <text x="40" y="12" font-size="10" font-family="Geist Mono, monospace" letter-spacing="1" fill="#9A9DA3">POSSIBLE RETURN</text>
+          <text x="306" y="160" text-anchor="end" font-size="10" font-family="Geist Mono, monospace" letter-spacing="1" fill="#9A9DA3">UPS AND DOWNS</text>
+        </svg>
+        <div class="rr-x" aria-hidden="true"><sc-for list="{{r.rr}}" as="z" hint-placeholder-count="3"><span style="color:{{z.tc}}">{{z.label}}</span></sc-for></div>
+        <p class="rz-pl">This is a concept drawing, not data. It shows a general idea, not any real investment. Your three rates are your own assumptions, so this page cannot say how risky any of them is.</p>
+        <p class="rz-pl">In your own numbers, the gap between your lower and higher assumption is <b class="num">{{r.gap}}</b> after {{r.yearsLabel}}. A wider gap means a less certain outcome.</p>
+      </section>
+
+      <section class="rz-card" aria-labelledby="dn-h" data-rv="1">
+        <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">If values fall · hypothetical</p>
+        <h2 id="dn-h" class="rz-h2d">A {{v.dropText}} fall at the end of {{r.yearsLabel}}</h2>
+        <div class="dn-chips" role="group" aria-label="Size of the hypothetical fall">
+          <sc-for list="{{r.drops}}" as="d" hint-placeholder-count="3"><button class="rz-chip" type="button" aria-pressed="{{d.pressed}}" onClick="{{d.pick}}">{{d.label}}</button></sc-for>
+        </div>
+        <div class="dn">
+          <sc-for list="{{r.downs}}" as="d" hint-placeholder-count="3">
+            <div class="dn-r">
+              <div class="dn-h"><span><i style="background:{{d.col}}"></i>{{d.name}}</span><b class="num">{{d.end}}</b></div>
+              <div class="dn-bar" role="img" aria-label="{{d.aria}}"><i class="dn-keep" style="width:{{d.keepW}};background:{{d.col}}"></i><i class="dn-lost" style="width:{{d.lostW}}"></i></div>
+              <div class="dn-s"><span>Before the fall {{d.fv}}</span><span>Lost {{d.lost}}</span></div>
+            </div>
+          </sc-for>
+        </div>
+        <p class="rz-fine">Today, straight after a {{v.dropText}} fall, {{r.pvText}} would be worth {{r.nowAfter}}. Round numbers chosen to illustrate. They are not past events or forecasts, and real falls can be larger. Each figure is worked out exactly and then rounded to the rupee on its own, so a difference of two shown figures can be ₹1 off.</p>
+        <details class="rz-more rz-more-l"><summary>How was this calculated?</summary><p class="rz-fine">{{v.howDown}}</p></details>
+      </section>
+    </div>
+
+    <!-- budget -->
+    <section class="rz-card" aria-labelledby="bg-h" data-rv="1">
+      <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">Your budget</p>
+      <h2 id="bg-h" class="rz-h2d">Where each month's income goes, and what you already hold</h2>
+      <div class="bg">
+        <div>
+          <div class="bg-l">Each month</div>
+          <div class="bg-bar" role="img" aria-label="{{r.flow.aria}}"><sc-for list="{{r.flow.parts}}" as="b" hint-placeholder-count="3"><i style="width:{{b.w}};background:{{b.col}}"></i></sc-for></div>
+          <sc-for list="{{r.flow.parts}}" as="b" hint-placeholder-count="3"><div class="bk-r"><span><i style="background:{{b.col}}"></i>{{b.label}}</span><b class="num">{{b.v}}</b></div></sc-for>
+          <p class="rz-fine">{{v.surplusSentence}}</p>
+        </div>
+        <div>
+          <div class="bg-l">Your pots today, three separate things</div>
+          <div class="bg-bar" role="img" aria-label="{{v.potsAria}}"><sc-for list="{{r.pots}}" as="p" hint-placeholder-count="3"><i style="width:{{p.pct}};background:{{p.col}}"></i></sc-for></div>
+          <sc-for list="{{r.pots}}" as="p" hint-placeholder-count="3"><div class="bk-r"><span><i style="background:{{p.col}}"></i>{{p.label}}</span><b class="num">{{p.value}}</b></div></sc-for>
+          <p class="rz-fine">{{v.shareSentence}}</p>
+        </div>
+      </div>
+      <details class="rz-more rz-more-l"><summary>How was this calculated?</summary><p class="rz-fine">{{v.howBudget}}</p></details>
+    </section>
+
+    <!-- considerations -->
+    <section class="rz-card" aria-labelledby="cn-h" data-rv="1">
+      <p class="ap-eyebrow" style="margin:0;text-transform:uppercase">Before you decide anything</p>
+      <h2 id="cn-h" class="rz-h2d">Important considerations</h2>
+      <ol class="cn">
+        <sc-for list="{{v.considerations}}" as="c" hint-placeholder-count="6"><li>{{c}}</li></sc-for>
+      </ol>
+      <div class="cn-src"><strong>Sources and rules behind this page.</strong> Definitions and risk-profiling principles: SEBI (Investment Advisers) Regulations, 2013, amended to 25 Nov 2025; SEBI Master Circular for Investment Advisers, 6 Feb 2026; SEBI (Intermediaries) Regulations, 2008, amended to 10 Oct 2026. Calculation formulas: project methodology v0.1 (F1 to F14). Optional inflation reference: Government of India CPI target of 4% for 2026 to 2031, a target and not a forecast. Sources last checked 2 Nov 2026. No market prices or index returns are used. This site is not registered with SEBI as an investment adviser and does not recommend any security or product.</div>
+    </section>
+    </sc-if>
+  </div>
+  </sc-if>
+
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":3000}}'>
+/* ---------- exact arithmetic helpers (BigInt, money in paise, rates in basis points) ---------- */
+const D = 10000n;
+const IN = new Intl.NumberFormat('en-IN');
+const half = (num, den) => (2n * num + den) / (2n * den); // round half up, non-negative
+const fvP = (pv, bp, t) => half(pv * (D + BigInt(bp)) ** BigInt(t), D ** BigInt(t));
+const realP = (pv, bp, ibp, t) => half(pv * (D + BigInt(bp)) ** BigInt(t), (D + BigInt(ibp)) ** BigInt(t));
+const sgn = (p) => (p < 0n ? -p : p);
+function rs(p) { return (p < 0n ? '−' : '') + '₹' + IN.format(sgn(p) / 100n) + '.' + String(sgn(p) % 100n).padStart(2, '0'); }
+function rs0(p) { const a = sgn(p); let r = a / 100n; if (a % 100n >= 50n) r += 1n; return (p < 0n && r > 0n ? '−' : '') + '₹' + IN.format(r); }
+function compact(x) {
+  if (x >= 1e7) return (x / 1e7).toFixed(1).replace(/\.0$/, '') + ' Cr';
+  if (x >= 1e5) return (x / 1e5).toFixed(1).replace(/\.0$/, '') + ' L';
+  return IN.format(Math.round(x));
+}
+function parseMoney(s, maxRupees, allowZero) {
+  const t = String(s == null ? '' : s).replace(/[₹,\s]/g, '');
+  if (t === '') return { err: 'Please enter an amount (0 is fine where it does not apply).' };
+  if (!/^\d+(\.\d{1,2})?$/.test(t)) return { err: 'Use numbers only, with up to 2 decimals.' };
+  const parts = t.split('.');
+  const p = BigInt(parts[0]) * 100n + BigInt(((parts[1] || '') + '00').slice(0, 2));
+  if (p > BigInt(maxRupees) * 100n) return { err: 'That amount is larger than this tool accepts.' };
+  if (!allowZero && p === 0n) return { err: 'Please enter an amount greater than 0.' };
+  return { v: p };
+}
+function parseBp(s, minBp, maxBp, msg) {
+  const t = String(s == null ? '' : s).replace(/[%\s]/g, '');
+  if (t === '') return { err: 'Please enter a rate.' };
+  if (!/^-?\d+(\.\d{1,2})?$/.test(t)) return { err: 'Use numbers only, with up to 2 decimals.' };
+  const neg = t[0] === '-';
+  const parts = t.replace('-', '').split('.');
+  let n = Number(BigInt(parts[0]) * 100n + BigInt(((parts[1] || '') + '00').slice(0, 2)));
+  if (neg) n = -n;
+  if (n < minBp || n > maxBp) return { err: msg };
+  return { v: n };
+}
+const pct = (bp) => (bp / 100).toFixed(2) + '%';
+
+/* ---------- questionnaire definitions (see docs/methodology/03-risk-methodology.md) ---------- */
+const OBJECTIVES = ['Protect it', 'Mostly stability, some growth', 'Balance', 'Mostly growth', 'Maximum growth'];
+const Q = {
+  c4: { id: 'C4', name: 'Income predictability', text: 'How predictable is your monthly income over the next 12 months?', opts: ['Not at all', 'Slightly', 'Moderately', 'Mostly', 'Fully'] },
+  c5: { id: 'C5', name: 'When the money may be needed', text: 'When might you need this money back?', opts: ['Less than 1 year', '1 to 3 years', '3 to 5 years', '5 to 10 years', 'More than 10 years'] },
+  c7: { id: 'C7', name: 'Effect of a loss on essentials and plans', text: 'If this money lost a quarter of its value and took years to recover, how much would that affect your essential spending, EMIs or near-term plans?', opts: ['Severely', 'Significantly', 'Moderately', 'Slightly', 'Not at all'] },
+  t1: { id: 'T1', name: 'Reaction to a 20% fall', text: 'Imagine your investment fell by 20% within a few months. What would you most likely do?', opts: ['Sell all of it', 'Sell some of it', 'Keep it, but feel very uneasy', 'Keep it and wait', 'Add more, if I could afford to'] },
+  t2: { id: 'T2', name: 'Statement that fits you', text: 'Which statement fits you best?', opts: ["I can't accept any fall in value", 'I can accept small, short falls', 'I can accept moderate falls for some growth', 'I can accept large falls for more long-term growth', 'I can accept very large falls for the most long-term growth'] },
+  t3: { id: 'T3', name: 'Largest one-year fall you could live with', text: 'What is the largest one-year fall you could live with without changing your plans?', opts: ['0%', 'Up to 5%', 'Up to 15%', 'Up to 30%', 'More than 30%'] },
+  t4: { id: 'T4', name: 'Past behaviour in a fall', text: 'Have you held an investment that fell in value? What did you do?', opts: ['Sold quickly', 'Sold part', 'Held, but it was stressful', 'Held calmly', 'Added more', 'I have never held an investment that fell'] },
+};
+const KQ = [
+  { key: 'k1', text: '₹1,000 rises 10%, then falls 10%. It is now worth…', opts: ['₹1,000', '₹990', '₹1,010'], right: 1, expl: '₹1,000 × 1.10 = ₹1,100, and ₹1,100 × 0.90 = ₹990. A percentage fall applies to a larger base.' },
+  { key: 'k2', text: 'Your money grows 5% a year and prices rise 6% a year. What you can buy with it…', opts: ['Falls', 'Stays the same', 'Rises'], right: 0, expl: 'The real return is (1.05 ÷ 1.06) − 1, about −0.94% a year, so buying power falls.' },
+  { key: 'k3', text: 'A diversified fund guarantees you cannot lose money.', opts: ['True', 'False'], right: 1, expl: 'Diversification can reduce some risks. It does not remove the risk of loss, and no market investment is guaranteed.' },
+];
+const CLASSES = ['Conservative', 'Moderate', 'Growth-oriented'];
+const band = (score) => (score < 40 ? 0 : score < 70 ? 1 : 2);
+const SCEN = [
+  { key: 'lo', name: 'Lower assumption', color: '#8E8A80' },
+  { key: 'mid', name: 'Moderate assumption', color: '#17A673' },
+  { key: 'hi', name: 'Higher assumption', color: '#111316' },
+];
+
+/* sample values, used for the "fill with sample numbers" button and to keep the template shape stable when a section is hidden */
+const SAMPLE_F = { income: '80000', ess: '45000', emi: '15000', es: '240000', sv: '300000', inv: '150000', pv: '100000', years: '10', tgt: '', lo: '8', mid: '10', hi: '12', infl: '6.08', goal: '' };
+const SAMPLE_A = { c4: 2, c5: 3, c7: 2, t1: 3, t2: 2, t3: 2, t4: 'never' };
+
+function parseAll(f) {
+  const E = {}, P = {};
+  const mon = (k, max, zero) => { const r = parseMoney(f[k], max, zero); if (r.err) E[k] = r.err; else P[k] = r.v; };
+  mon('income', 1e10, true); mon('ess', 1e10, true); mon('emi', 1e10, true);
+  mon('es', 1e12, true); mon('sv', 1e12, true); mon('inv', 1e12, true);
+  mon('pv', 1e12, false);
+  const hz = parseHorizon(f.years, f.yunit);
+  if (hz.err) E.years = hz.err; else { P.hz = hz.v; P.years = hz.v.W; }
+  const tg = String(f.tgt == null ? '' : f.tgt).trim();
+  if (tg !== '') {
+    if (!/^\d+(\.\d{1,2})?$/.test(tg)) E.tgt = 'Use numbers only, with up to 2 decimals.';
+    else { const ps = tg.split('.'); const h = BigInt(ps[0]) * 100n + BigInt(((ps[1] || '') + '00').slice(0, 2)); if (h <= 0n || h > 6000n) E.tgt = 'Enter a number of months above 0 and up to 60.'; else P.tgt = h; }
+  }
+  const RM = 'Enter a rate between −99% and 50%.';
+  [['lo'], ['mid'], ['hi']].forEach((a) => { const r = parseBp(f[a[0]], -9900, 5000, RM); if (r.err) E[a[0]] = r.err; else P[a[0]] = r.v; });
+  const ri = parseBp(f.infl, -1000, 5000, 'Enter inflation between −10% and 50%.'); if (ri.err) E.infl = ri.err; else P.infl = ri.v;
+  const gl = String(f.goal == null ? '' : f.goal).trim();
+  if (gl !== '') { const r = parseMoney(gl, 1e13, false); if (r.err) E.goal = r.err; else P.goal = r.v; }
+  if (P.lo !== undefined && P.mid !== undefined && P.hi !== undefined && !(P.lo < P.mid && P.mid < P.hi)) E.order = 'Enter the three rates in increasing order: lower, then moderate, then higher.';
+  const s1 = ['income', 'ess', 'emi', 'es', 'sv', 'inv', 'pv', 'years', 'tgt'].every((k) => !E[k]);
+  const s3 = ['lo', 'mid', 'hi', 'infl', 'goal', 'order'].every((k) => !E[k]);
+  return { E, P, s1, s3 };
+}
+
+function budget(P) {
+  const o = {};
+  const haveSurplus = P.income !== undefined && P.ess !== undefined && P.emi !== undefined;
+  if (haveSurplus) { o.EL = P.ess + P.emi; o.S = P.income - o.EL; }
+  if (P.es !== undefined && P.ess !== undefined && P.emi !== undefined) {
+    const EL = P.ess + P.emi;
+    o.EL = EL;
+    if (EL > 0n) { const c = half(P.es * 100n, EL); o.cover100 = c; o.coverText = IN.format(c / 100n) + '.' + String(c % 100n).padStart(2, '0') + ' months'; }
+    else o.coverText = 'n/a';
+    if (P.tgt !== undefined) { const need = EL === 0n ? 0n : half(P.tgt * EL, 100n); o.SF = need > P.es ? need - P.es : 0n; }
+  }
+  return o;
+}
+
+function riskScore(P, a, obj, b) {
+  const items = [];
+  const EL = b.EL, S = b.S, I = P.income;
+  let c1;
+  if (EL === 0n) c1 = P.es > 0n ? 4 : 0;
+  else c1 = P.es >= 12n * EL ? 4 : P.es >= 6n * EL ? 3 : P.es >= 3n * EL ? 2 : P.es >= EL ? 1 : 0;
+  let c2;
+  if (I === 0n) c2 = 0;
+  else { const l = P.emi * 100n; c2 = l >= 50n * I ? 0 : l >= 40n * I ? 1 : l >= 30n * I ? 2 : l >= 15n * I ? 3 : 4; }
+  let c3;
+  if (S <= 0n) c3 = 0; else { const s = S * 100n; c3 = s < 10n * I ? 1 : s < 20n * I ? 2 : s <= 35n * I ? 3 : 4; }
+  const base = P.sv + P.inv;
+  let c6;
+  if (base === 0n) c6 = 0; else { const v = P.pv * 100n; c6 = v > 75n * base ? 0 : v >= 50n * base ? 1 : v >= 25n * base ? 2 : v >= 10n * base ? 3 : 4; }
+  const lab1 = ['Under 1 month', '1 to under 3 months', '3 to under 6 months', '6 to under 12 months', '12 months or more'];
+  const lab2 = ['50% or more of income', '40% to under 50%', '30% to under 40%', '15% to under 30%', 'Under 15%'];
+  const lab3 = ['No surplus', 'Under 10% of income', '10% to under 20%', '20% to 35%', 'Over 35%'];
+  const lab6 = ['Over 75% of other savings and investments', '50% to 75%', '25% to under 50%', '10% to under 25%', 'Under 10%'];
+  items.push({ id: 'C1', name: 'Emergency cover (computed)', answer: b.coverText, score: c1 });
+  items.push({ id: 'C2', name: 'EMIs as a share of income (computed)', answer: lab2[c2], score: c2 });
+  items.push({ id: 'C3', name: 'Surplus as a share of income (computed)', answer: lab3[c3], score: c3 });
+  ['c4', 'c5', 'c7'].forEach((k) => items.push({ id: Q[k].id, name: Q[k].name, answer: Q[k].opts[a[k]], score: a[k] }));
+  items.splice(6, 0, { id: 'C6', name: 'This amount vs other savings and investments (computed)', answer: lab6[c6], score: c6 });
+  items.sort((x, y) => (x.id < y.id ? -1 : 1));
+  const capItems = items.filter((i) => i.id[0] === 'C');
+  const capRaw = capItems.reduce((s, i) => s + i.score, 0) / capItems.length * 25;
+  const caps = [];
+  if (S < 0n) caps.push('You have a monthly deficit.');
+  if (EL > 0n && P.es < EL) caps.push('Your emergency savings cover less than 1 month.');
+  if (a.c5 === 0) caps.push('You may need this money back within a year.');
+  const cap = caps.length ? Math.min(capRaw, 39) : capRaw;
+  const tolKeys = ['t1', 't2', 't3'].concat(a.t4 === 'never' ? [] : ['t4']);
+  const tolItems = tolKeys.map((k) => ({ id: Q[k].id, name: Q[k].name, answer: Q[k].opts[a[k]], score: a[k] }));
+  if (a.t4 === 'never') tolItems.push({ id: 'T4', name: Q.t4.name, answer: Q.t4.opts[5], score: 'not scored' });
+  const tol = tolKeys.reduce((s, k) => s + a[k], 0) / tolKeys.length * 25;
+  const klass = Math.min(cap, tol);
+  return { items: capItems.concat(tolItems), capRaw, cap, caps, tol, klass, capBand: band(cap), tolBand: band(tol), classBand: band(klass), binding: cap < tol ? 'capacity' : tol < cap ? 'tolerance' : 'both equally' };
+}
+
+/* ----- horizon: years, months or days -----
+   Whole years compound once a year. Any part-year left over (months or days) then earns the rate
+   as simple interest for that fraction of a year: value = amount x (1 + rate)^W x (1 + rate x fn/fd).
+   Months: fraction = months / 12. Days: fraction = days / 365. Exact, in whole paise. */
+const HZ = {
+  years:  { one: 'year',  many: 'years',  max: 50,    div: 1,   slMax: 50,  slMid: 25, err: 'Enter a whole number of years, from 1 to 50.', hint: 'Whole years, 1 to 50.' },
+  months: { one: 'month', many: 'months', max: 600,   div: 12,  slMax: 120, slMid: 60, err: 'Enter a whole number of months, from 1 to 600.', hint: 'Whole months, 1 to 600 (up to 50 years).' },
+  days:   { one: 'day',   many: 'days',   max: 18250, div: 365, slMax: 365, slMid: 180, err: 'Enter a whole number of days, from 1 to 18,250.', hint: 'Whole days, 1 to 18,250 (up to 50 years).' },
+};
+function parseHorizon(raw, unit) {
+  const u = HZ[unit] ? unit : 'years', z = HZ[u];
+  const y = String(raw == null ? '' : raw).trim();
+  if (!/^\d+$/.test(y)) return { err: z.err };
+  const n = parseInt(y, 10);
+  if (n < 1 || n > z.max) return { err: z.err };
+  return { v: { n, unit: u, W: Math.floor(n / z.div), fn: n % z.div, fd: z.div } };
+}
+const hzText = (h) => h.n + ' ' + (h.n === 1 ? HZ[h.unit].one : HZ[h.unit].many);
+const fvPart = (pv, bp, h) => half(pv * (D + BigInt(bp)) ** BigInt(h.W) * (BigInt(h.fd) * D + BigInt(bp) * BigInt(h.fn)), D ** BigInt(h.W) * BigInt(h.fd) * D);
+const realPart = (pv, bp, ibp, h) => half(pv * (D + BigInt(bp)) ** BigInt(h.W) * (BigInt(h.fd) * D + BigInt(bp) * BigInt(h.fn)), (D + BigInt(ibp)) ** BigInt(h.W) * (BigInt(h.fd) * D + BigInt(ibp) * BigInt(h.fn)));
+const fvAfterFall = (pv, bp, h, dnum) => half(pv * (D + BigInt(bp)) ** BigInt(h.W) * (BigInt(h.fd) * D + BigInt(bp) * BigInt(h.fn)) * dnum, 100n * D ** BigInt(h.W) * BigInt(h.fd) * D);
+// the yearly rate (as a fraction) that grows pv into goal over the horizon (F9). Closed form for whole years; bisection when there is a part-year.
+function reqRate(goal, pv, h) {
+  const ratio = Number(goal) / Number(pv), f = h.fn / h.fd;
+  if (h.fn === 0) return Math.pow(ratio, 1 / h.W) - 1;
+  if (h.W === 0) return (ratio - 1) / f;
+  const g = (r) => Math.pow(1 + r, h.W) * (1 + r * f);
+  let lo = -0.999999, hi = 1;
+  while (g(hi) < ratio && hi < 1e12) hi *= 2;
+  for (let i = 0; i < 200; i++) { const mid = (lo + hi) / 2; if (g(mid) < ratio) lo = mid; else hi = mid; }
+  return (lo + hi) / 2;
+}
+
+function project(P) {
+  const h = P.hz, W = h.W, part = h.fn > 0, t = W + (part ? 1 : 0), T = W + h.fn / h.fd;
+  const times = []; for (let k = 0; k <= W; k++) times.push(k); if (part) times.push(T);
+  const out = { t, T, W, part, times, scen: [] };
+  [['lo', 0], ['mid', 1], ['hi', 2]].forEach((x) => {
+    const bp = P[x[0]];
+    const vals = [], reals = [];
+    for (let k = 0; k <= W; k++) { vals.push(fvP(P.pv, bp, k)); reals.push(realP(P.pv, bp, P.infl, k)); }
+    if (part) { vals.push(fvPart(P.pv, bp, h)); reals.push(realPart(P.pv, bp, P.infl, h)); }
+    const fv = vals[t];
+    const siNum = D * BigInt(h.fd) + BigInt(bp) * (BigInt(W) * BigInt(h.fd) + BigInt(h.fn));
+    const si = siNum >= 0n ? half(P.pv * siNum, D * BigInt(h.fd)) : null;
+    const cagr = Math.pow(Number(fv) / Number(P.pv), 1 / T) - 1;
+    const realRate = (1 + bp / 10000) / (1 + P.infl / 10000) - 1;
+    out.scen.push({ ...SCEN[x[1]], bp, vals, reals, fv, gain: fv - P.pv, si, ce: si === null ? null : fv - si, cagr, realRate, realFv: reals[t] });
+  });
+  return out;
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 1, showErr: false, fail: false,
+      f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
+      obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null },
+      tab: 1, yr: null,
+    };
+  }
+
+  renderVals() {
+    const s = this.state, f = s.f, a = s.a;
+    const setF = (key) => (e) => this.setState({ f: { ...this.state.f, [key]: e.target.value }, fail: false });
+    const live = parseAll(f);
+    const sample = parseAll(SAMPLE_F);
+    const E = live.E;
+    const showE = (k) => (s.showErr || f[k] !== '') && E[k] ? E[k] : '';
+
+    /* ----- step 1 fields ----- */
+    const mk = (key, label, ph, hint, help, o) => {
+      const err = showE(key);
+      const opt = o || {};
+      return { id: 'in-' + key, descId: 'd-' + key, label, ph, hint, help, value: f[key], onInput: setF(key), err, hasErr: !!err, invalid: err ? 'true' : 'false',
+        opt: opt.optional ? ' (optional)' : '', hasPre: !opt.suf && !opt.unit, hasSuf: !!opt.suf, suf: opt.suf || '', cls: opt.unit ? 'inp plain unitpad' : opt.suf ? 'inp plain sfx' : 'inp',
+        hasUnit: !!opt.unit, unit: f.yunit || 'years', onUnit: (e) => this.setState({ f: { ...this.state.f, yunit: e.target.value }, fail: false }) };
+    };
+    const groups = [
+      { title: 'Every month', fields: [
+        mk('income', 'Monthly income', 'e.g. 80,000', 'Take-home pay after tax, in a typical month.', 'Take-home income is the money that actually reaches you each month, after tax and deductions.'),
+        mk('ess', 'Essential expenses', 'e.g. 45,000', 'Rent, food, utilities, insurance premiums, school fees.', 'Essential expenses are costs you cannot easily cut: housing, food, utilities, transport to work, insurance premiums and fees.'),
+        mk('emi', 'EMIs and fixed obligations', 'e.g. 15,000', 'Loan repayments and similar fixed commitments.', 'An EMI (equated monthly instalment) is a fixed monthly loan repayment. Include any other fixed monthly commitments here.'),
+      ] },
+      { title: 'What you have today', fields: [
+        mk('es', 'Emergency savings', 'e.g. 2,40,000', 'Easy-to-reach money kept for unexpected events.', 'Emergency savings are money set aside for surprises such as a medical bill or loss of income. They are not meant to be invested in markets.'),
+        mk('sv', 'Other savings', 'e.g. 3,00,000', 'Bank, deposits and similar, excluding emergency savings.', 'Savings are money held in safe, easily accessible forms such as bank accounts and deposits. Do not count your emergency savings again here.'),
+        mk('inv', 'Existing investments', 'e.g. 1,50,000', 'Current value of market investments you already hold.', 'Investments are assets whose value can rise and fall, such as shares and mutual funds. Enter today\'s value, not what you paid.'),
+      ] },
+      { title: 'The plan you are thinking about', fields: [
+        mk('pv', 'One-time amount you are considering investing', 'e.g. 1,00,000', 'A single amount invested at the start.', 'This tool looks at one amount invested once. It does not model monthly investing. Whether to invest at all is your decision.'),
+        mk('years', 'How long you would keep it invested', 'e.g. 10', HZ[f.yunit] ? HZ[f.yunit].hint : HZ.years.hint, 'The investment horizon is how long you expect to leave the money invested before you need it. Pick years, months or days. Whole years compound once a year; any months or days left over earn the rate for that part of a year, as simple interest.', { unit: true }),
+        mk('tgt', 'Your own emergency target', 'e.g. 6', 'Only if you have set one. The tool never suggests a number.', 'Some people keep a number of months of expenses aside as an emergency reserve. There is no single official figure, so this tool only compares your savings with a target you choose.', { suf: 'months', optional: true }),
+      ] },
+    ];
+    const objErr = s.showErr && s.obj === null;
+    const objectives = OBJECTIVES.map((label, i) => ({ label, pressed: s.obj === i ? 'true' : 'false', pick: () => this.setState({ obj: i, fail: false }) }));
+
+    const b = budget(live.P);
+    const liveV = {
+      surplus: b.S !== undefined ? rs0(b.S) : '—',
+      surplusNote: b.S === undefined ? 'Fill in income, essentials and EMIs.' : b.S < 0n ? 'A monthly deficit: spending is above income.' : 'Income − essentials − EMIs.',
+      cover: b.coverText ? b.coverText : '—',
+      coverNote: b.coverText === 'n/a' ? 'No essentials or EMIs entered, so no cover figure.' : b.coverText ? 'Emergency savings ÷ (essentials + EMIs). A description, not a target.' : 'Fill in emergency savings, essentials and EMIs.',
+      hasTarget: b.SF !== undefined, shortfall: b.SF !== undefined ? rs0(b.SF) : '',
+    };
+
+    /* ----- step 2 ----- */
+    const mkQ = (key) => ({ text: Q[key].text, hasExpl: false, result: '', expl: '', options: Q[key].opts.map((label, i) => ({ label, pressed: a[key] === (key === 't4' && i === 5 ? 'never' : i) ? 'true' : 'false', pick: () => this.setState({ a: { ...this.state.a, [key]: (key === 't4' && i === 5 ? 'never' : i) }, fail: false }) })) });
+    const mkK = (q) => { const sel = s.k[q.key]; return { text: q.text, hasExpl: sel !== null, result: sel === null ? '' : (sel === q.right ? 'Correct.' : 'Not quite.'), expl: q.expl, options: q.opts.map((label, i) => ({ label, pressed: sel === i ? 'true' : 'false', pick: () => this.setState({ k: { ...this.state.k, [q.key]: i } }) })) }; };
+    const qsections = [
+      { title: 'Part A · What your finances can absorb', note: 'Your income, EMIs, savings and emergency cover are already counted from step 1.', qs: [mkQ('c4'), mkQ('c5'), mkQ('c7')] },
+      { title: 'Part B · What feels comfortable to you', note: 'The numbers below are hypothetical prompts, not statistics or forecasts.', qs: [mkQ('t1'), mkQ('t2'), mkQ('t3'), mkQ('t4')] },
+      { title: 'Part C · A few basics (optional)', note: 'This does not change your profile.', qs: KQ.map(mkK) },
+    ];
+    const reqKeys = ['c4', 'c5', 'c7', 't1', 't2', 't3', 't4'];
+    const answered = reqKeys.filter((k) => a[k] !== null).length;
+    const ansComplete = answered === 7;
+
+    /* ----- step 3 ----- */
+    const rf = (key, label, ph) => { const err = showE(key); return { id: 'in-' + key, descId: 'd-' + key, label, ph, value: f[key], onInput: setF(key), err, hasErr: !!err, invalid: err ? 'true' : 'false' }; };
+    const rateFields = [rf('lo', 'Lower assumption', 'e.g. 6'), rf('mid', 'Moderate assumption', 'e.g. 9'), rf('hi', 'Higher assumption', 'e.g. 12')];
+    const inflErr = showE('infl'), goalErr = showE('goal');
+    const orderErr = !!E.order && (s.showErr || (f.lo !== '' && f.mid !== '' && f.hi !== ''));
+    const drops = [10, 25, 40].map((d) => ({ label: d + '% fall', pressed: s.drop === d ? 'true' : 'false', pick: () => this.setState({ drop: d }) }));
+
+    /* ----- dashboard (computed from validated inputs; sample inputs only keep the template shape while hidden) ----- */
+    const ready = live.s1 && live.s3 && s.obj !== null && ansComplete;
+    const useLive = s.step === 4 && ready;
+    const P = useLive ? live.P : sample.P;
+    const A = useLive ? a : SAMPLE_A;
+    const OBJ = useLive ? s.obj : 2;
+    const bb = budget(P);
+    const R = riskScore(P, A, OBJ, bb);
+    const J = project(P);
+    const t = J.t, T = J.T, W = J.W, hz = P.hz;
+    const maxYear = t;
+    const selYear = Math.min(Math.max(s.yr === null ? t : s.yr, 1), t);
+
+    const pvText = rs0(P.pv);
+    const yearsText = hzText(hz);
+    const unitCap = hz.unit === 'years' ? 'Year' : hz.unit === 'months' ? 'Month' : 'Day';
+    const yearName = (k) => (k <= W ? 'Year ' + k : 'End of ' + yearsText);
+    const partNote = J.part ? ' The ' + yearsText + ' is ' + (W > 0 ? W + (W === 1 ? ' whole year' : ' whole years') + ' compounded once a year, plus ' : '') + hz.fn + '/' + hz.fd + ' of a year at simple interest: value = amount × (1 + rate) ^ ' + W + ' × (1 + rate × ' + hz.fn + '/' + hz.fd + ').' : '';
+    const dropText = s.drop + '%';
+    const base = P.sv + P.inv;
+    const sharePct = base === 0n ? null : Number(P.pv * 10000n / base) / 100;
+
+    const kpis = [
+      { label: 'Monthly surplus', value: rs0(bb.S), note: bb.S < 0n ? 'A deficit: spending is above income.' : 'Income − essentials − EMIs.' },
+      { label: 'Emergency savings cover', value: bb.coverText, note: 'Months of essentials + EMIs your emergency savings would pay for.' },
+      { label: 'Amount you are considering', value: pvText, note: 'One-time, for ' + yearsText + '. Not a recommendation.' },
+      { label: 'Educational risk profile', value: CLASSES[R.classBand], note: 'This project\'s own method, not a SEBI category.' },
+    ];
+    const monthRows = [
+      { label: 'Take-home income', value: rs0(P.income), weight: 500 },
+      { label: 'Essential expenses', value: '− ' + rs0(P.ess), weight: 500 },
+      { label: 'EMIs and fixed obligations', value: '− ' + rs0(P.emi), weight: 500 },
+      { label: 'Monthly surplus (or deficit)', value: rs0(bb.S), weight: 800 },
+    ];
+    const potsTotal = P.es + P.sv + P.inv;
+    const potPct = (x) => (potsTotal === 0n ? '0%' : (Number(x * 10000n / potsTotal) / 100).toFixed(2) + '%');
+    const pots = [
+      { label: 'Emergency savings', value: rs0(P.es), pct: potPct(P.es), color: '#111316' },
+      { label: 'Other savings', value: rs0(P.sv), pct: potPct(P.sv), color: '#8E8A80' },
+      { label: 'Existing investments', value: rs0(P.inv), pct: potPct(P.inv), color: '#17A673' },
+    ];
+    const surplusSentence = bb.S < 0n
+      ? 'Your entered spending is above your income by ' + rs0(-bb.S) + ' a month. The tool does not judge this; it only reports it.'
+      : 'After essentials and EMIs you have ' + rs0(bb.S) + ' a month. This tool does not assume any of it should be invested.';
+    const shareSentence = sharePct === null ? 'You entered no other savings or investments, so this amount has nothing to compare against.' : 'This is ' + sharePct.toFixed(1) + '% of your other savings plus existing investments (' + rs0(base) + '). Emergency savings are not counted.';
+
+    const gauges = [
+      { name: 'Risk capacity', score: Math.round(R.cap), pos: R.cap.toFixed(1) + '%',
+        text: 'How much loss your finances could absorb: ' + CLASSES[R.capBand] + ' range.' + (R.caps.length ? ' Capped at 39 because: ' + R.caps.join(' ') : '') },
+      { name: 'Risk tolerance', score: Math.round(R.tol), pos: R.tol.toFixed(1) + '%',
+        text: 'How comfortable you say you are with ups and downs: ' + CLASSES[R.tolBand] + ' range.' },
+    ];
+    const classText = 'The profile is the lower of your capacity and tolerance scores (' + Math.round(R.cap) + ' and ' + Math.round(R.tol) + '), so it follows your ' + R.binding + '. The idea is that you should not take more risk than you can afford, or more than you are comfortable with. This is a design choice of this project, not a regulatory rule.';
+
+    // risk requirement (F9)
+    let requirementText;
+    if (P.goal === undefined) requirementText = 'You did not enter a goal amount, so no requirement was calculated.';
+    else {
+      const nominal = reqRate(P.goal, P.pv, hz);
+      if (nominal <= 0) requirementText = 'Your goal of ' + rs0(P.goal) + ' is not above ' + pvText + '. Over ' + yearsText + ' it would be reached at a 0% return in nominal terms.';
+      else {
+        const real = (1 + nominal) / (1 + P.infl / 10000) - 1;
+        const rbp = nominal * 10000;
+        const place = rbp <= P.lo ? 'at or below your lower assumption' : rbp <= P.mid ? 'between your lower and moderate assumptions' : rbp <= P.hi ? 'between your moderate and higher assumptions' : 'above your highest assumption';
+        requirementText = 'To grow ' + pvText + ' into ' + rs0(P.goal) + ' in ' + yearsText + ', the yearly growth needed is about ' + (nominal * 100).toFixed(2) + '% (nominal), or ' + (real * 100).toFixed(2) + '% after your ' + pct(P.infl) + ' inflation assumption. That is ' + place + '. This compares only with the rates you entered. It is not linked to any market data.';
+      }
+    }
+
+    // conflict flags
+    const flags = [];
+    const reqAbove = P.goal !== undefined && reqRate(P.goal, P.pv, hz) * 10000 > P.hi;
+    const kAnswered = KQ.every((q) => s.k[q.key] !== null);
+    const kScore = KQ.reduce((n, q) => n + (s.k[q.key] === q.right ? 1 : 0), 0);
+    if (R.capBand > R.tolBand) flags.push({ code: 'X2', text: 'Your finances could absorb more fluctuation than you are comfortable with. Comfort matters too.', kind: 'warn' });
+    if (reqAbove) flags.push({ code: 'X3', text: 'Your goal needs more growth than even your highest assumption. You could revisit the goal, the timeline or the amount.', kind: 'warn' });
+    if ((OBJ === 3 || OBJ === 4) && R.classBand === 0) flags.push({ code: 'X4', text: 'Your stated aim and your assessed profile point in different directions.', kind: 'warn' });
+    if (useLive && kAnswered && R.tol >= 70 && kScore <= 1) flags.push({ code: 'X5', text: 'You are comfortable with risk, but a few basics may be worth reading about first.', kind: 'warn' });
+    if (!flags.length) flags.push({ code: '—', text: 'No conflicts were detected between your finances, your comfort level, your aim and your goal, on the answers given.', kind: 'ok' });
+    flags.forEach((x) => { x.bg = x.kind === 'ok' ? '#E7F5EF' : '#FFF4DE'; x.fg = x.kind === 'ok' ? '#0A7A55' : '#8A4B00'; });
+
+    // outcomes
+    const cards = J.scen.map((c) => ({
+      name: c.name, color: c.color, rate: pct(c.bp), fv: rs0(c.fv),
+      rows: [
+        { label: 'Amount you put in', value: rs0(P.pv) },
+        { label: 'Estimated gain or loss', value: rs0(c.gain) },
+        { label: 'From returns earning returns', value: c.ce === null ? 'n/a' : rs0(c.ce) },
+        { label: 'Value in today\'s rupees (' + pct(P.infl) + ' inflation)', value: rs0(c.realFv) },
+        { label: 'Real yearly rate', value: (c.realRate * 100).toFixed(2) + '%' },
+      ],
+    }));
+    const maxV = Math.max(Number(P.pv), ...J.scen.map((c) => Number(c.fv))) / 100 * 1.05;
+    const pathFor = (vals) => 'M' + vals.map((v, k) => (J.times[k] / T * 100).toFixed(2) + ' ' + (100 - Number(v) / 100 / maxV * 100).toFixed(2)).join(' L');
+    const baseY = (100 - Number(P.pv) / 100 / maxV * 100).toFixed(2);
+    const yticks = [0, 1, 2, 3, 4].map((i) => ({ top: (i * 25) + '%', label: i === 4 ? '0' : compact(maxV * (1 - i / 4)) }));
+    const xticks = [0, 0.25, 0.5, 0.75, 1].map((q) => (q === 0 ? 'Today' : unitCap + ' ' + Math.round(hz.n * q)));
+    const chart = { yticks, xticks, base: 'M0 ' + baseY + ' L100 ' + baseY, p1: pathFor(J.scen[0].vals), p2: pathFor(J.scen[1].vals), p3: pathFor(J.scen[2].vals), selX: (J.times[selYear] / T * 100).toFixed(2),
+      aria: 'Line chart of estimated value over ' + yearsText + ' for three assumed rates: ' + J.scen.map((c) => c.name + ' ' + pct(c.bp) + ' ends at ' + rs0(c.fv)).join('; ') + '.' };
+    const sel = [{ label: 'Amount you put in', value: rs0(P.pv) }].concat(J.scen.map((c) => ({ label: c.name, value: rs0(c.vals[selYear]) })));
+    const tabs = J.scen.map((c, i) => ({ label: c.name.replace(' assumption', '') + ' · ' + pct(c.bp), pressed: s.tab === i ? 'true' : 'false', pick: () => this.setState({ tab: i }) }));
+    const ts = J.scen[Math.min(s.tab, 2)];
+    const table = [];
+    for (let k = 1; k <= t; k++) table.push({ year: k <= W ? String(k) : 'End · ' + yearsText, value: rs(ts.vals[k]), yearGain: rs(ts.vals[k] - ts.vals[k - 1]), totalGain: rs(ts.vals[k] - P.pv), real: rs(ts.reals[k]) });
+
+    const dnum = BigInt(100 - s.drop);
+    const downs = J.scen.map((c) => {
+      const now = half(P.pv * dnum, 100n);
+      const end = fvAfterFall(P.pv, c.bp, hz, dnum);
+      return { name: c.name + ' · ' + pct(c.bp), now: rs0(now), loss: rs0(now - P.pv), end: rs0(end) };
+    });
+
+    const ms = Array.from(new Set([1, Math.round(t * 0.25), Math.round(t * 0.5), Math.round(t * 0.75), t].filter((x) => x >= 1))).sort((x, y) => x - y);
+    const timeline = ms.map((k) => ({ when: k === t ? 'END · ' + (J.part ? yearsText.toUpperCase() : 'YEAR ' + k) : 'YEAR ' + k, vals: J.scen.map((c) => ({ name: c.name.replace(' assumption', ''), color: c.color, value: rs0(c.vals[k]) })) }));
+
+    const considerations = [
+      'The three rates are assumptions you chose. Real returns vary year to year, can be negative, and cannot be known in advance.',
+      'Costs, charges and taxes are not included: fund expenses, brokerage, STT, stamp duty, exit loads, GST and capital-gains tax would all reduce actual outcomes.',
+      'Nominal values are plain rupees. Values "in today\'s rupees" remove inflation, using the ' + pct(P.infl) + ' you entered. Both are shown so they are not confused.',
+      'Emergency savings, other savings and investments are separate pots. This tool does not say how much of any pot you should hold or invest.',
+      'The risk profile is an educational method with unvalidated weights. If your situation changes, repeat the questions.',
+    ];
+    if (bb.S < 0n) considerations.unshift('Your entered monthly spending is above your income. You may want to review the figures before thinking about investing.');
+    if (sharePct !== null && sharePct >= 50) considerations.push('The amount you are considering is ' + sharePct.toFixed(0) + '% of your other savings and investments, so a fall in its value would be felt in a large part of what you hold outside emergency savings.');
+
+    const v = {
+      disclaimer: 'These figures are illustrations based only on the numbers and rates you entered. They are not predictions, not guaranteed, and not investment advice. Markets do not have a fixed or predictable rate of return, and you can lose money. Costs, charges and taxes are not included.',
+      kpis, monthRows, pots, potsAria: 'Share of emergency savings, other savings and existing investments', pvText, yearsText, dropText,
+      surplusSentence, shareSentence,
+      howBudget: 'F1: Monthly surplus = income − essentials − EMIs = ' + rs0(P.income) + ' − ' + rs0(P.ess) + ' − ' + rs0(P.emi) + ' = ' + rs0(bb.S) + '. F2: Emergency cover = emergency savings ÷ (essentials + EMIs) = ' + rs0(P.es) + ' ÷ ' + rs0(bb.EL) + ' = ' + bb.coverText + '.' + (bb.SF !== undefined ? ' F3: Shortfall against your own target of ' + (Number(P.tgt) / 100) + ' months = ' + rs0(bb.SF) + '.' : '') + ' Money is held in whole paise; nothing is estimated.',
+      gauges, className: CLASSES[R.classBand], classText, requirementText, flags,
+      items: R.items.map((i) => ({ id: i.id, name: i.name, answer: i.answer, score: String(i.score) })),
+      howRisk: 'Capacity = average of items C1 to C7 (each 0 to 4) × 25. Tolerance = average of T1 to T3, and T4 if you have held an investment that fell, × 25. Classification = the lower of the two scores. Bands: 0 to 39 Conservative, 40 to 69 Moderate, 70 to 100 Growth-oriented. Capacity is capped at 39 if you have a monthly deficit, cover under 1 month, or may need the money within a year. Full method: methodology document 03.',
+      cards, chart, selYear, maxYear, sel, tabs, table,
+      howProjection: 'F4: Value = amount × (1 + rate) ^ years, using exact whole-number arithmetic on paise. F5: each row is the same formula for that year.' + partNote + ' F6: Gain = value − amount; "from returns earning returns" = value − amount × (1 + rate × years), i.e. the difference from simple interest. F8: Real yearly rate = (1 + rate) ÷ (1 + inflation) − 1; value in today\'s rupees = value ÷ (1 + inflation) ^ years. The rate is applied once a year, with no withdrawals, costs or taxes. The chart uses the same numbers, drawn to scale.',
+      downs, howDown: 'F10: Today after the fall = amount × (1 − fall). At the end after the fall = estimated value × (1 − fall), using the exact unrounded value. The fall is hypothetical and chosen by you.',
+      timeline, considerations,
+    };
+
+
+    /* ----- results view (display only: every figure below comes from J, R, bb and P above; nothing is estimated here) ----- */
+    const DK = ['#9A9DA3', '#7FD3AE', '#D2B47C'];   // lines on the dark stage
+    const LT = ['#8E8A80', '#17A673', '#8F7444'];   // the same three on light cards
+    const SHORT = ['Lower', 'Moderate', 'Higher'];
+    const tab = Math.min(s.tab, 2);
+    const sc = J.scen[tab];
+    const bad = s.step === 4 && !ready;
+    const plus = (p) => (p > 0n ? '+' : '') + rs0(p);
+    const retPct = (gain) => { const a = gain < 0n ? -gain : gain; const r = half(a * 10000n, P.pv); return (gain < 0n && r > 0n ? '−' : gain > 0n ? '+' : '') + IN.format(r / 100n) + '.' + String(r % 100n).padStart(2, '0') + '%'; };
+    const share = (x, of) => (of > 0 ? Math.max(0, Math.min(100, x / of * 100)) : 0).toFixed(2) + '%';
+    const liveHz = live.P.hz;
+    const yearsLabel = liveHz !== undefined ? hzText(liveHz) : 'your horizon';
+    const slU = HZ[(liveHz || hz).unit], slN = (liveHz || hz).n, slMax = Math.max(slU.slMax, slN);
+    const pvRaw = String(f.pv == null ? '' : f.pv).trim();
+    const pvErr = pvRaw === '' ? 'Enter the amount you are considering, above ₹0.' : (E.pv || '');
+    const rTabs = SHORT.map((name, i) => { const k = ['lo', 'mid', 'hi'][i]; return { name, col: DK[i], rate: live.P[k] !== undefined ? pct(live.P[k]) : '—', pressed: tab === i ? 'true' : 'false', pick: () => this.setState({ tab: i }) }; });
+
+    // overview tiles
+    const ov = [
+      { k: 'Amount invested', v: pvText, tag: 'Your input', tagCls: 'is-in', note: 'One amount, invested once at the start.',
+        how: 'This is the figure you entered. Nothing is added later. Monthly investing is not modelled by this tool.' },
+      { k: 'Horizon', v: yearsText, tag: 'Your input', tagCls: 'is-in', note: 'How long it stays invested, with no withdrawals.',
+        how: 'Change it with the horizon slider above. Every figure on the page is recalculated for the new horizon.' },
+      { k: 'Estimated value', v: rs0(sc.fv), tag: 'Estimate', tagCls: 'is-est', note: SHORT[tab] + ' assumption, ' + pct(sc.bp) + ' a year.',
+        how: 'F4: value = amount × (1 + rate) ^ years = ' + pvText + ' × (1 + ' + pct(sc.bp) + ') ^ ' + W + (J.part ? ' × (1 + ' + pct(sc.bp) + ' × ' + hz.fn + '/' + hz.fd + ')' : '') + ' = ' + rs0(sc.fv) + '.' + partNote + ' The rate is your own assumption, applied once a year. Real returns change every year and can be negative.' },
+      { k: sc.gain < 0n ? 'Estimated loss' : 'Estimated gain', v: plus(sc.gain), tag: 'Estimate', tagCls: 'is-est', note: 'Investment return ' + retPct(sc.gain) + ' over the whole period.',
+        how: 'Gain = value − amount = ' + rs0(sc.fv) + ' − ' + pvText + ' = ' + rs0(sc.gain) + '. F14: investment return = [(value − amount) ÷ amount] × 100 = ' + retPct(sc.gain) + '. This is for the whole ' + yearsText + ', not per year. The yearly rate is the ' + pct(sc.bp) + ' you assumed.' },
+    ];
+
+    // growth chart, drawn on the same scale as v.chart
+    const yOf = (val) => 100 - Number(val) / 100 / maxV * 100;
+    const order = [0, 1, 2].filter((i) => i !== tab).concat([tab]);
+    const rChart = {
+      yticks: [0, 1, 2, 3, 4].map((i) => { const x = maxV * (1 - i / 4); return { top: (i * 25) + '%', label: i === 4 ? '₹0' : maxV >= 1e7 ? '₹' + (x / 1e7).toFixed(2) + ' Cr' : maxV >= 1e5 ? '₹' + (x / 1e5).toFixed(1) + ' L' : '₹' + IN.format(Math.round(x)) }; }),
+      xticks, base: chart.base, selX: chart.selX, selCol: DK[tab],
+      lines: order.map((i) => ({ d: pathFor(J.scen[i].vals), col: DK[i], w: i === tab ? 3 : 1.6, op: i === tab ? 1 : 0.6 })),
+      area: pathFor(sc.vals) + ' L100 100 L0 100 Z',
+      dotY: yOf(sc.vals[selYear]).toFixed(2),
+      tipPos: (J.times[selYear] / T > 0.58 ? 'right:calc(' + (100 - J.times[selYear] / T * 100).toFixed(2) + '% + 14px)' : 'left:calc(' + chart.selX + '% + 14px)'),
+      aria: chart.aria,
+    };
+    const tip = {
+      year: yearName(selYear) + (selYear === t && selYear <= W ? ' · end' : ''),
+      rows: J.scen.map((c, i) => ({ name: SHORT[i] + ' ' + pct(c.bp), col: DK[i], val: rs0(c.vals[selYear]) })),
+      inv: pvText, real: rs0(sc.reals[selYear]),
+      aria: yearName(selYear) + ': ' + J.scen.map((c, i) => SHORT[i] + ' ' + rs0(c.vals[selYear])).join(', '),
+    };
+
+    // what the selected end value is made of
+    let bkParts, bkExplain;
+    if (sc.gain >= 0n) {
+      const simple = sc.si - P.pv, cmp = sc.ce, tot = Number(sc.fv) || 1;
+      bkParts = [
+        { cls: 'bk-p', label: 'Amount invested', v: pvText, w: share(Number(P.pv), tot) },
+        { cls: 'bk-s', label: 'Simple growth (rate × years on the amount)', v: rs0(simple), w: share(Number(simple), tot) },
+        { cls: 'bk-c', label: 'Growth on growth', v: rs0(cmp), w: share(Number(cmp), tot) },
+      ];
+      bkExplain = 'Simple growth would add ' + pct(sc.bp) + ' of ' + pvText + ' every year, ' + rs0(simple) + ' over ' + yearsText + '. Because each year\'s gain stays invested, later years also earn on earlier gains. That extra part is ' + rs0(cmp) + '. It grows faster the longer the horizon. F6: growth on growth = value − amount × (1 + rate × years).';
+    } else {
+      const tot = Number(P.pv) || 1;
+      bkParts = [
+        { cls: 'bk-p', label: 'What remains of the amount invested', v: rs0(sc.fv), w: share(Number(sc.fv), tot) },
+        { cls: 'bk-l', label: 'Estimated loss', v: rs0(-sc.gain), w: share(Number(-sc.gain), tot) },
+      ];
+      bkExplain = 'At a negative rate there is no growth to compound. Each year the rate is applied to what is left, so the value shrinks a little less in rupees each year, but it keeps shrinking.';
+    }
+    const bk = {
+      parts: bkParts, explain: bkExplain, real: rs0(sc.realFv),
+      realW: share(Number(sc.realFv), Math.max(Number(sc.fv), Number(sc.realFv))),
+      realNote: 'Prices are assumed to change by ' + pct(P.infl) + ' a year (your input). ' + rs0(sc.fv) + ' after ' + yearsText + ' would buy about what ' + rs0(sc.realFv) + ' buys today. Real yearly rate: ' + (sc.realRate * 100).toFixed(2) + '%.',
+      aria: 'Breakdown of ' + rs0(sc.fv) + ': ' + bkParts.map((x) => x.label + ' ' + x.v).join(', '),
+    };
+
+    // the three assumptions side by side
+    const maxP = Math.max(Number(P.pv), ...J.scen.map((c) => Number(c.fv))) || 1;
+    const pillars = J.scen.map((c, i) => ({
+      name: SHORT[i], col: LT[i], rate: pct(c.bp), fv: rs0(c.fv), gain: plus(c.gain), ret: retPct(c.gain), real: rs0(c.realFv),
+      h: share(Number(c.fv), maxP), base: share(Number(P.pv), maxP),
+      pressed: tab === i ? 'true' : 'false', pick: () => this.setState({ tab: i }),
+      aria: SHORT[i] + ' assumption, ' + pct(c.bp) + ' a year: ' + rs0(c.fv) + ' after ' + yearsText + '. Show this assumption.',
+    }));
+    const lo = J.scen[0], hi = J.scen[2];
+
+    // risk profile
+    const bandText = ['Lower capacity or comfort for ups and downs', 'Some room for ups and downs', 'More room for ups and downs'];
+    const bands = CLASSES.map((name, i) => ({ name, range: ['0 to 39', '40 to 69', '70 to 100'][i], text: bandText[i], cur: R.classBand === i ? 'true' : 'false' }));
+    const rGauges = [
+      { name: 'Risk capacity', sub: 'What your finances could absorb', score: Math.round(R.cap), dash: R.cap.toFixed(2), band: CLASSES[R.capBand], text: gauges[0].text,
+        aria: 'Risk capacity ' + Math.round(R.cap) + ' out of 100, ' + CLASSES[R.capBand] + ' range' },
+      { name: 'Risk tolerance', sub: 'What you say feels comfortable', score: Math.round(R.tol), dash: R.tol.toFixed(2), band: CLASSES[R.tolBand], text: gauges[1].text,
+        aria: 'Risk tolerance ' + Math.round(R.tol) + ' out of 100, ' + CLASSES[R.tolBand] + ' range' },
+    ];
+    const rr = [0, 1, 2].map((i) => ({ x: (34 + i * 90.67).toFixed(2), w: '90.67', tx: (34 + i * 90.67 + 45.33).toFixed(2), label: ['CONSERVATIVE', 'MODERATE', 'GROWTH'][i],
+      fill: R.classBand === i ? 'rgba(210,180,124,.16)' : 'rgba(244,241,234,.02)', tc: R.classBand === i ? '#D2B47C' : '#6B6E74' }));
+
+    // a hypothetical fall at the end of the horizon
+    const maxF = Math.max(...J.scen.map((c) => Number(c.fv))) || 1;
+    const rDowns = J.scen.map((c, i) => {
+      const end = fvAfterFall(P.pv, c.bp, hz, dnum);
+      return { name: SHORT[i] + ' ' + pct(c.bp), col: LT[i], fv: rs0(c.fv), end: rs0(end), lost: rs0(c.fv - end),
+        keepW: share(Number(end), maxF), lostW: share(Number(c.fv - end), maxF),
+        aria: SHORT[i] + ': ' + rs0(c.fv) + ' before the fall, ' + rs0(end) + ' after it' };
+    });
+
+    // each month's income
+    const flowBase = Number(P.income > bb.EL ? P.income : bb.EL) || 1;
+    const flowParts = [
+      { label: 'Essential expenses', v: rs0(P.ess), col: '#8E8A80', w: share(Number(P.ess), flowBase) },
+      { label: 'EMIs and fixed obligations', v: rs0(P.emi), col: '#111316', w: share(Number(P.emi), flowBase) },
+      bb.S >= 0n
+        ? { label: 'Monthly surplus', v: rs0(bb.S), col: '#17A673', w: share(Number(bb.S), flowBase) }
+        : { label: 'Monthly deficit (spending above income)', v: rs0(-bb.S), col: '#E26A6A', w: '0%' },
+    ];
+
+    const r = {
+      ok: !bad, bad, badText: pvErr ? 'The amount needs fixing: ' + pvErr : 'Some earlier answers are incomplete or not valid.',
+      title: bad ? 'Your results' : 'What ' + pvText + ' could become in ' + yearsText,
+      sub: bad ? 'Nothing is shown until every input is valid, so no figure here can come from a sample.' : 'An estimate from your own inputs, not a forecast. Change the amount, the horizon or the assumption, and every figure below is recalculated.',
+      pvValue: f.pv, onPv: setF('pv'), pvErr, pvHasErr: !!pvErr, pvInvalid: pvErr ? 'true' : 'false',
+      yearsValue: String(slN), yearsLabel, slMax: String(slMax), slLo: '1 ' + slU.one, slMid: String(slU.slMid), slHi: slMax + ' ' + slU.many,
+      selLabel: yearName(selYear) + (J.part ? '' : ' of ' + t),
+      onYears: (e) => this.setState({ f: { ...this.state.f, years: e.target.value }, yr: null }),
+      tabs: rTabs, ov, chart: rChart, tip, t, timesAttr: J.times.map((x) => x / T).join('|'), selName: SHORT[tab] + ' assumption, ' + pct(sc.bp),
+      fvText: rs0(sc.fv), pvText, bk, pillars,
+      spread: 'The same ' + pvText + ' ends between ' + rs0(lo.fv) + ' and ' + rs0(hi.fv) + ', depending only on which rate you assume. A small difference in the yearly rate becomes a large difference over a long horizon.',
+      bands, gauges: rGauges, capScore: Math.round(R.cap), tolScore: Math.round(R.tol), klassScore: Math.round(R.klass),
+      rr, gap: rs0(hi.fv - lo.fv), drops, downs: rDowns, nowAfter: rs0(half(P.pv * dnum, 100n)),
+      flow: { parts: flowParts, aria: 'Monthly income ' + rs0(P.income) + ': ' + flowParts.map((x) => x.label + ' ' + x.v).join(', ') },
+      pots: pots.map((p) => ({ ...p, col: p.color })),
+    };
+
+    const stepNames = ['Financial profile', 'Risk questions', 'Assumptions', 'Dashboard'];
+    const stepper = stepNames.map((label, i) => {
+      const n = i + 1; const cur = s.step === n; const done = s.step > n;
+      return { label, n, cls: cur ? 'is-now' : done ? 'is-done' : '', stateText: cur ? 'Now' : done ? 'Done' : n === 4 ? 'Last' : 'Next', mark: done ? '✓' : String(n), current: cur ? 'step' : 'false',
+        border: cur ? '#111316' : done ? '#BFE3D3' : '#E6E1D6', bg: cur ? '#FFFFFF' : done ? '#E7F5EF' : '#FFFFFF',
+        dot: cur ? '#111316' : done ? '#0A7A55' : '#E6E1D6', dotText: cur || done ? '#FFFFFF' : '#5C5A55', text: cur ? '#111316' : done ? '#0A7A55' : '#5C5A55' };
+    });
+
+    // the plan sheet: what each layer holds so far (display only; never feeds a calculation)
+    const okF = (k) => f[k] !== '' && !E[k];
+    const lyState = (n) => (s.step > n ? 'is-done' : s.step === n ? 'is-now' : 'is-todo');
+    const lyText = (n) => (s.step > n ? 'Done' : s.step === n ? 'In progress' : 'Not started');
+    const rates = okF('lo') && okF('mid') && okF('hi') && !E.order ? f.lo + '% · ' + f.mid + '% · ' + f.hi + '%' : '—';
+    const bpLayers = [
+      { name: 'Financial profile', rows: [{ k: 'Monthly surplus', v: liveV.surplus }, { k: 'Emergency cover', v: liveV.cover }].concat(liveV.hasTarget ? [{ k: 'Shortfall to your target', v: liveV.shortfall }] : []).concat([{ k: 'Main aim', v: s.obj === null ? '—' : OBJECTIVES[s.obj] }]) },
+      { name: 'Risk questions', rows: [{ k: 'Answered', v: answered + ' of 7' }] },
+      { name: 'Assumptions', rows: [{ k: 'Amount', v: live.P.pv !== undefined ? rs0(live.P.pv) : '—' }, { k: 'Horizon', v: live.P.hz !== undefined ? hzText(live.P.hz) : '—' }, { k: 'Rates', v: rates }, { k: 'Inflation', v: okF('infl') ? f.infl + '%' : '—' }] },
+      { name: 'Dashboard', rows: [{ k: useLive ? 'Educational profile' : 'Opens', v: useLive ? CLASSES[R.classBand] : 'after steps 1 to 3' }] },
+    ].map((l, i) => ({ ...l, mark: s.step > i + 1 ? '✓' : String(i + 1), cls: lyState(i + 1), state: lyText(i + 1) }));
+    const bp = { layers: bpLayers, status: 'Layer ' + s.step + ' of 4' };
+
+    const go = (n) => () => { this.setState({ step: n, showErr: false, fail: false }); };
+    return {
+      stepper, bp, is1: s.step === 1, is2: s.step === 2, is3: s.step === 3, is4: s.step === 4,
+      groups, objectives, objErr, live: liveV, s1fail: s.fail && s.step === 1, s2fail: s.fail && s.step === 2, s3fail: s.fail && s.step === 3,
+      reset: () => this.setState({ step: 1, showErr: false, fail: false, f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' }, obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null }, tab: 1, yr: null }),
+      loadSample: () => this.setState({ f: { ...this.state.f, income: SAMPLE_F.income, ess: SAMPLE_F.ess, emi: SAMPLE_F.emi, es: SAMPLE_F.es, sv: SAMPLE_F.sv, inv: SAMPLE_F.inv, pv: SAMPLE_F.pv, years: SAMPLE_F.years, yunit: 'years' }, obj: 2, fail: false }),
+      next1: () => { if (live.s1 && s.obj !== null) go(2)(); else this.setState({ showErr: true, fail: true }); },
+      qsections, answeredCount: answered, answeredPct: Math.round(answered / 7 * 100) + '%',
+      back2: go(1), next2: () => { if (ansComplete) go(3)(); else this.setState({ fail: true }); },
+      pvText: P.pv !== undefined && live.P.pv !== undefined ? rs0(live.P.pv) : 'your amount', yearsText: live.P.hz !== undefined ? hzText(live.P.hz) : 'your horizon', toStep1: go(1),
+      rateFields, orderErr, orderErrText: E.order || '',
+      inflValue: f.infl, onInfl: setF('infl'), inflErr, inflHasErr: !!inflErr, inflInvalid: inflErr ? 'true' : 'false',
+      goalValue: f.goal, onGoal: setF('goal'), goalErr, goalHasErr: !!goalErr, goalInvalid: goalErr ? 'true' : 'false',
+      fillRates: () => this.setState({ f: { ...this.state.f, lo: '8', mid: '10', hi: '12' } }),
+      fillInfl: () => this.setState({ f: { ...this.state.f, infl: '6.08' } }),
+      drops, back3: go(2),
+      next3: () => { if (live.s1 && live.s3 && s.obj !== null && ansComplete) { this.setState({ step: 4, showErr: false, fail: false, yr: null }); } else this.setState({ showErr: true, fail: true }); },
+      back4: go(3), onYear: (e) => this.setState({ yr: parseInt(e.target.value, 10) }),
+      v, r,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#111316">
+<style>html,body{background:#111316}@view-transition{navigation:auto}@media (max-width:640px){header.hd>div{flex-wrap:nowrap!important;padding:10px 16px!important;gap:16px!important}header.hd>div>a:first-child span{font-size:20px!important}header.hd nav{flex:1 1 auto;min-width:0;flex-wrap:nowrap!important;justify-content:flex-start;overflow-x:auto;white-space:nowrap;gap:0 18px!important;font-size:14.5px!important;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 10px,#000 calc(100% - 24px),transparent);padding:0 16px 0 6px}header.hd nav::-webkit-scrollbar{display:none}header.hd nav a{padding:10px 0}}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gullak candlestick lab</title>
+<link rel="stylesheet" href="./lattice-loader.css"><script src="./net-status.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="./arth-ui.js" defer></script>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./arth-strip.js" defer></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap">
+<style>
+:root{--navy:#111316;--navy2:#24272C;--ink:#15171A;--muted:#5C5A55;--line:#E6E1D6;--bg:#F4F1EA;--green:#0A7A55;--greenBright:#17A673;--greenTint:#E7F5EF;--amber:#8A4B00;--amberTint:#FFF4DE;--red:#A12A2A;--redTint:#FCEDED}
+body{margin:0;background:#F4F1EA;color:var(--ink);font-family:'Geist','Noto Sans Devanagari',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:'Source Serif 4','Noto Sans Devanagari', Georgia,serif!important;font-weight:600!important;letter-spacing:-0.012em!important}
+h1 em,h2 em{font-weight:400}
+.ap-nav a{padding:6px 0;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+.ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
+.ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:10px;font-weight:600;font-size:15.5px;border:0;cursor:pointer;transition:background .18s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy2)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid #D3CEC3}
+.btn-ghost:hover{border-color:var(--navy)}
+.btn:focus-visible,.opt:focus-visible,.row:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #B8913F;outline-offset:2px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px}
+.opt{border:1.5px solid #D3CEC3;border-radius:999px;padding:8px 16px;background:#fff;font-size:15px;font-weight:600;cursor:pointer;color:var(--ink);min-height:42px}
+.opt:hover{border-color:#A39E92}
+.opt[aria-pressed="true"]{border-color:var(--navy);background:var(--navy);color:#fff}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px 8px 8px;cursor:pointer;font-size:15.5px;color:var(--ink);min-height:64px}
+.row:hover{border-color:#A39E92}
+.row[aria-pressed="true"]{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy);background:#F7F4EE}
+.ans{display:block;width:100%;text-align:left;border:1.5px solid #D3CEC3;border-radius:12px;padding:14px 16px;background:#fff;font-size:16.5px;font-weight:600;cursor:pointer;color:var(--ink);min-height:56px}
+.ans:hover{border-color:var(--navy)}
+.search{width:100%;height:46px;border:1.5px solid #D3CEC3;border-radius:10px;padding:0 14px;font:inherit;font-size:16px;color:var(--ink)}
+input[type=range]{width:100%;accent-color:#111316;height:30px}
+.cn{animation-fill-mode:both}
+@keyframes cA{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes cB{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cn{animation:none!important;opacity:1!important}.btn{transition:none}}
+.mini{font-size:14px;line-height:1.55;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px}
+.scroll{max-height:700px;overflow-y:auto;padding:2px}
+@media (max-width:640px){
+nav[aria-label="Main"]{gap:2px 16px!important;font-size:14.5px!important}
+[style*="px 32px"],[style*="padding:0 32px"]{padding-left:16px!important;padding-right:16px!important}
+[style*="padding:32px"],[style*="padding:30px"],[style*="padding:28px"]{padding:20px!important}
+[style*="padding:24px 28px"]{padding:18px!important}
+h1{font-size:34px!important;line-height:1.12!important}
+h2[style*="font-size:40px"],h2[style*="font-size:36px"],h2[style*="font-size:44px"]{font-size:28px!important}
+[style*="font-size:76px"],[style*="font-size:60px"]{font-size:48px!important}
+[style*="font-size:46px"]{font-size:34px!important}
+p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]{font-size:17px!important}
+}
+.stage{background:#111316;color:#F4F1EA;position:relative;overflow:hidden}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 0%,rgba(210,180,124,.10),rgba(210,180,124,0) 70%);pointer-events:none}
+.wrap{max-width:1280px;margin:0 auto;padding-left:clamp(16px,4vw,48px);padding-right:clamp(16px,4vw,48px)}
+.eyb{font-family:'Geist Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+.st-head{position:relative;padding-top:clamp(28px,3.6vw,48px);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.st-h1{margin:12px 0 0;font-size:clamp(36px,4vw,58px)!important;line-height:1.02!important;max-width:19ch;color:#F4F1EA}
+.st-h1 em{font-style:italic;color:#D2B47C}
+.st-lede{margin:0;max-width:420px;font-size:17px;line-height:1.65;color:#C4C6CA}
+.st-grid{position:relative;display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:stretch;padding:26px 0 clamp(48px,6vw,80px)}
+.inputs{background:#FBF9F4;color:var(--ink);border-radius:24px;padding:clamp(22px,2.4vw,32px);box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.lab-h{margin:0!important;font-family:'Geist Mono',ui-monospace,monospace!important;font-size:12px!important;font-weight:500!important;letter-spacing:.16em!important;text-transform:uppercase;color:#8F7444}
+.scene{position:relative;border-radius:24px;border:1px solid rgba(244,241,234,.12);background:#111316;overflow:hidden;display:flex;flex-direction:column;min-height:620px}
+#valley{position:relative;flex:1 1 auto;min-height:400px;outline:none;touch-action:none}
+#valley canvas{position:absolute;inset:0;display:block}
+#valley:focus-visible{box-shadow:inset 0 0 0 2px #D2B47C}
+.readout{position:absolute;left:clamp(18px,2.4vw,30px);top:clamp(18px,2.4vw,26px);pointer-events:none;z-index:2}
+.readout .k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B0B3B8}
+.readout .v{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(56px,6.4vw,96px);line-height:.95;letter-spacing:-0.03em;color:#D2B47C;font-variant-numeric:tabular-nums}
+.readout .v.dim{color:rgba(244,241,234,.28)}
+.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
+.legend2 i{display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle}
+.res{position:relative;z-index:2;padding:20px clamp(18px,2.4vw,30px) 24px;border-top:1px solid rgba(244,241,234,.12);background:linear-gradient(180deg,rgba(17,19,22,0),#15171A)}
+.res-s{margin:0;font-size:17px;line-height:1.55;color:#EDE8DD;max-width:62ch}
+.chips{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.chip{border:1px solid rgba(244,241,234,.12);border-radius:14px;padding:12px 14px;background:rgba(244,241,234,.03)}
+.chip .l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
+.chip .n{margin-top:6px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:#F4F1EA}
+.yrs{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(210,180,124,.35);background:rgba(210,180,124,.06)}
+.yrs .h{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.yrs .t{margin-top:6px;font-size:17px;line-height:1.5;color:#F4F1EA}
+.yrs .n2{margin-top:6px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
+.res-note{margin-top:12px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
+.res-empty{margin:0;font-size:19px;line-height:1.5;color:#CFCABE;max-width:46ch}
+.res-msg{margin:0;font-size:18px;line-height:1.55;color:#F4F1EA;max-width:60ch}
+.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#8A8E94}
+
+.below{padding:clamp(56px,8vw,110px) 0}
+.why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
+.why-h{margin:12px 0 0;font-size:clamp(32px,3.8vw,52px)!important;line-height:1.04!important;color:var(--ink)}
+.why p{font-size:17px;line-height:1.7;color:#34363B}
+.formula{margin-top:20px;border-radius:16px;background:#111316;color:#F4F1EA;padding:20px 22px;font-family:'Geist Mono',monospace;font-size:15px;line-height:1.8}
+.formula b{color:#D2B47C;font-weight:500}
+.why details summary{cursor:pointer;color:#8F7444;font-weight:600;font-size:14.5px;padding:10px 0;list-style:none}
+.why details summary::before{content:"+";display:inline-block;width:18px;font-family:'Geist Mono',monospace}
+.why details[open] summary::before{content:"−"}
+.gauge{background:#FBF9F4;border:1px solid var(--line);border-radius:24px;padding:clamp(22px,2.6vw,34px)}
+.g-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.g-h{margin:0;font-size:clamp(26px,2.6vw,34px)!important;line-height:1.1!important;color:var(--ink)}
+.g-sub{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#5C5A55}
+.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:11.5px;color:#5C5A55}
+.g-key i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.g-rows{margin-top:18px;display:flex;flex-direction:column}
+.g-row{display:grid;grid-template-columns:64px minmax(0,1fr) 98px;gap:14px;align-items:center;width:100%;padding:10px 8px;margin:0 -8px;border:0;border-top:1px solid var(--line);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px;transition:background .2s}
+.g-row:hover{background:#F1EDE4}
+.g-row:focus-visible{outline:2px solid #B8913F;outline-offset:0}
+.g-fall{font-variant-numeric:tabular-nums;font-size:15.5px;color:#34363B}
+.g-bars{display:flex;flex-direction:column;gap:4px}
+.g-bars span{display:block;height:7px;border-radius:4px;transform-origin:left;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+[data-in] .g-bars span{transform:scaleX(1)}
+.g-gain{font-variant-numeric:tabular-nums;font-weight:700;font-size:15.5px;text-align:right;color:var(--ink)}
+.warn{margin-top:clamp(28px,4vw,48px);display:flex;gap:14px;align-items:flex-start;background:#FBF1DC;border:1px solid #E3C48C;border-left:6px solid #8A4B00;border-radius:16px;padding:18px 20px;color:#2B1A00;font-size:15.5px;line-height:1.6;font-weight:500}
+.cta{margin-top:20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;background:#111316;color:#F4F1EA;border-radius:20px;padding:26px 30px}
+.cta .t{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(22px,2.4vw,30px);line-height:1.2}
+.btn-gold{background:#D2B47C;color:#111316}
+.btn-gold:hover{background:#E2C894}
+[data-reveal]{opacity:0;transform:translate3d(0,24px,0);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+[data-reveal][data-in]{opacity:1;transform:none}
+@media (max-width:900px){
+  .st-grid{grid-template-columns:minmax(0,1fr)}
+  .scene{min-height:0}
+  #valley{min-height:340px;flex:0 0 340px}
+  .why{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .chips{grid-template-columns:minmax(0,1fr)}
+  .legend2{display:none}
+  .readout .v{font-size:52px}
+  #valley{min-height:300px;flex-basis:300px}
+  .g-row{grid-template-columns:54px minmax(0,1fr) 86px;gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  [data-reveal]{opacity:1;transform:none;transition:none}
+  .g-bars span{transform:scaleX(1);transition:none}
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.btn-line{background:transparent;color:#F4F1EA;border:1px solid rgba(244,241,234,.28)}
+.btn-line:hover{border-color:#D2B47C;color:#fff}
+.btn-ink{background:#111316;color:#F4F1EA}
+.btn-ink:hover{background:#24272C}
+.ap-eyebrow.up{text-transform:uppercase}
+
+/* stage */
+.lab-grid{position:relative;display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:center;padding:clamp(32px,4vw,56px) 0 clamp(48px,6vw,80px)}
+.lab-copy .st-h1{max-width:16ch}
+.lab-note{margin:26px 0 0;max-width:460px;font-size:13.5px;line-height:1.6;color:#9A9DA3;border-left:2px solid rgba(210,180,124,.5);padding-left:14px}
+.pg{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid rgba(244,241,234,.12);border-radius:24px;overflow:hidden;background:#111316}
+#candle{position:relative;min-height:440px;border-right:1px solid rgba(244,241,234,.08)}
+#candle canvas{position:absolute;inset:0;display:block}
+.pg-tag{position:absolute;left:18px;top:16px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;color:#8A8E94;pointer-events:none}
+.pg-side{padding:clamp(18px,2.2vw,28px);display:flex;flex-direction:column;gap:10px;background:linear-gradient(180deg,#15171A,#111316)}
+.pg-story{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(22px,2vw,27px);line-height:1.2;color:#F4F1EA}
+.pg-wicks{margin:0;font-size:14.5px;line-height:1.55;color:#B0B3B8}
+.pg-presets{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+.chip-btn{border:1px solid rgba(244,241,234,.2);background:transparent;color:#E6E3DC;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;min-height:34px;transition:border-color .2s,color .2s}
+.chip-btn:hover{border-color:#D2B47C;color:#fff}
+.chip-btn:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}
+.pg-sliders{margin-top:auto;display:flex;flex-direction:column;gap:2px}
+.sl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.04em;color:#B0B3B8}
+.pg input[type=range]{accent-color:#D2B47C;height:28px}
+.pg-key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:#9A9DA3}
+.pg-key span{display:inline-flex;align-items:center;gap:6px}
+.pg-key i{display:inline-block;width:12px;height:12px;border-radius:3px}
+.k-up{background:#56BE92}.k-dn{background:#E26A6A}
+
+/* wall of candles */
+.wall-top{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:clamp(24px,4vw,64px);align-items:end;padding-top:clamp(32px,4vw,56px)}
+.day-card{border:1px solid rgba(210,180,124,.4);border-radius:18px;background:#181A1E;padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.dc-k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#D2B47C}
+.dc-t{margin:0;font-family:'Source Serif 4',Georgia,serif;font-size:26px;font-weight:600;line-height:1.15;color:#F4F1EA}
+.dc-p{margin:0;font-size:15.5px;line-height:1.55;color:#C4C6CA}
+.dc-ohlc{display:flex;flex-wrap:wrap;gap:4px 14px;font-family:'Geist Mono',monospace;font-size:12.5px;color:#9A9DA3}
+.dc-b{align-self:flex-start;margin-top:4px}
+.wall{position:relative;margin-top:clamp(28px,3.4vw,44px);overflow-x:auto;scrollbar-width:thin}
+.wall-in{display:flex;min-width:760px;height:clamp(240px,26vw,330px)}
+.wd{position:relative;flex:1 1 0;min-width:0;height:100%;padding:0;border:0;border-radius:6px;background:transparent;cursor:pointer;opacity:.4;transition:opacity .2s,background .2s}
+.wd:hover{opacity:.85}
+.wd[aria-pressed="true"]{opacity:1;background:rgba(210,180,124,.08);box-shadow:inset 0 0 0 1px rgba(210,180,124,.45)}
+.wd:focus-visible{outline:2px solid #D2B47C;outline-offset:2px;opacity:1}
+.wd-w{position:absolute;left:50%;width:2px;margin-left:-1px;border-radius:1px}
+.wd-b{position:absolute;left:24%;right:24%;border-radius:2px;min-height:2px}
+.stage .lab-note{margin:22px 0 clamp(40px,5vw,64px)}
+.labx{background:#111316;color:#F4F1EA;border-top:1px solid rgba(244,241,234,.08);padding:clamp(48px,6vw,80px) 0}
+.labx-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 40px;margin-bottom:24px}
+.labx-top .why-h{margin:10px 0 0}
+.labx-lede{margin:0;max-width:420px;font-size:16px;line-height:1.6;color:#C4C6CA}
+.fc-lv{position:absolute;left:18px;right:18px;height:0;border-top:1px dashed rgba(244,241,234,.18)}
+.fc-lv span{position:absolute;right:0;transform:translateY(-50%);padding:0 6px;background:#111316;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#B0B3B8}
+@media (max-width:900px){.wall-top{grid-template-columns:minmax(0,1fr);align-items:start}}
+
+/* library: film strip + lightbox */
+.lib{background:#16181C;color:#F4F1EA;padding:clamp(48px,6vw,88px) 0;border-top:1px solid rgba(244,241,234,.08)}
+.lib-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.lib-h{margin:10px 0 0;font-size:clamp(32px,3.6vw,50px)!important;line-height:1.05!important;color:#F4F1EA}
+.lib-intro{margin:12px 0 0;font-size:17px;line-height:1.6;color:#B0B3B8}
+.seg{display:inline-flex;gap:4px;padding:4px;border:1px solid rgba(244,241,234,.14);border-radius:999px}
+.seg-b{border:0;background:transparent;color:#C4C6CA;border-radius:999px;padding:8px 16px;font:inherit;font-size:14.5px;font-weight:500;cursor:pointer;min-height:38px;transition:background .2s,color .2s}
+.seg-b:hover{color:#fff}
+.seg-b[aria-pressed="true"]{background:#D2B47C;color:#111316;font-weight:600}
+.seg-b:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}
+.lib-tools{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.lib-filters{display:flex;flex-wrap:wrap;gap:6px}
+.lib-filters .seg-b{border:1px solid rgba(244,241,234,.14)}
+.lib-search{display:flex;align-items:center;gap:12px;flex:0 1 380px;min-width:0}
+.lib .search{background:#111316;border:1px solid rgba(244,241,234,.18);color:#F4F1EA;height:44px}
+.lib .search::placeholder{color:#7C8086}
+.lib .search:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}
+.lib-count{flex:none;font-family:'Geist Mono',monospace;font-size:12px;color:#9A9DA3}
+.film{position:relative;margin-top:20px;display:grid;grid-template-columns:40px minmax(0,1fr) 40px;gap:8px;align-items:center}
+.film-arrow{height:100%;min-height:120px;border:1px solid rgba(244,241,234,.12);border-radius:14px;background:#111316;color:#D2B47C;font-size:26px;cursor:pointer}
+.film-arrow:hover{border-color:#D2B47C}
+.film-arrow:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}
+.strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:22px 14px;border-radius:14px;scrollbar-width:thin;scrollbar-color:#3A3D44 transparent;
+  background:#0B0C0E;
+  background-image:radial-gradient(circle at 8px 9px,#1E2024 3.2px,transparent 3.6px),radial-gradient(circle at 8px calc(100% - 9px),#1E2024 3.2px,transparent 3.6px);
+  background-size:22px 100%;background-repeat:repeat-x}
+.strip>div{flex:0 0 auto;scroll-snap-align:start}
+.frame{display:flex;flex-direction:column;gap:8px;width:168px;text-align:left;background:#1A1C20;border:1px solid rgba(244,241,234,.08);border-radius:10px;padding:8px 8px 12px;cursor:pointer;color:#F4F1EA;font:inherit;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .2s,background .2s}
+.frame:hover{transform:translateY(-3px);border-color:rgba(210,180,124,.5)}
+.frame[aria-pressed="true"]{border-color:#D2B47C;background:#22252A;box-shadow:0 0 0 1px #D2B47C,0 18px 30px -18px rgba(210,180,124,.5)}
+.frame:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}
+.thumb{position:relative;display:block;width:100%;height:78px;background:#FBF9F4;border-radius:6px;overflow:hidden}
+.f-name{font-weight:600;font-size:14px;line-height:1.25}
+.f-tag{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.02em;line-height:1.35}
+.tg-bottom{color:#7FD3AE}.tg-top{color:#EE9C9C}.tg-cont{color:#C4C6CA}
+.lib[lang=hi] .v-k,.lib[lang=hi] .v-tag,.lib[lang=hi] .f-tag{letter-spacing:0;font-family:'Noto Sans Devanagari','Geist',sans-serif;font-size:12.5px;font-weight:600}
+.lib-none{margin-top:12px;font-size:14.5px;color:#B0B3B8}
+.viewer{margin-top:22px;border:1px solid rgba(244,241,234,.12);border-radius:24px;padding:clamp(20px,2.6vw,32px);background:#111316}
+.v-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:14px}
+.v-tag{display:inline-block;font-family:'Geist Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.1em;padding:5px 10px;border-radius:999px}
+.v-name{margin:10px 0 0;font-family:'Source Serif 4','Noto Sans Devanagari',Georgia,serif;font-weight:400;font-size:clamp(30px,3vw,42px);line-height:1.05;letter-spacing:-0.02em;color:#F4F1EA}
+.v-fam{margin-top:4px;font-size:14.5px;color:#9A9DA3}
+.v-btns{display:flex;gap:8px;flex-wrap:wrap}
+.v-body{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(20px,3vw,36px);align-items:start}
+.lightbox{position:relative;height:360px;background:#FBF9F4;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(244,241,234,.2),0 0 60px -10px rgba(251,249,244,.18),inset 0 0 40px rgba(210,180,124,.12)}
+.v-caps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.v-caps li{display:flex;gap:12px;align-items:flex-start;font-size:16.5px;line-height:1.45;color:#E6E3DC}
+.v-n{flex:none;width:26px;height:26px;border-radius:50%;border:1px solid #D2B47C;color:#D2B47C;font-family:'Geist Mono',monospace;font-size:12px;display:flex;align-items:center;justify-content:center}
+.v-boxes{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.v-read,.v-fail{border-radius:14px;padding:14px 16px;border:1px solid rgba(244,241,234,.12)}
+.v-read{background:rgba(86,190,146,.07);border-color:rgba(86,190,146,.35)}
+.v-fail{background:rgba(227,196,140,.07);border-color:rgba(227,196,140,.35)}
+.v-k{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;color:#9A9DA3}
+.v-read .v-k{color:#7FD3AE}.v-fail .v-k{color:#E3C48C}
+.v-t{margin-top:4px;font-size:15.5px;line-height:1.55;color:#F4F1EA}
+.v-mini{margin-top:10px;font-size:13.5px;line-height:1.55;color:#9A9DA3}
+
+/* same shape, different place */
+.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+.pair-p{font-size:17px;line-height:1.7;color:#34363B;max-width:48ch}
+.pair-tabs{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.seg-b.light{border:1px solid #D3CEC3;color:#34363B;background:#FBF9F4}
+.seg-b.light:hover{border-color:#8F7444;color:#111316}
+.seg-b.light[aria-pressed="true"]{background:#111316;border-color:#111316;color:#F4F1EA}
+.pair-name{margin-top:22px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(30px,3vw,40px);line-height:1.05;color:#111316}
+.pair-t{margin:8px 0 0;font-size:16.5px;line-height:1.6;color:#34363B;max-width:52ch}
+.pair-box{height:320px;box-shadow:0 0 0 1px var(--line),0 40px 80px -50px rgba(17,19,22,.5)}
+
+/* quiz */
+.quiz{margin-top:clamp(64px,9vw,120px)}
+.quiz-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.score{font-family:'Geist Mono',monospace;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#5C5A55;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:#FBF9F4}
+.score strong{color:#111316;font-weight:500;margin-left:6px}
+.quiz-grid{margin-top:24px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.flip{perspective:1600px}
+.flip-in{position:relative;height:380px;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.flip[data-flip="1"] .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:18px;display:flex;flex-direction:column}
+.front{background:#FBF9F4;border:1px solid var(--line);box-shadow:0 40px 80px -50px rgba(17,19,22,.5)}
+.back{background:#111316;color:#F4F1EA;transform:rotateY(180deg);padding:clamp(24px,3vw,40px);justify-content:center;box-shadow:0 40px 80px -40px rgba(17,19,22,.7)}
+.face-k{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#8F7444}
+.back .face-k{color:#D2B47C}
+.q-chart{position:relative;flex:1 1 auto;margin-top:10px;border-radius:14px;overflow:hidden;background:#fff}
+.b-name{margin-top:10px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(34px,3.4vw,48px);line-height:1.05}
+.b-read{margin:14px 0 0;font-size:17px;line-height:1.6;color:#E6E3DC;max-width:40ch}
+.b-note{margin:18px 0 0;font-size:13.5px;line-height:1.55;color:#9A9DA3}
+.q-q{margin:0;font-size:17px;line-height:1.5;color:#34363B}
+.q-opts{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.quiz .ans{border-radius:14px;font-weight:500;font-size:16px;transition:border-color .2s,background .2s}
+
+/* cautions */
+.cautions{margin-top:clamp(64px,9vw,120px);background:#111316;color:#F4F1EA;border-radius:28px;padding:clamp(28px,4vw,52px)}
+.c-h{margin:0;font-size:clamp(28px,3vw,40px)!important;line-height:1.1!important;color:#F4F1EA}
+.c-list{list-style:none;counter-reset:c;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,56px)}
+.c-list li{counter-increment:c;position:relative;padding:18px 0 18px 48px;border-top:1px solid rgba(244,241,234,.12)}
+.c-list li::before{content:"0" counter(c);position:absolute;left:0;top:20px;font-family:'Geist Mono',monospace;font-size:12px;color:#D2B47C;letter-spacing:.1em}
+.c-t{font-weight:600;font-size:17px}
+.c-b{margin-top:6px;font-size:15.5px;line-height:1.55;color:#B0B3B8}
+.c-links{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+
+@media (max-width:1000px){
+  .lab-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+  .v-body,.pair,.quiz-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .pg{grid-template-columns:minmax(0,1fr)}
+  #candle{min-height:340px;border-right:0;border-bottom:1px solid rgba(244,241,234,.08)}
+  .film{grid-template-columns:minmax(0,1fr)}
+  .film-arrow{display:none}
+  .frame{width:148px}
+  .lightbox{height:300px}
+  .flip-in{height:340px}
+  .c-list{grid-template-columns:minmax(0,1fr)}
+  .lib-search{flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){.flip-in{transition:none}.frame{transition:none}}
+</style>
+</helmet>
+
+<div style="width:100%;min-height:100%;background:var(--bg)">
+
+<header class="hd" style="position:sticky;top:0;z-index:60;background:rgba(17,19,22,.96);border-bottom:1px solid rgba(244,241,234,.12);color:#F4F1EA">
+  <div style="max-width:1240px;margin:0 auto;padding:14px 32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px">
+    <a href="Main.dc.html" aria-label="Gullak home" style="display:flex;align-items:center;gap:12px">
+      <svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>
+      <span style="font-family:'Source Serif 4',Georgia,serif;font-size:23px;letter-spacing:-0.01em;color:#F4F1EA">Gullak</span>
+    </a>
+    <nav aria-label="Main" class="ap-nav" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 26px;font-size:15px;font-weight:500;color:#D2D4D8">
+      <a href="Workspace.dc.html">Planner</a>
+      <a href="Recovery.dc.html">Break-even</a>
+      <a href="TradeCost.dc.html">Charges</a>
+      <a href="Candlesticks.dc.html" aria-current="page" style="color:#D2B47C;font-weight:600">Candlesticks</a>
+      <a href="Practice.dc.html">Practice desk</a>
+    </nav>
+  </div>
+</header>
+
+<main data-arth-ready="1">
+<!-- STAGE: a wall of made-up days; pick one to read it -->
+<section class="stage" aria-labelledby="page-h">
+  <div class="wrap">
+    <div class="wall-top">
+      <div class="lab-copy">
+        <p class="eyb" style="margin:0;color:#D2B47C">Candlestick lab</p>
+        <h1 id="page-h" class="st-h1">Every candle is a small fight. <em>Learn to read who won.</em></h1>
+        <p class="st-lede" style="margin-top:18px">A chart is just days stood side by side, one candle each. Pick any day below to read it, reshape it yourself, then watch {{count}} patterns draw themselves.</p>
+        <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px">
+          <a class="btn btn-gold" href="#library">Browse the patterns</a>
+          <a class="btn btn-line" href="#quiz">Test yourself</a>
+        </div>
+      </div>
+      <div class="day-card" aria-live="polite">
+        <span class="dc-k">Day {{wall.n}} of {{wall.total}} · selected</span>
+        <p class="dc-t">{{wall.title}}</p>
+        <p class="dc-p">{{wall.text}}</p>
+        <div class="dc-ohlc num"><span>Open {{wall.o}}</span><span>High {{wall.h}}</span><span>Low {{wall.l}}</span><span>Close {{wall.c}}</span></div>
+        <a class="btn btn-gold dc-b" href="#lab" onClick="{{wall.load}}">Reshape this candle</a>
+      </div>
+    </div>
+    <div class="wall" role="group" aria-label="{{wall.total}} made-up days of a made-up share. Pick a day to read it.">
+      <div class="wall-in">
+        <sc-for list="{{wall.days}}" as="d" hint-placeholder-count="36">
+          <button class="wd" type="button" aria-pressed="{{d.pressed}}" aria-label="{{d.aria}}" onClick="{{d.pick}}">
+            <i class="wd-w" style="top:{{d.wt}};height:{{d.wh}};background:{{d.col}}"></i>
+            <i class="wd-b" style="top:{{d.bt}};height:{{d.bh}};background:{{d.col}}"></i>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+    <p class="lab-note">All candles on this page are drawn by us to illustrate. They are not real prices and not signals. A pattern describes what happened. It does not predict what comes next.</p>
+  </div>
+</section>
+
+<!-- LAB: reshape one candle -->
+<section id="lab" class="labx" aria-labelledby="pg-h">
+  <div class="wrap">
+    <div class="labx-top">
+      <div>
+        <p class="eyb" style="margin:0;color:#D2B47C">Reshape it</p>
+        <h2 id="pg-h" class="why-h" style="color:#F4F1EA">Move the four prices. Watch who wins.</h2>
+      </div>
+      <p class="labx-lede">Open and close make the body. The highest and lowest prices of the day make the wicks.</p>
+    </div>
+    <section class="pg">
+      <div id="candle" role="img" aria-label="{{pg.aria}}">
+        <sc-for list="{{pg.labels}}" as="l" hint-placeholder-count="4">
+          <div class="fc-lv" style="top:{{l.top}}"><span>{{l.text}}</span></div>
+        </sc-for>
+        <div style="position:absolute;{{pg.wick}}"></div>
+        <div style="position:absolute;{{pg.body}}"></div>
+      </div>
+      <div class="pg-side">
+        <p class="pg-story">{{pg.story}}</p>
+        <p class="pg-wicks">{{pg.wicks}}</p>
+        <div class="pg-presets">
+          <sc-for list="{{pg.presets}}" as="p" hint-placeholder-count="5"><button class="chip-btn" type="button" onClick="{{p.pick}}">{{p.label}}</button></sc-for>
+        </div>
+        <div class="pg-sliders">
+          <sc-for list="{{pg.sliders}}" as="s" hint-placeholder-count="4">
+            <label class="sl"><span>{{s.label}}</span><input type="range" min="{{s.min}}" max="{{s.max}}" step="1" value="{{s.value}}" onInput="{{s.onInput}}" aria-label="{{s.label}}"></label>
+          </sc-for>
+        </div>
+        <div class="pg-key"><span><i class="k-up"></i>Closed higher (green)</span><span><i class="k-dn"></i>Closed lower (red)</span></div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- LIBRARY: a film strip and a lightbox -->
+<section id="library" class="lib" aria-labelledby="lib-h" lang="{{v.lang}}">
+  <div class="wrap">
+    <div class="lib-top">
+      <div style="max-width:760px">
+        <p class="eyb" style="margin:0;color:#D2B47C">The library</p>
+        <h2 id="lib-h" class="lib-h">{{ui.title}}</h2>
+        <p class="lib-intro">{{ui.intro}}</p>
+      </div>
+      <div role="group" aria-label="Language" class="seg">
+        <sc-for list="{{langs}}" as="l" hint-placeholder-count="2"><button class="seg-b" type="button" aria-pressed="{{l.pressed}}" onClick="{{l.pick}}">{{l.label}}</button></sc-for>
+      </div>
+    </div>
+
+    <div class="lib-tools">
+      <div role="group" aria-label="Filter patterns" class="lib-filters">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="4"><button class="seg-b" type="button" aria-pressed="{{f.pressed}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for>
+      </div>
+      <div class="lib-search">
+        <label for="q" class="sr-only">{{ui.search}}</label>
+        <input id="q" class="search" type="text" placeholder="{{ui.ph}}" value="{{query}}" onInput="{{onQuery}}" autocomplete="off" aria-label="{{ui.search}}">
+        <span class="lib-count">{{listCount}}</span>
+      </div>
+    </div>
+
+    <div class="film">
+      <button class="film-arrow" type="button" data-strip="prev" aria-label="Scroll the patterns left">‹</button>
+      <div id="strip" class="strip" role="list">
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+          <div role="listitem"><button class="frame" type="button" aria-pressed="{{r.pressed}}" onClick="{{r.pick}}">
+            <span class="thumb" aria-hidden="true">
+              <sc-for list="{{r.cs}}" as="c" hint-placeholder-count="6">
+                <span style="position:absolute;{{c.wick}}"></span><span style="position:absolute;{{c.body}}"></span>
+              </sc-for>
+            </span>
+            <span class="f-name">{{r.name}}</span><span class="f-tag {{r.tagCls}}">{{r.tag}}</span>
+          </button></div>
+        </sc-for>
+      </div>
+      <button class="film-arrow" type="button" data-strip="next" aria-label="Scroll the patterns right">›</button>
+    </div>
+    <sc-if value="{{noRows}}" hint-placeholder-val="{{false}}"><div class="lib-none">{{ui.none}}</div></sc-if>
+
+    <article class="viewer" aria-live="polite">
+      <div class="v-head">
+        <div>
+          <span class="v-tag" style="background:{{v.tagBg}};color:{{v.tagColor}}">{{v.tag}}</span>
+          <h3 class="v-name">{{v.name}}</h3>
+          <div class="v-fam">{{v.family}}</div>
+        </div>
+        <div class="v-btns"><button class="btn btn-line" type="button" onClick="{{replay}}">{{v.replayLabel}}</button><button class="btn btn-gold" type="button" onClick="{{nextPattern}}">{{v.nextLabel}}</button></div>
+      </div>
+      <div class="v-body">
+        <div class="lightbox" role="img" aria-label="{{v.aria}}">
+          <div class="cn" style="position:absolute;top:0;bottom:0;left:{{v.bandLeft}};width:{{v.bandW}};background:#FFF4DE;{{v.bandAnim}}"></div>
+          <div style="position:absolute;top:8px;left:{{v.bandLeft}};width:{{v.bandW}};text-align:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:500;color:#8A4B00;letter-spacing:.12em">PATTERN</div>
+          <sc-for list="{{v.cs}}" as="c" hint-placeholder-count="8">
+            <div class="cn" style="position:absolute;{{c.wick}}"></div><div class="cn" style="position:absolute;{{c.body}}"></div>
+          </sc-for>
+        </div>
+        <div class="v-text">
+          <ol class="v-caps">
+            <sc-for list="{{v.caps}}" as="s" hint-placeholder-count="3">
+              <li class="cn" style="{{s.anim}}"><span class="v-n">{{s.n}}</span><span>{{s.text}}</span></li>
+            </sc-for>
+          </ol>
+          <div class="v-boxes">
+            <div class="v-read"><div class="v-k">{{v.readLabel}}</div><div class="v-t">{{v.read}}</div></div>
+            <div class="v-fail"><div class="v-k">{{v.failLabel}}</div><div class="v-t">{{v.fail}}</div></div>
+          </div>
+          <sc-if value="{{v.hiReview}}" hint-placeholder-val="{{false}}"><div class="v-mini">{{v.reviewText}}</div></sc-if>
+          <sc-if value="{{v.varies}}" hint-placeholder-val="{{false}}"><div class="v-mini">{{v.variesText}}</div></sc-if>
+          <sc-if value="{{v.added}}" hint-placeholder-val="{{false}}"><div class="v-mini">{{v.addedText}}</div></sc-if>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="below">
+  <div class="wrap">
+    <!-- SAME SHAPE, DIFFERENT PLACE -->
+    <section class="pair" aria-labelledby="pair-h">
+      <div class="pair-copy" data-reveal="1">
+        <p class="ap-eyebrow up" style="margin:0">Context</p>
+        <h2 id="pair-h" class="why-h">Same shape, different place, different name.</h2>
+        <p class="pair-p">Some candles look identical. What they are called depends on what came before them. Move the candle and watch the name change.</p>
+        <div role="group" aria-label="Pick a pair" class="pair-tabs">
+          <sc-for list="{{pairTabs}}" as="t" hint-placeholder-count="2"><button class="seg-b light" type="button" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+        </div>
+        <div role="group" aria-label="What came before" class="pair-tabs">
+          <sc-for list="{{placeTabs}}" as="t" hint-placeholder-count="2"><button class="seg-b light" type="button" aria-pressed="{{t.pressed}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for>
+        </div>
+        <div class="pair-name">{{pair.name}}</div>
+        <p class="pair-t">{{pair.text}}</p>
+      </div>
+      <div class="lightbox pair-box" role="img" aria-label="{{pair.aria}}" data-reveal="1">
+        <sc-for list="{{pair.cs}}" as="c" hint-placeholder-count="6"><div class="cn" style="position:absolute;{{c.wick}}"></div><div class="cn" style="position:absolute;{{c.body}}"></div></sc-for>
+      </div>
+    </section>
+
+    <!-- QUIZ: a card that flips to reveal the answer -->
+    <section id="quiz" class="quiz" aria-labelledby="quiz-h">
+      <div class="quiz-top">
+        <div>
+          <p class="ap-eyebrow up" style="margin:0">Test yourself</p>
+          <h2 id="quiz-h" class="why-h">What is this pattern telling traders?</h2>
+        </div>
+        <div class="score">Score <strong>{{quiz.score}}</strong></div>
+      </div>
+      <div class="quiz-grid" aria-live="polite">
+        <div class="flip" data-flip="{{quiz.flip}}">
+          <div class="flip-in">
+            <div class="face front">
+              <div class="face-k">Watch it form</div>
+              <div class="q-chart" role="img" aria-label="A candlestick pattern to identify">
+                <sc-for list="{{quiz.cs}}" as="c" hint-placeholder-count="8"><div class="cn" style="position:absolute;{{c.wick}}"></div><div class="cn" style="position:absolute;{{c.body}}"></div></sc-for>
+              </div>
+            </div>
+            <div class="face back">
+              <sc-if value="{{quiz.done}}" hint-placeholder-val="{{false}}">
+              <div class="face-k">{{quiz.verdict}}</div>
+              <div class="b-name">{{quiz.name}}</div>
+              <p class="b-read">{{quiz.read}}</p>
+              <p class="b-note">A pattern describes what happened. It does not predict what comes next.</p>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        <div class="q-side">
+          <p class="q-q">Pick what traders might read from it.</p>
+          <div class="q-opts">
+            <sc-for list="{{quiz.options}}" as="o" hint-placeholder-count="3"><button class="ans" type="button" onClick="{{o.pick}}" style="background:{{o.bg}};border-color:{{o.border}}">{{o.label}}</button></sc-for>
+          </div>
+          <sc-if value="{{quiz.done}}" hint-placeholder-val="{{false}}">
+            <button class="btn btn-ink" type="button" onClick="{{quiz.next}}" style="margin-top:16px">Next question</button>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAUTIONS -->
+    <section class="cautions" aria-labelledby="real-h">
+      <h2 id="real-h" class="c-h">Before you trust any pattern</h2>
+      <ol class="c-list">
+        <sc-for list="{{cautions}}" as="c" hint-placeholder-count="4">
+          <li><div class="c-t">{{c.title}}</div><div class="c-b">{{c.body}}</div></li>
+        </sc-for>
+      </ol>
+      <div class="c-links">
+        <a class="btn btn-gold" href="Recovery.dc.html">How much gain does a fall need?</a>
+        <a class="btn btn-line" href="TradeCost.dc.html">What would a trade cost?</a>
+      </div>
+    </section>
+
+    <div class="warn" role="note"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="flex:0 0 auto;margin-top:1px"><path d="M12 3 2.5 20h19L12 3z" fill="#8A4B00"></path><path d="M12 9.5v5" stroke="#FBF1DC" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="17.3" r="1.2" fill="#FBF1DC"></circle></svg><span>This page is for education. The candles are illustrations drawn by us, not real prices, and nothing here is a buy or sell signal or investment advice. Candlestick patterns do not predict prices, and you can lose money trading on them. Pattern names and shapes are widely used, but sources define some of them differently. Common definitions were cross-checked with Steve Nison's "Japanese Candlestick Charting Techniques" where it covers them.</span></div>
+  </div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":4200}}'>
+/* ---------------- candle geometry ---------------- */
+const UP_FILL = '#D5F0E4', UP_LINE = '#0A7A55', DN_FILL = '#B83B3B', DN_LINE = '#8E2626';
+const STEPS = [6.5, 5.5, 7, 6];
+
+/* prior trend candles, generated so they end exactly where the pattern begins */
+function ctxCandles(firstOpen, dir, n) {
+  const s = dir === 'down' ? -1 : 1;
+  const deltas = [];
+  for (let k = 0; k < n; k++) deltas.push(k === 2 && n >= 4 ? -s * 2.5 : s * STEPS[k % 4]);
+  let cur = firstOpen - deltas.reduce((a, b) => a + b, 0);
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    const o = cur, c = cur + deltas[k];
+    out.push({ o, c, h: Math.max(o, c) + 1 + (k % 2) * 0.6, l: Math.min(o, c) - 1 - ((k + 1) % 2) * 0.6, kind: 'ctx' });
+    cur = c;
+  }
+  return out;
+}
+/* turns candles into absolutely-positioned percentage styles */
+function geo(all, opts) {
+  const hi = Math.max(...all.map((c) => c.h)), lo = Math.min(...all.map((c) => c.l));
+  const pad = (hi - lo) * 0.09, top = hi + pad, span = hi - lo + 2 * pad;
+  const y = (p) => ((top - p) / span) * 100;
+  const n = all.length, slot = 100 / n;
+  const anim = opts.anim ? opts.anim : null; // {name, ctxGap, patStart, patGap}
+  return all.map((c, i) => {
+    const up = c.c >= c.o;
+    const line = up ? UP_LINE : DN_LINE, fill = up ? UP_FILL : DN_FILL;
+    const cx = i * slot + slot / 2, bw = slot * (opts.wide || 0.56);
+    const yt = y(Math.max(c.o, c.c)), yb = y(Math.min(c.o, c.c));
+    const bodyH = Math.max(yb - yt, 1.4);
+    const op = c.kind === 'ctx' ? 0.42 : 1;
+    let a = '';
+    if (anim) {
+      const d = c.kind === 'ctx' ? i * anim.ctxGap : anim.patStart + c.pi * anim.patGap;
+      a = 'animation:' + anim.name + ' .55s ease both;animation-delay:' + d.toFixed(2) + 's;';
+    }
+    const wick = 'left:' + cx + '%;top:' + y(c.h) + '%;height:' + (y(c.l) - y(c.h)) + '%;width:2px;margin-left:-1px;background:' + line + ';opacity:' + op + ';' + a;
+    const body = 'left:' + (cx - bw / 2) + '%;width:' + bw + '%;top:' + yt + '%;height:' + bodyH + '%;background:' + fill + ';border:2px solid ' + line + ';border-radius:2px;opacity:' + op + ';' + a;
+    return { wick, body };
+  });
+}
+function assemble(p, dir, nCtx) {
+  const pat = p.candles.map((a, i) => ({ o: a[0], h: a[1], l: a[2], c: a[3], kind: 'pat', pi: i }));
+  const ctx = ctxCandles(pat[0].o, dir, nCtx).map((c, i) => ({ ...c, pi: -1 }));
+  return { all: ctx.concat(pat), nCtx, nPat: pat.length };
+}
+
+/* ---------------- the patterns ----------------
+   [name, family, story, context, contextCandles, candles[o,h,l,c], captions, read, flags]
+   Prices are on an arbitrary scale. Candles are illustrations, not market data.        */
+const RAW = [
+  ['Bullish Engulfing', 'Engulfing', 'bottom', 'down', 4, [[48,49.5,43,44],[41,52,40,50.5]], ['A red day: sellers still lead.','A big green day swallows it whole: buyers take charge.'], 'Buyers may be taking over after a fall.'],
+  ['Hammer', 'Single candle', 'bottom', 'down', 4, [[43.5,45.2,33,44.8]], ['Sellers push price far down, but buyers pull it back to the top.'], 'Sellers tried to push lower and failed to hold the low.'],
+  ['Morning Star', 'Star', 'bottom', 'down', 4, [[52,53,40,41],[38,39.5,36,37.5],[39,51,38,50]], ['A long red day: sellers are strong.','A small candle gaps down: sellers hesitate.','A long green day wins back more than half of the red one.'], 'The selling may be over and buyers are stepping in.'],
+  ['Piercing Line', 'Piercing', 'bottom', 'down', 4, [[52,53,40,41],[38.5,49,37.5,48]], ['A long red day.','It opens lower, then buyers push past the middle of the red body.'], 'Buyers fought back hard after a gap lower.'],
+  ['Bullish Harami', 'Harami', 'bottom', 'down', 4, [[54,55,41,42],[45,47.5,44,46.5]], ['A long red day.','A small green day sits inside it: the selling slows.'], 'The fall is losing momentum.'],
+  ['Three White Soldiers', 'Three-candle run', 'bottom', 'down', 4, [[40,46,39.5,45.5],[44,51,43.5,50.5],[49,56,48.5,55.5]], ['A green day.','Another green day, closing higher.','A third, higher again: steady buying.'], 'Three steady green days show buyers in control.'],
+  ['Inverted Hammer', 'Single candle', 'bottom', 'down', 4, [[42,52,41.5,43]], ['Buyers push high, but sellers push most of it back.'], 'Buyers made an attempt after a fall. The next candle matters.'],
+  ['Dragonfly Doji', 'Doji', 'bottom', 'down', 4, [[44,44.3,34,44.1]], ['It opens and closes at the top. Sellers drove it down, then lost.'], 'Sellers lost their grip after a fall.'],
+  ['Bullish Abandoned Baby', 'Star', 'bottom', 'down', 4, [[52,53,41,42],[38,39.5,37,38.1],[41.5,52,41,51]], ['A long red day.','A doji floats alone below it, with a gap on both sides.','It gaps up on a green day: the turn is confirmed.'], 'A rare, strong sign that selling has ended.'],
+  ['Three Inside Up', 'Harami', 'bottom', 'down', 4, [[54,55,41,42],[45,47.5,44,46.5],[47,56,46.5,55.5]], ['A long red day.','A small green day inside it.','A third green day closes above the first open: the turn is confirmed.'], 'A harami that buyers have confirmed.'],
+  ['Three Outside Up', 'Engulfing', 'bottom', 'down', 4, [[48,49.5,43,44],[41,52,40,50.5],[51,57,50.5,56]], ['A red day.','A green day swallows it.','Another green day: buyers follow through.'], 'An engulfing pattern that buyers have confirmed.'],
+  ['Bullish Kicker', 'Kicker', 'bottom', 'down', 4, [[50,51,44,45],[52,60,51.5,59.5]], ['A red day.','The next day gaps up above the red open and rises hard: a sudden switch.'], 'A sharp change of mood, from sellers to buyers.', 'varies'],
+  ['Tweezer Bottom', 'Tweezers', 'bottom', 'down', 4, [[50,51,40,41],[41.5,48,40,47]], ['A red day makes a low.','The next day dips to the same low and bounces: the low holds.'], 'The same low was defended twice.'],
+  ['Concealing Baby Swallow', 'Rare run', 'bottom', 'down', 2, [[56,56,47,47],[48,48,40,40],[38,42,34,35],[43,43.5,31,32]], ['A long red day with no wicks.','Another one, opening lower.','It gaps down, then climbs back toward the day before.','A fourth red day swallows it, wicks and all. Sellers look exhausted.'], 'A rare sign that heavy selling is running out.', 'varies'],
+  ['Bullish Belt Hold', 'Single candle', 'bottom', 'down', 4, [[40,52,40,51]], ['It opens at the low and closes near the high: buyers lead all day.'], 'Buyers took control from the first minute.'],
+  ['Bullish Three-Line Strike', 'Three-candle run', 'bottom', 'down', 2, [[56,57,49,50],[51,52,44,45],[46,47,39,40],[38,58,37,57]], ['A red day.','Red again, lower.','A third lower red day.','One big green day wipes out all three.'], 'A sudden reversal that erases three days of selling.', 'varies'],
+  ['Ladder Bottom', 'Three-candle run', 'bottom', 'down', 2, [[62,63,55,56],[58,59,50,51],[53,54,45,46],[47,52,42,43],[48,58,47.5,57]], ['A red day.','Red again, lower.','A third lower red day.','A fourth red day with a long top wick: buyers are testing.','It gaps up and rises: the ladder ends.'], 'A step-by-step fall that finally turns.', 'varies'],
+  ['Meeting Lines', 'Counterattack', 'bottom', 'down', 4, [[55,56,42,43],[36,44,35.5,43]], ['A long red day.','It gaps lower, then climbs back to the same close: sellers lose their edge.'], 'Buyers pulled price back to where the last day closed.', 'varies'],
+
+  ['Bearish Engulfing', 'Engulfing', 'top', 'up', 4, [[46,52,45.5,51],[53,54,43,44]], ['A green day: buyers still lead.','A big red day swallows it whole: sellers take charge.'], 'Sellers may be taking over after a rise.'],
+  ['Bearish Belt Hold', 'Single candle', 'top', 'up', 4, [[60,60,48,49]], ['It opens at the high and closes near the low: sellers lead all day.'], 'Sellers took control from the first minute.'],
+  ['Three Black Crows', 'Three-candle run', 'top', 'up', 4, [[60,60.5,54,54.5],[56,56.5,49,49.5],[51,51.5,44,44.5]], ['A red day.','Another, closing lower.','A third, lower again: steady selling.'], 'Three steady red days show sellers in control.'],
+  ['Bearish Three-Line Strike', 'Three-candle run', 'top', 'up', 2, [[40,46,39.5,45.5],[45,51,44.5,50.5],[50,56,49.5,55.5],[57,57.5,38,39]], ['A green day.','Green again, higher.','A third higher green day.','One big red day wipes out all three.'], 'A sudden reversal that erases three days of buying.', 'varies'],
+  ['Hanging Man', 'Single candle', 'top', 'up', 4, [[58,58.5,47,57]], ['Sellers push far down during the day, but buyers pull it back. A warning after a rise.'], 'Selling appeared at the top. The next candle matters.'],
+  ['Upside Gap Two Crows', 'Crows', 'top', 'up', 4, [[44,56,43.5,55],[58,59,56,56.5],[59.5,60.5,55.5,56]], ['A long green day.','It gaps up, but closes red: buyers are slipping.','Another red day opens higher and swallows the second.'], 'Buyers are fading even though price gapped up.'],
+  ['Evening Star', 'Star', 'top', 'up', 4, [[40,52,39.5,51],[54,56,53,54.5],[53,53.5,41,42]], ['A long green day.','A small candle gaps up: buyers hesitate.','A long red day wins back more than half of the green one.'], 'The rise may be over and sellers are stepping in.'],
+  ['Shooting Star', 'Single candle', 'top', 'up', 4, [[57,67,56.5,57.8]], ['Buyers push far up, but sellers push it all the way back.'], 'Buyers tried to push higher and could not hold the high.'],
+  ['Bearish Harami', 'Harami', 'top', 'up', 4, [[40,53,39,52],[50,51.5,48,49]], ['A long green day.','A small red day sits inside it: the buying slows.'], 'The rise is losing momentum.'],
+  ['Bearish Doji Star', 'Star', 'top', 'up', 4, [[40,52,39.5,51],[54,56,53,54.2]], ['A long green day.','A doji gaps above it: nobody is winning any more.'], 'Buyers have run out of steam.'],
+  ['Bearish Abandoned Baby', 'Star', 'top', 'up', 4, [[40,52,39.5,51],[55,57,54,55.1],[53,53.5,42,43]], ['A long green day.','A doji floats alone above it, with a gap on both sides.','It gaps down on a red day: the turn is confirmed.'], 'A rare, strong sign that buying has ended.'],
+  ['Tweezer Top', 'Tweezers', 'top', 'up', 4, [[44,52,43.5,51],[50.5,52,45,46]], ['A green day makes a high.','The next day hits the same high and falls: the high holds.'], 'The same high was rejected twice.'],
+  ['Bearish Kicker', 'Kicker', 'top', 'up', 4, [[45,52,44,51],[43,43.5,34,35]], ['A green day.','The next day gaps down below the green open and falls hard: a sudden switch.'], 'A sharp change of mood, from buyers to sellers.', 'varies'],
+  ['Three Inside Down', 'Harami', 'top', 'up', 4, [[40,53,39,52],[50,51.5,48,49],[48,48.5,37,38]], ['A long green day.','A small red day inside it.','A third red day closes below the first open: the turn is confirmed.'], 'A harami that sellers have confirmed.'],
+  ['Three Outside Down', 'Engulfing', 'top', 'up', 4, [[46,52,45,51],[53,54,43,44],[43.5,44,35,36]], ['A green day.','A red day swallows it.','Another red day: sellers follow through.'], 'An engulfing pattern that sellers have confirmed.'],
+  ['Dark Cloud Cover', 'Piercing', 'top', 'up', 4, [[40,53,39.5,52],[55,56,44.5,45]], ['A long green day.','It opens higher, then sellers push below the middle of the green body.'], 'Sellers fought back hard after a gap higher.'],
+  ['Gravestone Doji', 'Doji', 'top', 'up', 4, [[56,66,55.8,56.1]], ['It opens and closes at the bottom. Buyers drove it up, then lost.'], 'Buyers lost their grip after a rise.', 'added'],
+
+  ['Rising Three Methods', 'Continuation', 'cont', 'up', 3, [[40,52,39.5,51],[50,51.5,46.5,47.5],[48,49,44.5,45.5],[46.5,47.5,43,44],[44.5,58,44,57]], ['A long green day.','A small red day: a pause.','Another small red day.','A third, still inside the first day\'s range.','A long green day breaks above: the rise resumes.'], 'A short rest inside a rise, then the rise continues.'],
+  ['Mat Hold', 'Continuation', 'cont', 'up', 3, [[40,52,39.5,51],[53,54.5,49,50],[50,51,47,48],[48.5,49.5,46,47],[47,58,46.5,57]], ['A long green day.','It gaps up, then closes red: a pause.','Small days drift lower.','They stay above the middle of the first green day.','A long green day sets a new high: the rise resumes.'], 'A pause above support, then the rise continues.'],
+  ['Bullish Separating Lines', 'Continuation', 'cont', 'up', 4, [[53,54,46,47],[53,62,52.5,61]], ['A red day during a rise: a pullback.','The next day opens at the same price and rises: the pullback is rejected.'], 'A dip was shrugged off and the rise resumes.'],
+  ['Bearish Mat Hold', 'Continuation', 'cont', 'down', 3, [[58,58.5,46,47],[44,46.5,43,45.5],[45.5,48.5,45,47.5],[47,50,46.5,49],[49,49.5,38,39]], ['A long red day.','It gaps down, then closes green: a pause.','Small days drift higher.','They stay below the middle of the first red day.','A long red day sets a new low: the fall resumes.'], 'A pause below resistance, then the fall continues.'],
+  ['Falling Three Methods', 'Continuation', 'cont', 'down', 3, [[58,58.5,46,47],[48,51.5,47.5,50.5],[50,53,49.5,52.5],[52,55,51.5,54],[53,53.5,40,41]], ['A long red day.','A small green day: a pause.','Another small green day.','A third, still inside the first day\'s range.','A long red day breaks lower: the fall resumes.'], 'A short bounce inside a fall, then the fall continues.', 'added'],
+  ['Bearish Separating Lines', 'Continuation', 'cont', 'down', 4, [[45,52,44,51],[45,45.5,35,36]], ['A green day during a fall: a bounce.','The next day opens at the same price and falls: the bounce is rejected.'], 'A bounce was rejected and the fall resumes.', 'added'],
+];
+const STORY = {
+  bottom: { tag: 'SELLERS RUNNING OUT OF STEAM', short: 'Bottom reversal', color: '#0A7A55', bg: '#E7F5EF', fail: 'A bottom signal can fail: price may keep falling. Many traders wait for the next candle to agree before reading anything into it.' },
+  top: { tag: 'BUYERS RUNNING OUT OF STEAM', short: 'Top reversal', color: '#8E2626', bg: '#FCEDED', fail: 'A top signal can fail: price may keep rising. Many traders wait for the next candle to agree before reading anything into it.' },
+  cont: { tag: 'THE TREND MAY CONTINUE', short: 'Trend continues', color: '#24272C', bg: '#F3EEE3', fail: 'A pause can turn into a real reversal. Traders watch whether the last candle breaks out the way the pattern suggests.' },
+};
+const SINGLE_FAIL = ' One candle is a weak signal on its own.';
+const PATTERNS = RAW.map((r, i) => ({
+  id: 'p' + i, name: r[0], family: r[1], story: r[2], ctx: r[3], nCtx: r[4], candles: r[5], caps: r[6], read: r[7],
+  varies: r[8] === 'varies', added: r[8] === 'added', single: r[5].length === 1,
+}));
+const PAIRS = [
+  { label: 'Hammer or Hanging Man', candle: [[43.5,45.2,33,44.8]], down: { name: 'Hammer', text: 'After a fall, traders watch this shape for a possible bottom: sellers pushed down but buyers pulled it back.' }, up: { name: 'Hanging Man', text: 'After a rise, the very same shape is a warning of a possible top: selling appeared even though buyers pulled it back.' } },
+  { label: 'Inverted Hammer or Shooting Star', candle: [[42,52,41.5,43]], down: { name: 'Inverted Hammer', text: 'After a fall, traders watch this shape for a possible bottom: buyers tried to push up, and the attempt matters.' }, up: { name: 'Shooting Star', text: 'After a rise, the very same shape is a warning of a possible top: buyers pushed up but sellers pushed it all back.' } },
+];
+const CAUTIONS = [
+  { title: 'Patterns describe, they do not predict', body: 'A pattern tells you what buyers and sellers did. It cannot tell you what they will do next.' },
+  { title: 'Context matters', body: 'The same shape can mean different things after a rise or after a fall. Position within the trend counts.' },
+  { title: 'Many signals fail', body: 'Patterns fail often. That is why many traders wait for the next candle to agree before acting.' },
+  { title: 'Costs eat into small moves', body: 'Brokerage, GST and tax reduce what you keep. Try the trade cost calculator before you judge a trade.' },
+];
+const STORY_KEYS = ['bottom', 'top', 'cont'];
+/* Hindi for the pattern library only. Draft wording, to be reviewed by a native speaker before launch.
+   Each entry: [name, captions, how traders read it]. The word "Harami" is deliberately kept in Latin letters:
+   written in Devanagari it reads as a Hindi slur. */
+const HI = {
+  'Bullish Engulfing': ['बुलिश एंगल्फिंग', ['एक लाल दिन: बेचने वाले अभी भी हावी हैं।', 'एक बड़ा हरा दिन उसे पूरी तरह निगल लेता है: खरीदारों ने कमान संभाल ली।'], 'गिरावट के बाद शायद खरीदार हावी हो रहे हैं।'],
+  'Hammer': ['हैमर', ['बेचने वालों ने कीमत काफ़ी नीचे धकेली, लेकिन खरीदारों ने उसे वापस ऊपर खींच लिया।'], 'बेचने वालों ने कीमत और नीचे ले जाने की कोशिश की, पर निचला स्तर टिका नहीं पाए।'],
+  'Morning Star': ['मॉर्निंग स्टार', ['एक लंबा लाल दिन: बेचने वाले मज़बूत हैं।', 'एक छोटी कैंडल नीचे गैप के साथ खुलती है: बेचने वाले झिझकते हैं।', 'एक लंबा हरा दिन लाल कैंडल के आधे से ज़्यादा हिस्से को वापस जीत लेता है।'], 'बिकवाली शायद थम गई है और खरीदार आगे आ रहे हैं।'],
+  'Piercing Line': ['पियर्सिंग लाइन', ['एक लंबा लाल दिन।', 'अगला दिन नीचे खुलता है, फिर खरीदार कीमत को लाल कैंडल के बीच से ऊपर ले जाते हैं।'], 'नीचे गैप के बाद खरीदारों ने ज़ोरदार वापसी की।'],
+  'Bullish Harami': ['Bullish Harami', ['एक लंबा लाल दिन।', 'उसके अंदर एक छोटा हरा दिन: बिकवाली धीमी पड़ रही है।'], 'गिरावट की रफ़्तार कम हो रही है।'],
+  'Three White Soldiers': ['थ्री व्हाइट सोल्जर्स', ['एक हरा दिन।', 'एक और हरा दिन, पिछले से ऊँचा बंद।', 'तीसरा, और भी ऊँचा: लगातार खरीदारी।'], 'लगातार तीन हरे दिन खरीदारों का दबदबा दिखाते हैं।'],
+  'Inverted Hammer': ['इनवर्टेड हैमर', ['खरीदारों ने कीमत ऊपर धकेली, पर बेचने वालों ने ज़्यादातर हिस्सा वापस ले लिया।'], 'गिरावट के बाद खरीदारों ने एक कोशिश की। अगली कैंडल अहम है।'],
+  'Dragonfly Doji': ['ड्रैगनफ्लाई डोजी', ['खुलना और बंद होना, दोनों ऊपर। बेचने वालों ने कीमत गिराई, फिर पकड़ खो दी।'], 'गिरावट के बाद बेचने वालों की पकड़ ढीली पड़ गई।'],
+  'Bullish Abandoned Baby': ['बुलिश एबंडंड बेबी', ['एक लंबा लाल दिन।', 'एक डोजी अकेली नीचे तैरती है, दोनों तरफ़ गैप के साथ।', 'ऊपर गैप के साथ हरा दिन: पलटाव की पुष्टि।'], 'एक दुर्लभ और मज़बूत संकेत कि बिकवाली ख़त्म हो गई।'],
+  'Three Inside Up': ['थ्री इनसाइड अप', ['एक लंबा लाल दिन।', 'उसके अंदर एक छोटा हरा दिन।', 'तीसरा हरा दिन पहले दिन के खुलने के स्तर से ऊपर बंद होता है: पलटाव की पुष्टि।'], 'ऐसा Harami जिसकी खरीदारों ने पुष्टि कर दी।'],
+  'Three Outside Up': ['थ्री आउटसाइड अप', ['एक लाल दिन।', 'एक हरा दिन उसे निगल लेता है।', 'एक और हरा दिन: खरीदारों ने साथ दिया।'], 'ऐसा एंगल्फिंग पैटर्न जिसकी खरीदारों ने पुष्टि कर दी।'],
+  'Bullish Kicker': ['बुलिश किकर', ['एक लाल दिन।', 'अगला दिन लाल कैंडल के खुलने के स्तर से ऊपर गैप के साथ खुलता है और तेज़ी से चढ़ता है: अचानक बदलाव।'], 'माहौल अचानक बदला, बेचने वालों से खरीदारों की ओर।'],
+  'Tweezer Bottom': ['ट्वीज़र बॉटम', ['एक लाल दिन एक निचला स्तर बनाता है।', 'अगला दिन उसी निचले स्तर तक जाकर उछलता है: निचला स्तर टिक गया।'], 'वही निचला स्तर दो बार बचाया गया।'],
+  'Concealing Baby Swallow': ['कंसीलिंग बेबी स्वैलो', ['एक लंबा लाल दिन, बिना बत्ती के।', 'एक और, नीचे खुलता हुआ।', 'नीचे गैप के साथ खुलता है, फिर पिछले दिन की ओर चढ़ता है।', 'चौथा लाल दिन उसे बत्तियों समेत निगल लेता है। बेचने वाले थके हुए लगते हैं।'], 'एक दुर्लभ संकेत कि भारी बिकवाली ख़त्म होने को है।'],
+  'Bullish Belt Hold': ['बुलिश बेल्ट होल्ड', ['यह सबसे निचले स्तर पर खुलता है और ऊँचाई के पास बंद होता है: पूरे दिन खरीदारों का नियंत्रण।'], 'खरीदारों ने पहले मिनट से कमान संभाल ली।'],
+  'Bullish Three-Line Strike': ['बुलिश थ्री-लाइन स्ट्राइक', ['एक लाल दिन।', 'फिर लाल, और नीचे।', 'तीसरा और नीचे का लाल दिन।', 'एक बड़ा हरा दिन तीनों को मिटा देता है।'], 'अचानक पलटाव जो तीन दिन की बिकवाली को मिटा देता है।'],
+  'Ladder Bottom': ['लैडर बॉटम', ['एक लाल दिन।', 'फिर लाल, और नीचे।', 'तीसरा और नीचे का लाल दिन।', 'चौथा लाल दिन, ऊपर लंबी बत्ती के साथ: खरीदार परख रहे हैं।', 'यह ऊपर गैप के साथ खुलकर चढ़ता है: सीढ़ी यहीं ख़त्म।'], 'कदम-दर-कदम गिरावट जो आख़िर में पलटती है।'],
+  'Meeting Lines': ['मीटिंग लाइंस', ['एक लंबा लाल दिन।', 'नीचे गैप के साथ खुलता है, फिर पिछले दिन के बंद भाव तक लौट आता है: बेचने वालों की धार कुंद।'], 'खरीदारों ने कीमत को पिछले दिन के बंद भाव तक खींच लिया।'],
+  'Bearish Engulfing': ['बेयरिश एंगल्फिंग', ['एक हरा दिन: खरीदार अब भी आगे हैं।', 'एक बड़ा लाल दिन उसे पूरी तरह निगल लेता है: बेचने वालों ने कमान संभाल ली।'], 'तेज़ी के बाद शायद बेचने वाले हावी हो रहे हैं।'],
+  'Bearish Belt Hold': ['बेयरिश बेल्ट होल्ड', ['यह सबसे ऊँचे स्तर पर खुलता है और निचले स्तर के पास बंद होता है: पूरे दिन बेचने वालों का नियंत्रण।'], 'बेचने वालों ने पहले मिनट से कमान संभाल ली।'],
+  'Three Black Crows': ['थ्री ब्लैक क्रोज़', ['एक लाल दिन।', 'एक और, नीचे बंद।', 'तीसरा, और नीचे: लगातार बिकवाली।'], 'लगातार तीन लाल दिन बेचने वालों का दबदबा दिखाते हैं।'],
+  'Bearish Three-Line Strike': ['बेयरिश थ्री-लाइन स्ट्राइक', ['एक हरा दिन।', 'फिर हरा, और ऊपर।', 'तीसरा और ऊँचा हरा दिन।', 'एक बड़ा लाल दिन तीनों को मिटा देता है।'], 'अचानक पलटाव जो तीन दिन की खरीदारी को मिटा देता है।'],
+  'Hanging Man': ['हैंगिंग मैन', ['दिन के दौरान बेचने वालों ने कीमत काफ़ी गिराई, पर खरीदारों ने उसे वापस खींच लिया। तेज़ी के बाद यह चेतावनी है।'], 'ऊँचे स्तर पर बिकवाली दिखी। अगली कैंडल अहम है।'],
+  'Upside Gap Two Crows': ['अपसाइड गैप टू क्रोज़', ['एक लंबा हरा दिन।', 'ऊपर गैप के साथ खुलता है, पर लाल बंद होता है: खरीदार फिसल रहे हैं।', 'एक और लाल दिन ऊँचा खुलता है और दूसरे को निगल लेता है।'], 'ऊपर गैप के बावजूद खरीदारों की पकड़ कमज़ोर पड़ रही है।'],
+  'Evening Star': ['ईवनिंग स्टार', ['एक लंबा हरा दिन।', 'एक छोटी कैंडल ऊपर गैप के साथ खुलती है: खरीदार झिझकते हैं।', 'एक लंबा लाल दिन हरी कैंडल के आधे से ज़्यादा हिस्से को वापस ले लेता है।'], 'तेज़ी शायद ख़त्म हो गई है और बेचने वाले आगे आ रहे हैं।'],
+  'Shooting Star': ['शूटिंग स्टार', ['खरीदारों ने कीमत काफ़ी ऊपर धकेली, पर बेचने वालों ने उसे पूरी तरह वापस ला दिया।'], 'खरीदारों ने और ऊपर जाने की कोशिश की, पर ऊँचा स्तर टिका नहीं पाए।'],
+  'Bearish Harami': ['Bearish Harami', ['एक लंबा हरा दिन।', 'उसके अंदर एक छोटा लाल दिन: खरीदारी धीमी पड़ रही है।'], 'तेज़ी की रफ़्तार कम हो रही है।'],
+  'Bearish Doji Star': ['बेयरिश डोजी स्टार', ['एक लंबा हरा दिन।', 'एक डोजी ऊपर गैप के साथ खुलती है: अब कोई जीत नहीं रहा।'], 'खरीदारों का दम ख़त्म हो गया है।'],
+  'Bearish Abandoned Baby': ['बेयरिश एबंडंड बेबी', ['एक लंबा हरा दिन।', 'एक डोजी अकेली ऊपर तैरती है, दोनों तरफ़ गैप के साथ।', 'नीचे गैप के साथ लाल दिन: पलटाव की पुष्टि।'], 'एक दुर्लभ और मज़बूत संकेत कि खरीदारी ख़त्म हो गई।'],
+  'Tweezer Top': ['ट्वीज़र टॉप', ['एक हरा दिन एक ऊँचा स्तर बनाता है।', 'अगला दिन उसी ऊँचे स्तर को छूकर गिरता है: ऊँचा स्तर पार नहीं हुआ।'], 'वही ऊँचा स्तर दो बार ठुकराया गया।'],
+  'Bearish Kicker': ['बेयरिश किकर', ['एक हरा दिन।', 'अगला दिन हरी कैंडल के खुलने के स्तर से नीचे गैप के साथ खुलता है और तेज़ी से गिरता है: अचानक बदलाव।'], 'माहौल अचानक बदला, खरीदारों से बेचने वालों की ओर।'],
+  'Three Inside Down': ['थ्री इनसाइड डाउन', ['एक लंबा हरा दिन।', 'उसके अंदर एक छोटा लाल दिन।', 'तीसरा लाल दिन पहले दिन के खुलने के स्तर से नीचे बंद होता है: पलटाव की पुष्टि।'], 'ऐसा Harami जिसकी बेचने वालों ने पुष्टि कर दी।'],
+  'Three Outside Down': ['थ्री आउटसाइड डाउन', ['एक हरा दिन।', 'एक लाल दिन उसे निगल लेता है।', 'एक और लाल दिन: बेचने वालों ने साथ दिया।'], 'ऐसा एंगल्फिंग पैटर्न जिसकी बेचने वालों ने पुष्टि कर दी।'],
+  'Dark Cloud Cover': ['डार्क क्लाउड कवर', ['एक लंबा हरा दिन।', 'ऊँचा खुलता है, फिर बेचने वाले कीमत को हरी कैंडल के बीच से नीचे ले आते हैं।'], 'ऊपर गैप के बाद बेचने वालों ने ज़ोरदार वापसी की।'],
+  'Gravestone Doji': ['ग्रेवस्टोन डोजी', ['यह सबसे निचले स्तर पर खुलता और बंद होता है। खरीदारों ने कीमत चढ़ाई, फिर पकड़ खो दी।'], 'तेज़ी के बाद खरीदारों की पकड़ ढीली पड़ गई।'],
+  'Rising Three Methods': ['राइज़िंग थ्री मेथड्स', ['एक लंबा हरा दिन।', 'एक छोटा लाल दिन: थोड़ा ठहराव।', 'एक और छोटा लाल दिन।', 'तीसरा भी, पहले दिन के दायरे के अंदर ही।', 'एक लंबा हरा दिन ऊपर निकल जाता है: तेज़ी फिर शुरू।'], 'तेज़ी के बीच थोड़ा आराम, फिर तेज़ी जारी।'],
+  'Mat Hold': ['मैट होल्ड', ['एक लंबा हरा दिन।', 'ऊपर गैप के साथ खुलता है, फिर लाल बंद होता है: ठहराव।', 'छोटे दिन धीरे-धीरे नीचे खिसकते हैं।', 'वे पहले हरे दिन के बीच के स्तर से ऊपर ही रहते हैं।', 'एक लंबा हरा दिन नया ऊँचा स्तर बनाता है: तेज़ी फिर शुरू।'], 'सहारे के ऊपर ठहराव, फिर तेज़ी जारी।'],
+  'Bullish Separating Lines': ['बुलिश सेपरेटिंग लाइंस', ['तेज़ी के दौरान एक लाल दिन: हल्की गिरावट।', 'अगला दिन उसी भाव पर खुलता है और चढ़ता है: गिरावट ठुकरा दी गई।'], 'हल्की गिरावट को नज़रअंदाज़ किया गया और तेज़ी जारी है।'],
+  'Bearish Mat Hold': ['बेयरिश मैट होल्ड', ['एक लंबा लाल दिन।', 'नीचे गैप के साथ खुलता है, फिर हरा बंद होता है: ठहराव।', 'छोटे दिन धीरे-धीरे ऊपर खिसकते हैं।', 'वे पहले लाल दिन के बीच के स्तर से नीचे ही रहते हैं।', 'एक लंबा लाल दिन नया निचला स्तर बनाता है: गिरावट फिर शुरू।'], 'प्रतिरोध के नीचे ठहराव, फिर गिरावट जारी।'],
+  'Falling Three Methods': ['फॉलिंग थ्री मेथड्स', ['एक लंबा लाल दिन।', 'एक छोटा हरा दिन: थोड़ा ठहराव।', 'एक और छोटा हरा दिन।', 'तीसरा भी, पहले दिन के दायरे के अंदर ही।', 'एक लंबा लाल दिन नीचे निकल जाता है: गिरावट फिर शुरू।'], 'गिरावट के बीच छोटा उछाल, फिर गिरावट जारी।'],
+  'Bearish Separating Lines': ['बेयरिश सेपरेटिंग लाइंस', ['गिरावट के दौरान एक हरा दिन: हल्का उछाल।', 'अगला दिन उसी भाव पर खुलता है और गिरता है: उछाल ठुकरा दिया गया।'], 'उछाल ठुकरा दिया गया और गिरावट जारी है।'],
+};
+const HI_TAG = { bottom: 'बेचने वालों का दम घट रहा है', top: 'खरीदारों का दम घट रहा है', cont: 'ट्रेंड जारी रह सकता है' };
+const HI_SHORT = { bottom: 'निचला पलटाव', top: 'ऊपरी पलटाव', cont: 'ट्रेंड जारी' };
+const HI_FAIL = {
+  bottom: 'नीचे का संकेत फेल हो सकता है: कीमत गिरती भी रह सकती है। कई ट्रेडर कुछ भी मानने से पहले अगली कैंडल की पुष्टि का इंतज़ार करते हैं।',
+  top: 'ऊपर का संकेत फेल हो सकता है: कीमत चढ़ती भी रह सकती है। कई ट्रेडर कुछ भी मानने से पहले अगली कैंडल की पुष्टि का इंतज़ार करते हैं।',
+  cont: 'ठहराव असली पलटाव में बदल सकता है। ट्रेडर देखते हैं कि आख़िरी कैंडल पैटर्न के हिसाब से आगे निकलती है या नहीं।',
+};
+const HI_SINGLE = ' अकेली एक कैंडल अपने आप में कमज़ोर संकेत है।';
+const HI_FAMILY = { 'Engulfing': 'एंगल्फिंग', 'Single candle': 'एकल कैंडल', 'Star': 'स्टार', 'Piercing': 'पियर्सिंग', 'Harami': 'Harami', 'Three-candle run': 'तीन-चार कैंडल की चाल', 'Doji': 'डोजी', 'Kicker': 'किकर', 'Tweezers': 'ट्वीज़र', 'Rare run': 'दुर्लभ पैटर्न', 'Counterattack': 'जवाबी हमला', 'Crows': 'क्रोज़', 'Continuation': 'ट्रेंड जारी रहने वाला' };
+const HI_CTX = { down: 'गिरावट के बाद बनता है', up: 'तेज़ी के बाद बनता है' };
+const HI_UI = {
+  title: 'पैटर्न लाइब्रेरी', intro: 'कोई पैटर्न चुनें और उसे बनते हुए देखें। पैटर्न इस आधार पर बाँटे गए हैं कि ट्रेडर बाज़ार को क्या कहता हुआ मानते हैं।',
+  search: 'नाम से खोजें', ph: 'जैसे: हैमर, स्टार, एंगल्फिंग', all: 'सभी', unit: 'पैटर्न', none: 'इस खोज से कोई पैटर्न नहीं मिला।',
+  varies: 'अलग-अलग स्रोत इस पैटर्न को थोड़ा अलग तरह से परिभाषित करते हैं। यहाँ इसका प्रचलित रूप दिया गया है।',
+  added: 'यह हमने जोड़ा है: सूची के एक पैटर्न का उलटा रूप।',
+  review: 'हिन्दी अनुवाद का मसौदा Claude ने लिखा है। लॉन्च से पहले किसी हिन्दी भाषी को इसे जाँचना चाहिए।',
+};
+
+/* ---------------- the wall: 36 made-up days of a made-up share (display only) ---------------- */
+const WALL_UP = '#56BE92', WALL_DN = '#E26A6A';
+const WALL = (() => {
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  const out = []; let prev = 100;
+  for (let i = 0; i < 36; i++) {
+    const o = prev; let c, h, l;
+    if (i === 24) { c = o + 0.4; h = c + 0.3; l = o - 3.4; }           // long lower wick, small body on top
+    else if (i === 8) { c = o + 0.05; h = o + 1.6; l = o - 1.5; }      // doji
+    else if (i === 15) { c = o - 0.3; h = o + 3.2; l = c - 0.2; }      // long upper wick, small body at the bottom
+    else if (i === 30) { c = o + 3.1; h = c + 0.3; l = o - 0.2; }      // strong buyers
+    else {
+      const drift = i < 12 ? 0.15 : i < 24 ? -0.25 : 0.35;
+      c = o + (rnd() - 0.5) * 3 + drift;
+      h = Math.max(o, c) + rnd() * 1.4;
+      l = Math.min(o, c) - rnd() * 1.4;
+    }
+    out.push({ o, h, l, c }); prev = c;
+  }
+  return out;
+})();
+const WALL_HI = Math.max(...WALL.map((d) => d.h)), WALL_LO = Math.min(...WALL.map((d) => d.l));
+function readDay(d) {
+  const rng = d.h - d.l || 1, body = Math.abs(d.c - d.o), top = d.h - Math.max(d.o, d.c), bot = Math.min(d.o, d.c) - d.l;
+  const doji = body <= rng * 0.1;
+  let title, text;
+  if (bot >= rng * 0.55) { title = 'Long lower wick, small body on top'; text = 'Sellers pushed the price well down during the day. Buyers brought it back up before the close.'; }
+  else if (top >= rng * 0.55) { title = 'Long upper wick, small body below'; text = 'Buyers pushed the price well up during the day. Sellers brought it back down before the close.'; }
+  else if (doji) { title = 'A doji: nobody won'; text = 'It closed almost exactly where it opened. Buyers and sellers ended the day level.'; }
+  else if (d.c > d.o) { title = body >= rng * 0.6 ? 'Buyers in charge all day' : 'Buyers won the day'; text = 'It closed higher than it opened' + (body >= rng * 0.6 ? ', near the top of its range.' : '.'); }
+  else { title = body >= rng * 0.6 ? 'Sellers in charge all day' : 'Sellers won the day'; text = 'It closed lower than it opened' + (body >= rng * 0.6 ? ', near the bottom of its range.' : '.'); }
+  return { title, text: text + ' One candle is a clue, never a signal on its own.' };
+}
+// the same shape on the playground's scale (open and close 15 to 85, wicks 0 to 30)
+function toPlayground(d) {
+  const top = d.h - Math.max(d.o, d.c), bot = Math.min(d.o, d.c) - d.l, rng = d.h - d.l || 1;
+  const w = Math.max(top, bot);
+  const k = Math.min(60 / rng, w > 0 ? 30 / w : Infinity), mid = (d.h + d.l) / 2;
+  const r = (x) => Math.round(x);
+  return { o: r(50 + (d.o - mid) * k), c: r(50 + (d.c - mid) * k), uw: Math.min(30, r(top * k)), lw: Math.min(30, r(bot * k)) };
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { day: 24, lang: 'en', o: 36, c: 66, uw: 8, lw: 6, filter: 'all', query: '', sel: 'p0', play: 0, pair: 0, place: 'down', pairKey: 0, qid: Math.floor(Math.random() * PATTERNS.length), qans: null, qscore: [0, 0], qkey: 0 };
+  }
+  renderVals() {
+    const s = this.state;
+
+    /* ----- one-candle playground ----- */
+    const hiP = Math.max(s.o, s.c) + s.uw, loP = Math.min(s.o, s.c) - s.lw;
+    const yy = (p) => ((122 - p) / 144) * 100;
+    const upPG = s.c >= s.o, lnPG = upPG ? UP_LINE : DN_LINE;
+    const flat = Math.abs(s.c - s.o) <= 1;
+    const pgBodyH = Math.max(yy(Math.min(s.o, s.c)) - yy(Math.max(s.o, s.c)), 1.4);
+    const diff = s.c - s.o;
+    const pgStory = flat ? 'Nobody won: it closed where it opened. This is called a doji.' : diff > 0 ? 'Buyers won the day: it closed higher than it opened.' : 'Sellers won the day: it closed lower than it opened.';
+    const wk = [];
+    if (s.uw > 8) wk.push('Long top wick: buyers pushed up, but sellers pushed it back.');
+    if (s.lw > 8) wk.push('Long bottom wick: sellers pushed down, but buyers pushed it back.');
+    if (!wk.length) wk.push('Short wicks: the day stayed close to its open and close.');
+    const set = (k) => (e) => this.setState({ [k]: parseInt(e.target.value, 10) });
+    const pg = {
+      wick: 'left:50%;top:' + yy(hiP) + '%;height:' + (yy(loP) - yy(hiP)) + '%;width:3px;margin-left:-1.5px;border-radius:2px;background:' + (upPG ? WALL_UP : WALL_DN) + ';',
+      body: 'left:50%;width:64px;margin-left:-32px;top:' + yy(Math.max(s.o, s.c)) + '%;height:' + pgBodyH + '%;background:' + (upPG ? WALL_UP : WALL_DN) + ';border-radius:4px;',
+      labels: [{ text: 'High', top: yy(hiP) + '%' }, { text: 'Open', top: yy(s.o) + '%' }, { text: 'Close', top: yy(s.c) + '%' }, { text: 'Low', top: yy(loP) + '%' }].sort((a, b) => parseFloat(a.top) - parseFloat(b.top)).reduce((acc, l) => { const p = acc[acc.length - 1]; if (p && parseFloat(l.top) - parseFloat(p.top) < 5) p.text += ' · ' + l.text; else acc.push({ ...l }); return acc; }, []),
+      story: pgStory, wicks: wk.join(' '), o: s.o, c: s.c, uw: s.uw, lw: s.lw,
+      aria: 'One candle. ' + pgStory,
+      sliders: [
+        { label: 'Open price', min: 15, max: 85, value: s.o, onInput: set('o') },
+        { label: 'Close price', min: 15, max: 85, value: s.c, onInput: set('c') },
+        { label: 'Top wick', min: 0, max: 30, value: s.uw, onInput: set('uw') },
+        { label: 'Bottom wick', min: 0, max: 30, value: s.lw, onInput: set('lw') },
+      ],
+      presets: [
+        { label: 'Strong buyers', pick: () => this.setState({ o: 30, c: 70, uw: 4, lw: 3 }) },
+        { label: 'Strong sellers', pick: () => this.setState({ o: 70, c: 30, uw: 3, lw: 4 }) },
+        { label: 'Doji', pick: () => this.setState({ o: 50, c: 50, uw: 9, lw: 9 }) },
+        { label: 'Hammer shape', pick: () => this.setState({ o: 62, c: 66, uw: 1, lw: 14 }) },
+        { label: 'Long top wick', pick: () => this.setState({ o: 36, c: 38, uw: 15, lw: 1 }) },
+      ],
+    };
+
+    /* ----- the wall of made-up days ----- */
+    const di = Math.min(Math.max(s.day, 0), WALL.length - 1), dd = WALL[di], rd = readDay(dd);
+    const wy = (p) => ((WALL_HI - p) / (WALL_HI - WALL_LO)) * 94 + 3;
+    const f2 = (x) => x.toFixed(2);
+    const wall = {
+      n: di + 1, total: WALL.length, title: rd.title, text: rd.text, o: f2(dd.o), h: f2(dd.h), l: f2(dd.l), c: f2(dd.c),
+      load: () => this.setState(toPlayground(dd)),
+      days: WALL.map((d, i) => {
+        const up = d.c >= d.o, top = wy(Math.max(d.o, d.c)), bot = wy(Math.min(d.o, d.c));
+        return {
+          wt: wy(d.h) + '%', wh: (wy(d.l) - wy(d.h)) + '%', bt: top + '%', bh: Math.max(bot - top, 0.6) + '%',
+          col: up ? WALL_UP : WALL_DN, pressed: i === di ? 'true' : 'false',
+          aria: 'Day ' + (i + 1) + ': ' + readDay(d).title, pick: () => this.setState({ day: i }),
+        };
+      }),
+    };
+
+    /* ----- library ----- */
+    const hi = s.lang === 'hi';
+    const q = s.query.trim().toLowerCase();
+    const list = PATTERNS.filter((p) => (s.filter === 'all' || p.story === s.filter) && (!q || p.name.toLowerCase().includes(q) || p.family.toLowerCase().includes(q) || HI[p.name][0].toLowerCase().includes(q)));
+    const nStory = (k) => PATTERNS.filter((p) => p.story === k).length;
+    const filters = [['all', (hi ? HI_UI.all : 'All') + ' ' + PATTERNS.length]].concat(STORY_KEYS.map((k) => [k, (hi ? HI_SHORT[k] : STORY[k].short) + ' ' + nStory(k)])).map((f) => ({ label: f[1], pressed: s.filter === f[0] ? 'true' : 'false', pick: () => this.setState({ filter: f[0] }) }));
+    const rows = list.map((p) => {
+      const a = assemble(p, p.ctx, 3);
+      const tag = hi ? HI_SHORT[p.story] + (p.ctx === 'down' ? ' · गिरावट के बाद' : ' · तेज़ी के बाद') : STORY[p.story].short + (p.ctx === 'down' ? ' · after a fall' : ' · after a rise');
+      return {
+      name: hi ? HI[p.name][0] : p.name, tag, tagColor: STORY[p.story].color, tagCls: 'tg-' + p.story, pressed: s.sel === p.id ? 'true' : 'false', pick: () => this.setState({ sel: p.id, play: this.state.play + 1 }), cs: geo(a.all, { wide: 0.6 }) };
+    });
+    const cur = PATTERNS.find((p) => p.id === s.sel) || PATTERNS[0];
+    const flip = s.play % 2 ? 'cB' : 'cA';
+    const ca = assemble(cur, cur.ctx, cur.nCtx);
+    const anim = { name: flip, ctxGap: 0.07, patStart: 0.8, patGap: 0.95 };
+    const bandLeft = (ca.nCtx / ca.all.length) * 100, bandW = (ca.nPat / ca.all.length) * 100;
+    const st = STORY[cur.story];
+    const H = HI[cur.name];
+    const capsText = hi ? H[1] : cur.caps;
+    const hiName = H[0] === cur.name ? cur.name : H[0] + ' (' + cur.name + ')';
+    const v = {
+      name: hi ? hiName : cur.name,
+      family: hi ? HI_FAMILY[cur.family] + ' · ' + HI_CTX[cur.ctx] : cur.family + ' · ' + (cur.ctx === 'down' ? 'appears after a fall' : 'appears after a rise'),
+      tag: hi ? HI_TAG[cur.story] : st.tag, tagBg: st.bg, tagColor: st.color,
+      cs: geo(ca.all, { anim }), bandLeft: bandLeft + '%', bandW: bandW + '%', bandAnim: 'animation:' + flip + ' .5s ease both;animation-delay:.6s;',
+      caps: capsText.map((t, i) => ({ n: i + 1, text: t, anim: 'animation:' + flip + ' .5s ease both;animation-delay:' + (0.8 + i * 0.95).toFixed(2) + 's;' })),
+      read: hi ? H[2] : cur.read,
+      fail: hi ? HI_FAIL[cur.story] + (cur.single ? HI_SINGLE : '') : st.fail + (cur.single ? SINGLE_FAIL : ''),
+      varies: cur.varies, added: cur.added,
+      variesText: hi ? HI_UI.varies : 'Sources define this pattern a little differently. This is the common version we use here.',
+      addedText: hi ? HI_UI.added : 'Added by us as the mirror image of a pattern on the standard list.',
+      readLabel: hi ? 'ट्रेडर इसे कैसे पढ़ते हैं' : 'HOW TRADERS READ IT', failLabel: hi ? 'यह कब फेल होता है' : 'WHEN IT FAILS',
+      replayLabel: hi ? 'फिर चलाएँ' : 'Replay', nextLabel: hi ? 'अगला पैटर्न' : 'Next pattern',
+      hiReview: hi, reviewText: HI_UI.review, lang: hi ? 'hi' : 'en',
+      aria: (hi ? hiName : cur.name) + ': ' + capsText.join(' '),
+    };
+    const idx = list.findIndex((p) => p.id === cur.id);
+    const nextPattern = () => { const pool = list.length ? list : PATTERNS; const nx = pool[(idx + 1 + pool.length) % pool.length]; this.setState({ sel: nx.id, play: this.state.play + 1 }); };
+
+    /* ----- same shape, different place ----- */
+    const pr = PAIRS[s.pair];
+    const pa = assemble({ candles: pr.candle }, s.place, 4);
+    const pairCs = geo(pa.all, { anim: { name: s.pairKey % 2 ? 'cB' : 'cA', ctxGap: 0.06, patStart: 0.4, patGap: 0.3 }, wide: 0.5 });
+    const pinfo = pr[s.place];
+    const pair = { name: pinfo.name, text: pinfo.text, cs: pairCs, aria: pinfo.name + ': one candle after ' + (s.place === 'down' ? 'a fall' : 'a rise') + '.' };
+    const pairTabs = PAIRS.map((p, i) => ({ label: p.label, pressed: s.pair === i ? 'true' : 'false', pick: () => this.setState({ pair: i, pairKey: this.state.pairKey + 1 }) }));
+    const placeTabs = [['down', 'After a fall'], ['up', 'After a rise']].map((t) => ({ label: t[1], pressed: s.place === t[0] ? 'true' : 'false', pick: () => this.setState({ place: t[0], pairKey: this.state.pairKey + 1 }) }));
+
+    /* ----- quiz ----- */
+    const qp = PATTERNS[s.qid];
+    const qa = assemble(qp, qp.ctx, qp.nCtx);
+    const qcs = geo(qa.all, { anim: { name: s.qkey % 2 ? 'cB' : 'cA', ctxGap: 0.05, patStart: 0.5, patGap: 0.7 } });
+    const done = s.qans !== null;
+    const right = done && s.qans === qp.story;
+    const answerText = { bottom: 'Sellers may be running out of steam (a possible bottom)', top: 'Buyers may be running out of steam (a possible top)', cont: 'The trend may simply continue' };
+    const options = STORY_KEYS.map((k) => {
+      let bg = '#fff', border = '#D3CEC3';
+      if (done && k === qp.story) { bg = '#E7F5EF'; border = '#0A7A55'; }
+      else if (done && k === s.qans) { bg = '#FCEDED'; border = '#A12A2A'; }
+      return { label: answerText[k], bg, border, pick: () => { if (this.state.qans !== null) return; const r = k === qp.story; this.setState({ qans: k, qscore: [this.state.qscore[0] + (r ? 1 : 0), this.state.qscore[1] + 1] }); } };
+    });
+    const quiz = {
+      cs: qcs, options, done, flip: done ? '1' : '0', verdict: right ? 'Yes, well spotted.' : 'Not quite.', fbBg: right ? '#E7F5EF' : '#FFF4DE', name: qp.name, read: qp.read,
+      next: () => { let n = Math.floor(Math.random() * PATTERNS.length); if (n === this.state.qid) n = (n + 1) % PATTERNS.length; this.setState({ qid: n, qans: null, qkey: this.state.qkey + 1 }); },
+      score: s.qscore[0] + ' of ' + s.qscore[1],
+    };
+
+    return {
+      wall, count: PATTERNS.length, pg, filters, query: s.query, onQuery: (e) => this.setState({ query: e.target.value }),
+      listCount: hi ? list.length + ' ' + HI_UI.unit : list.length + (list.length === 1 ? ' pattern' : ' patterns'), rows, noRows: list.length === 0,
+      ui: hi ? HI_UI : { title: 'The pattern library', intro: 'Pick a pattern and watch it form. Patterns are grouped by what traders think the market is saying.', search: 'Search by name', ph: 'e.g. hammer, star, engulfing', none: 'No pattern matches that search.' },
+      v, replay: () => this.setState({ play: this.state.play + 1 }), nextPattern,
+      langs: [['en', 'English'], ['hi', 'हिन्दी']].map((l) => ({ label: l[1], pressed: s.lang === l[0] ? 'true' : 'false', pick: () => this.setState({ lang: l[0], play: this.state.play + 1 }) })),
+      pairTabs, placeTabs, pair, quiz, cautions: CAUTIONS,
+    };
+  }
+}
+</script>
+</body>
+</html>
