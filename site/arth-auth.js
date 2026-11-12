@@ -320,5 +320,12 @@
       setTimeout(check, 40);
     })();
   }
-  if (document.body) whenDrawn(mount); else document.addEventListener('DOMContentLoaded', function () { whenDrawn(mount); });
+  /* the page is drawn after it loads, so the browser's own jump to #sources / #disclaimers finds nothing; jump again once drawn */
+  function jumpToHash() {
+    var id = ''; try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+    var go = function () { var el = id && document.getElementById(id); if (el) el.scrollIntoView(); };
+    go(); setTimeout(go, 300); setTimeout(go, 900);
+  }
+  function start() { mount(); jumpToHash(); }
+  if (document.body) whenDrawn(start); else document.addEventListener('DOMContentLoaded', function () { whenDrawn(start); });
 })();
