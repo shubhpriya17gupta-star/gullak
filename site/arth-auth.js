@@ -12,7 +12,11 @@
   var configured = !!(fb.apiKey && fb.authDomain && fb.projectId && fb.appId);
   var SDK = 'https://www.gstatic.com/firebasejs/10.12.2/';
   var KEY = 'arth.user';
-  var page = location.pathname.split('/').pop() || 'Main.dc.html';
+  /* Netlify serves "Workspace.dc.html" as "/workspace.dc" (no .html, lower case), so match the address to the real file name */
+  var FILES = ['Main.dc.html', 'Workspace.dc.html', 'Recovery.dc.html', 'TradeCost.dc.html', 'Candlesticks.dc.html', 'Practice.dc.html', 'Methodology.html', 'SignIn.html'];
+  var rawPage = location.pathname.split('/').pop();
+  var keyPage = rawPage.toLowerCase().replace(/\.html$/, '');
+  var page = FILES.filter(function (f) { return f.toLowerCase().replace(/\.html$/, '') === keyPage; })[0] || rawPage || 'Main.dc.html';
   var here = page + location.search;
   var onSignIn = /SignIn\.html$/i.test(page);
 
