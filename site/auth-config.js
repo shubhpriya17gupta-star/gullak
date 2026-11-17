@@ -12,5 +12,5 @@
 window.ARTH_AUTH = {
   firebase: { apiKey: "AIzaSyDRwscngXnIjSVRRuu21IihR5EMEKVhskI", authDomain: "gullak-5db54.firebaseapp.com", projectId: "gullak-5db54", appId: "1:442843455186:web:95c0eaecc9a2f2862fd70b" },
   endpoint: "https://script.google.com/macros/s/AKfycbxeCEYq8IX3DfEJrUYAPzE2ucuZtgdMgpDmQGcgN7Jdv5v6xjI4d7TPJdT-srOgLpNs/exec",
-  gate: true
+  gate: false
 };

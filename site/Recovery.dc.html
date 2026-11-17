@@ -12,6 +12,7 @@
 <script src="./arth-ui.js" defer></script>
 <script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
 <script src="./arth-valley.js" defer></script>
+<script src="./arth-save.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -28,6 +29,7 @@ h1 em,h2 em{font-weight:400}
 .ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
 .ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
@@ -45,6 +47,7 @@ button{font-family:inherit}
 .suf{position:absolute;right:14px;top:0;height:56px;display:flex;align-items:center;color:var(--muted);font-weight:600;font-size:20px;pointer-events:none}
 .err{margin-top:6px;font-size:14px;color:var(--red);font-weight:500}
 .hint{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.45}
+.ex{margin:16px 0 0;padding:16px 18px;border:1px solid #E3C48C;border-radius:14px;background:#FBF1DC;color:#2B1A00}.ex-h{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7A4200}.ex p{margin:8px 0 12px;font-size:15px;line-height:1.6}.ex-b{border:1.5px solid #8A4B00;border-radius:10px;padding:10px 16px;background:#fff;font:600 15px inherit;font-family:inherit;color:#2B1A00;cursor:pointer;min-height:44px}.ex-b:hover{background:#FFF8EA}.ex-b:focus-visible{outline:2px solid #8A4B00;outline-offset:2px}.ex-n{margin-left:10px;font-size:13.5px;color:#5A4420}
 .opt{border:1.5px solid #D3CEC3;border-radius:10px;padding:10px 16px;background:#fff;font-size:15.5px;font-weight:500;cursor:pointer;color:var(--ink);min-height:46px}
 .opt:hover{border-color:#A39E92}
 .opt[aria-pressed="true"]{border-color:var(--navy);background:#F3EEE3;box-shadow:inset 0 0 0 1px var(--navy);font-weight:700}
@@ -86,22 +89,22 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .readout .k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B0B3B8}
 .readout .v{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(56px,6.4vw,96px);line-height:.95;letter-spacing:-0.03em;color:#D2B47C;font-variant-numeric:tabular-nums}
 .readout .v.dim{color:rgba(244,241,234,.28)}
-.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
+.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
 .legend2 i{display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle}
 .res{position:relative;z-index:2;padding:20px clamp(18px,2.4vw,30px) 24px;border-top:1px solid rgba(244,241,234,.12);background:linear-gradient(180deg,rgba(17,19,22,0),#15171A)}
 .res-s{margin:0;font-size:17px;line-height:1.55;color:#EDE8DD;max-width:62ch}
 .chips{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .chip{border:1px solid rgba(244,241,234,.12);border-radius:14px;padding:12px 14px;background:rgba(244,241,234,.03)}
-.chip .l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
+.chip .l{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
 .chip .n{margin-top:6px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:#F4F1EA}
 .yrs{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(210,180,124,.35);background:rgba(210,180,124,.06)}
-.yrs .h{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.yrs .h{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
 .yrs .t{margin-top:6px;font-size:17px;line-height:1.5;color:#F4F1EA}
 .yrs .n2{margin-top:6px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-note{margin-top:12px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-empty{margin:0;font-size:19px;line-height:1.5;color:#CFCABE;max-width:46ch}
 .res-msg{margin:0;font-size:18px;line-height:1.55;color:#F4F1EA;max-width:60ch}
-.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#8A8E94}
+.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8A8E94}
 
 .below{padding:clamp(56px,8vw,110px) 0}
 .why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -116,7 +119,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .g-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .g-h{margin:0;font-size:clamp(26px,2.6vw,34px)!important;line-height:1.1!important;color:var(--ink)}
 .g-sub{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#5C5A55}
-.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:11.5px;color:#5C5A55}
+.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:12px;color:#5C5A55}
 .g-key i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .g-rows{margin-top:18px;display:flex;flex-direction:column}
 .g-row{display:grid;grid-template-columns:64px minmax(0,1fr) 98px;gap:14px;align-items:center;width:100%;padding:10px 8px;margin:0 -8px;border:0;border-top:1px solid var(--line);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px;transition:background .2s}
@@ -132,6 +135,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .cta .t{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(22px,2.4vw,30px);line-height:1.2}
 .btn-gold{background:#D2B47C;color:#111316}
 .btn-gold:hover{background:#E2C894}
+.save-row{margin-top:18px}.save-row .btn{min-height:46px;font-size:15px}
 [data-reveal]{opacity:0;transform:translate3d(0,24px,0);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
 [data-reveal][data-in]{opacity:1;transform:none}
 @media (max-width:900px){
@@ -187,6 +191,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
       <!-- inputs -->
       <section class="inputs" aria-labelledby="left-h">
         <h2 id="left-h" class="lab-h">What happened</h2>
+        <div class="ex"><div class="ex-h">Try an example</div><p>Suppose you invested ₹10,000 and its value fell by 20%, to ₹8,000. To get back to ₹10,000 it has to gain ₹2,000. That is 25% of the ₹8,000 you have left, not 20%.</p><button class="ex-b" type="button" onClick="{{setExample}}">Fill in this example</button><span class="ex-n">Then change the numbers and watch the answer move.</span></div>
         <div role="group" aria-label="How do you want to enter the fall?" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px">
           <button class="opt" id="mode-pct" type="button" aria-pressed="{{pctOn}}" onClick="{{setPct}}">I know the percentage</button>
           <button class="opt" type="button" aria-pressed="{{amtOn}}" onClick="{{setAmt}}">I know the amounts</button>
@@ -272,6 +277,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
               <div class="n2">This is arithmetic that assumes returns resume at a steady rate after the fall. Real markets do not behave steadily, and recovery is never guaranteed.</div>
             </div>
             </sc-if>
+            <div class="save-row"><button class="btn btn-gold" type="button" onClick="{{saveMine}}">Save my results</button></div>
           </div>
           </sc-if>
         </div>
@@ -379,6 +385,14 @@ class Component extends DCLogic {
     super(props);
     this.state = { mode: 'pct', loss: '', orig: '', cur: '', rate: '' };
   }
+  /* Save my results (arth-save.js): finish a save started before signing in, or open a result from My Gullak */
+  componentDidMount() {
+    if (window.ArthSave) window.ArthSave.resume('recovery', (st) => {
+      const p = window.ArthSave.pick({ mode: 'pct', loss: '', orig: '', cur: '', rate: '' }, st);
+      if (p.mode !== 'amt') p.mode = 'pct';
+      this.setState(p);
+    });
+  }
   renderVals() {
     const s = this.state;
     const set = (k) => (e) => this.setState({ [k]: e.target.value });
@@ -459,7 +473,7 @@ class Component extends DCLogic {
     return {
       pctOn: s.mode === 'pct' ? 'true' : 'false', amtOn: s.mode === 'amt' ? 'true' : 'false',
       isPct: s.mode === 'pct', isAmt: s.mode === 'amt',
-      setPct: () => this.setState({ mode: 'pct' }), setAmt: () => this.setState({ mode: 'amt' }),
+      setExample: () => this.setState({ mode: 'amt', loss: '20', orig: '10,000', cur: '8,000', rate: '' }), setPct: () => this.setState({ mode: 'pct' }), setAmt: () => this.setState({ mode: 'amt' }),
       loss: s.loss, onLoss: set('loss'), lossErr: errs.loss, lossHasErr: !!errs.loss, lossInvalid: errs.loss ? 'true' : 'false',
       orig: s.orig, onOrig: set('orig'), origErr: errs.orig, origHasErr: !!errs.orig, origInvalid: errs.orig ? 'true' : 'false',
       cur: s.cur, onCur: set('cur'), curErr: errs.cur, curHasErr: !!errs.cur, curInvalid: errs.cur ? 'true' : 'false',
@@ -471,6 +485,21 @@ class Component extends DCLogic {
       table,
       notOk: !ok, vState: ok ? 'ok' : (message ? 'message' : 'empty'), vMode: s.mode,
       vFall: vis.fall, vGain: vis.gain, vYears: vis.years, vRate: vis.rate, vStart: vis.start, vFloor: vis.floor,
+      // the record is built from the figures already on screen; nothing is recalculated for saving
+      saveMine: () => {
+        if (!window.ArthSave) return;
+        if (!ok) { window.ArthSave.save(null); return; }
+        const inputs = (s.mode === 'pct' ? [{ k: 'Fall entered', v: out.fallText }] : [{ k: 'Starting amount', v: out.steps[0].value }, { k: 'Value now', v: out.steps[1].value }])
+          .concat(out.hasYears ? [{ k: 'Assumed yearly return', v: out.rateText }] : []);
+        const outputs = [{ k: 'Fall', v: out.fallText }, { k: 'Gain needed to get back to even', v: out.gainText }]
+          .concat(out.steps.map((x) => ({ k: x.label, v: x.value })))
+          .concat(out.hasYears ? [{ k: 'Time to recover at ' + out.rateText + ' a year', v: out.yearsText }] : [])
+          .concat([{ k: 'In words', v: out.sentence }]);
+        window.ArthSave.save({
+          tool: 'recovery', title: out.fallText + ' fall', summary: 'A ' + out.fallText + ' fall needs a ' + out.gainText + ' gain to get back to even.' + (out.hasYears ? ' ' + out.yearsText : ''),
+          inputs, outputs, methodVersion: 'Financial method 0.1', state: { mode: s.mode, loss: s.loss, orig: s.orig, cur: s.cur, rate: s.rate },
+        });
+      },
     };
   }
 }

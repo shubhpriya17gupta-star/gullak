@@ -14,7 +14,7 @@
     {
       "label": "Gullak: run all tests",
       "type": "shell",
-      "command": "node tools/tests/tradecost.test.js; node tools/tests/recovery.test.js; node tools/tests/candles.test.js; node tools/tests/practice.test.js",
+      "command": "node tools/tests/tradecost.test.js; node tools/tests/recovery.test.js; node tools/tests/candles.test.js; node tools/tests/practice.test.js; node tools/tests/save.test.js",
       "problemMatcher": [],
       "group": { "kind": "test", "isDefault": true }
     },

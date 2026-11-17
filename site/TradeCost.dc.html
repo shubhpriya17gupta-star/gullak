@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="./lattice-loader.css"><script src="./net-status.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="./arth-ui.js" defer></script>
-<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script><script src="./arth-terms.js" defer></script>
 <script src="./arth-receipt.js" defer></script>
+<script src="./arth-save.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -28,6 +29,7 @@ h1 em,h2 em{font-weight:400}
 .ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
 .ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
@@ -82,22 +84,22 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .readout .k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B0B3B8}
 .readout .v{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(56px,6.4vw,96px);line-height:.95;letter-spacing:-0.03em;color:#D2B47C;font-variant-numeric:tabular-nums}
 .readout .v.dim{color:rgba(244,241,234,.28)}
-.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
+.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
 .legend2 i{display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle}
 .res{position:relative;z-index:2;padding:20px clamp(18px,2.4vw,30px) 24px;border-top:1px solid rgba(244,241,234,.12);background:linear-gradient(180deg,rgba(17,19,22,0),#15171A)}
 .res-s{margin:0;font-size:17px;line-height:1.55;color:#EDE8DD;max-width:62ch}
 .chips{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .chip{border:1px solid rgba(244,241,234,.12);border-radius:14px;padding:12px 14px;background:rgba(244,241,234,.03)}
-.chip .l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
+.chip .l{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
 .chip .n{margin-top:6px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:#F4F1EA}
 .yrs{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(210,180,124,.35);background:rgba(210,180,124,.06)}
-.yrs .h{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.yrs .h{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
 .yrs .t{margin-top:6px;font-size:17px;line-height:1.5;color:#F4F1EA}
 .yrs .n2{margin-top:6px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-note{margin-top:12px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-empty{margin:0;font-size:19px;line-height:1.5;color:#CFCABE;max-width:46ch}
 .res-msg{margin:0;font-size:18px;line-height:1.55;color:#F4F1EA;max-width:60ch}
-.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#8A8E94}
+.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8A8E94}
 
 .below{padding:clamp(56px,8vw,110px) 0}
 .why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -112,7 +114,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .g-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .g-h{margin:0;font-size:clamp(26px,2.6vw,34px)!important;line-height:1.1!important;color:var(--ink)}
 .g-sub{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#5C5A55}
-.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:11.5px;color:#5C5A55}
+.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:12px;color:#5C5A55}
 .g-key i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .g-rows{margin-top:18px;display:flex;flex-direction:column}
 .g-row{display:grid;grid-template-columns:64px minmax(0,1fr) 98px;gap:14px;align-items:center;width:100%;padding:10px 8px;margin:0 -8px;border:0;border-top:1px solid var(--line);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px;transition:background .2s}
@@ -128,6 +130,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .cta .t{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(22px,2.4vw,30px);line-height:1.2}
 .btn-gold{background:#D2B47C;color:#111316}
 .btn-gold:hover{background:#E2C894}
+.save-row{margin-top:18px}.save-row .btn{min-height:46px;font-size:15px}
 [data-reveal]{opacity:0;transform:translate3d(0,24px,0);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
 [data-reveal][data-in]{opacity:1;transform:none}
 @media (max-width:900px){
@@ -162,7 +165,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .readout .v{font-size:clamp(48px,5.4vw,82px)}
 .legend2 span{white-space:nowrap}
 .be{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:14px 16px;border-radius:14px;border:1px solid rgba(244,241,234,.12);background:rgba(244,241,234,.03);font-size:15.5px;line-height:1.5;color:#EDE8DD}
-.be-k{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.be-k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
 .be strong{color:#F4F1EA}
 
 /* the receipt */
@@ -182,24 +185,25 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 @keyframes print{0%{transform:translateY(-100%) rotateX(4deg)}70%{transform:translateY(1.5%) rotateX(4deg)}100%{transform:translateY(0) rotateX(4deg)}}
 .s-h{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px dashed #9A968C}
 .s-brand{font-weight:500;font-size:14px;letter-spacing:.24em}
-.s-sub{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6B6860}
+.ex{margin:16px 0 0;padding:16px 18px;border:1px solid #E3C48C;border-radius:14px;background:#FBF1DC;color:#2B1A00}.ex-h{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7A4200}.ex p{margin:8px 0 12px;font-size:15px;line-height:1.6}.ex-b{border:1.5px solid #8A4B00;border-radius:10px;padding:10px 16px;background:#fff;font:600 15px inherit;font-family:inherit;color:#2B1A00;cursor:pointer;min-height:44px}.ex-b:hover{background:#FFF8EA}.ex-b:focus-visible{outline:2px solid #8A4B00;outline-offset:2px}.ex-n{margin-left:10px;font-size:13.5px;color:#5A4420}
+.s-sub{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6B6860}
 .s-meta{padding:12px 0;font-size:12px;line-height:1.6;color:#4A4842;border-bottom:1px dashed #9A968C}
 .s-rows{padding:8px 0 4px}
 .rl{display:flex;align-items:baseline;gap:8px;padding:5px 0}
 .rl-l{flex:0 1 auto;min-width:0}
 .rl-d{flex:1 1 12px;min-width:12px;border-bottom:1px dotted #A9A59B;transform:translateY(-4px)}
 .rl-v{flex:0 0 auto;text-align:right;white-space:nowrap}
-.rl.head{margin-top:12px;padding-top:10px;border-top:1px solid #1B1C1F;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E5420}
+.rl.head{margin-top:12px;padding-top:10px;border-top:1px solid #1B1C1F;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6E5420}
 .rl.head:first-child{margin-top:0;border-top:0;padding-top:0}
 .rl.head .rl-d{display:none}
 .rl.sub{margin-top:6px;padding-top:9px;border-top:1px dashed #9A968C;font-weight:500}
 .rl.total{margin-top:8px;padding-top:10px;border-top:2px solid #1B1C1F;font-weight:500;font-size:14px}
 .rl.total .rl-v{color:#6E5420}
 .s-tot{margin-top:14px;padding:14px 0 10px;border-top:1px dashed #9A968C;border-bottom:1px dashed #9A968C;text-align:center}
-.s-tk{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6B6860}
+.s-tk{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#6B6860}
 .s-tv{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:40px;line-height:1.05;letter-spacing:-0.02em;color:#1B1C1F}
 .s-be{display:flex;justify-content:space-between;gap:12px;padding:10px 0;font-size:12px;color:#4A4842;border-bottom:1px dashed #9A968C}
-.s-foot{padding-top:12px;font-size:11px;line-height:1.6;color:#6B6860;text-align:center}
+.s-foot{padding-top:12px;font-size:12px;line-height:1.6;color:#6B6860;text-align:center}
 .s-empty{padding:26px 0 8px;font-size:13px;line-height:1.6;color:#4A4842}
 .s-eh{font-family:'Source Serif 4',Georgia,serif;font-size:26px;color:#1B1C1F;margin-bottom:6px}
 
@@ -210,7 +214,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .bill .feed{padding-bottom:40px}
 .bill .res{width:100%;max-width:480px;box-sizing:border-box;padding:0 4px;border:0;background:none}
 .bill .res-empty{font-size:15.5px;color:#C4C6CA}
-.s-ex{margin-top:12px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8F7444}
+.s-ex{margin-top:12px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8F7444}
 
 /* rates ledger and exclusions */
 .two{margin-top:0;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;align-items:start}
@@ -220,7 +224,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .lg summary{display:grid;grid-template-columns:minmax(0,1fr) auto 18px;gap:12px;align-items:center;padding:14px 0;cursor:pointer;list-style:none}
 .lg summary::-webkit-details-marker{display:none}
 .lg-n{font-weight:600;font-size:15.5px;color:var(--ink)}
-.lg-s{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.08em;border:1px solid;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.lg-s{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;border:1px solid;border-radius:999px;padding:3px 9px;white-space:nowrap}
 .lg-i{position:relative;width:14px;height:14px}
 .lg-i::before,.lg-i::after{content:"";position:absolute;left:0;right:0;top:6px;height:1.6px;background:#8F7444;transition:transform .35s cubic-bezier(.16,1,.3,1)}
 .lg-i::after{transform:rotate(90deg)}
@@ -285,6 +289,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
       <!-- inputs -->
       <section class="inputs" aria-labelledby="l-h">
         <h2 id="l-h" class="lab-h">Your trade</h2>
+        <div class="ex"><div class="ex-h">Try an example</div><p>Suppose you buy 100 shares at ₹500 and sell them at ₹600, held 12 months or less. That looks like a ₹10,000 gain. After brokerage, other charges, tax and cess, you keep ₹7,763.01, and ₹2,236.99 goes to costs and tax.</p><button class="ex-b" type="button" onClick="{{setExample}}">Fill in this example</button><span class="ex-n">Then change the prices or shares to see how each line moves.</span></div>
         <div class="f-grid">
           <sc-for list="{{fields}}" as="fl" hint-placeholder-count="5">
             <div style="flex:1 1 {{fl.basis}};min-width:0">
@@ -329,7 +334,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
               <div class="s-meta"><div>{{rcTrade}}</div><div>{{rcHold}} · {{rcOrders}}</div></div>
               <div class="s-rows">
                 <sc-for list="{{rows}}" as="r" hint-placeholder-count="9">
-                  <div class="rl {{r.cls}}"><span class="rl-l">{{r.label}}</span><i class="rl-d" aria-hidden="true"></i><span class="num rl-v">{{r.value}}</span></div>
+                  <div class="rl {{r.cls}}"><span class="rl-l">{{r.label}}<sc-if value="{{r.term}}" hint-placeholder-val="{{false}}"><button class="gl" type="button" data-term="{{r.term}}" aria-label="What is {{r.termName}}?">?</button></sc-if></span><i class="rl-d" aria-hidden="true"></i><span class="num rl-v">{{r.value}}</span></div>
                 </sc-for>
               </div>
               <div class="s-tot"><div class="s-tk">Total cost (charges + tax)</div><div class="s-tv num">{{totalCost}}</div></div>
@@ -346,6 +351,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
           <div class="fade">
             <p class="res-s">{{headline}}</p>
             <div class="res-note">{{taxNote}}</div>
+            <div class="save-row"><button class="btn btn-gold" type="button" onClick="{{saveMine}}">Save my results</button></div>
           </div>
           </sc-if>
         </div>
@@ -495,6 +501,10 @@ class Component extends DCLogic {
     super(props);
     this.state = { buy: '', sell: '', qty: '', nb: '1', ns: '1', long: false };
   }
+  /* Save my results (arth-save.js): finish a save started before signing in, or open a result from My Gullak */
+  componentDidMount() {
+    if (window.ArthSave) window.ArthSave.resume('tradecost', (st) => this.setState(window.ArthSave.pick({ buy: '', sell: '', qty: '', nb: '1', ns: '1', long: false }, st)));
+  }
   renderVals() {
     const s = this.state;
     const set = (k) => (e) => this.setState({ [k]: e.target.value });
@@ -534,16 +544,16 @@ class Component extends DCLogic {
       const rate = xLong ? '12.5%' : '20%';
       const kind = xLong ? 'Long-term' : 'Short-term';
       const profit = X.taxable > 0n;
-      const L = (label, v, minus) => ({ cls: 'line', label, value: (minus ? '− ' : '') + rs(v) });
+      const L = (label, v, minus, term, termName) => ({ cls: 'line', label, value: (minus ? '− ' : '') + rs(v), term, termName });
       const side = (T, isBuy, n) => [
         { cls: 'head', label: isBuy ? 'Buy side' : 'Sell side', value: '' },
         L(isBuy ? 'Buy value (price × shares)' : 'Sell value (price × shares)', T.value, false),
-        L(brokLabel(T.brok, n), T.brok.total, isBuy ? false : true),
+        L(brokLabel(T.brok, n), T.brok.total, isBuy ? false : true, 'brokerage', 'brokerage'),
         L('Exchange transaction charges (NSE, 0.00307%)', T.exch, !isBuy),
         L('SEBI turnover fee (₹10 per crore)', T.sebi, !isBuy),
         L('NSE IPFT (₹0.01 per crore)', T.ipft, !isBuy),
         L('GST at 18% on the four lines above', T.gst, !isBuy),
-        L('Securities transaction tax (0.1%, to the rupee)', T.stt, !isBuy),
+        L('Securities transaction tax (0.1%, to the rupee)', T.stt, !isBuy, 'stt', 'STT'),
       ].concat(isBuy ? [L('Stamp duty (0.015%, buy side, to the rupee)', T.stamp, false)] : [])
        .concat([{ cls: 'sub', label: isBuy ? 'Net amount you pay' : 'Net amount you receive', value: rs(T.net) }]);
       rows = side(X.B, true, xNb).concat(side(X.S, false, xNs)).concat([
@@ -612,10 +622,25 @@ class Component extends DCLogic {
 
     return {
       fields, shortOn: s.long ? 'false' : 'true', longOn: s.long ? 'true' : 'false',
-      setShort: () => this.setState({ long: false }), setLong: () => this.setState({ long: true }),
+      setExample: () => this.setState({ buy: '500', sell: '600', qty: '100', nb: '1', ns: '1', long: false }), setShort: () => this.setState({ long: false }), setLong: () => this.setState({ long: true }),
       stEmpty: !ok, stOk: ok,
       wfState: ok ? 'ok' : 'empty', wfV, wfT, wfAria, chips, slipAria, rcKey, rcTrade, rcHold, rcOrders, rcTaxRate,
       totalCost, headline, rows, taxNote, hasBar, wKeep, wTax, wCharges, barAria, hasBE, breakEven, rates, excluded,
+      // the record is the bill already on screen, line by line, with the rates it used; nothing is recalculated for saving
+      saveMine: () => {
+        if (!window.ArthSave) return;
+        if (!ok) { window.ArthSave.save(null); return; }
+        const inputs = [{ k: 'Buy price per share', v: rs(pb.v) }, { k: 'Sell price per share', v: rs(ps.v) }, { k: 'Number of shares', v: IN.format(pq.v) },
+          { k: 'Executed buy orders', v: String(pnb.v) }, { k: 'Executed sell orders', v: String(pns.v) }, { k: 'Holding period', v: rcHold }];
+        const outputs = rows.filter((x) => x.cls !== 'head').map((x) => ({ k: x.label, v: x.value }))
+          .concat([{ k: 'Total charges and tax', v: totalCost }, { k: 'Break-even sell price', v: breakEven + ' / share' }, { k: 'In words', v: headline }, { k: 'Tax note', v: taxNote },
+            { k: 'Rates used', v: 'Equity delivery on NSE · brokerage 0.1% per order, max ₹20, min ₹5 · exchange 0.00307% · SEBI ₹10/crore · IPFT ₹0.01/crore · GST 18% · STT 0.1% each side · stamp 0.015% on buy · ' + rcTaxRate + ' · cess 4%' }]);
+        window.ArthSave.save({
+          tool: 'tradecost', title: rcTrade, summary: headline, inputs, outputs,
+          methodVersion: 'Financial method 0.1 · rates checked 6 Nov 2026',
+          state: { buy: s.buy, sell: s.sell, qty: s.qty, nb: s.nb, ns: s.ns, long: s.long },
+        });
+      },
     };
   }
 }

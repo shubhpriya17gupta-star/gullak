@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Gullak saved results. Paste into Firebase console > Firestore Database > Rules, then Publish.
+// Setup and checks: docs/SETUP-signup.md, section 4.
+//
+// Layout: users/{uid}/savedResults/{resultId}. Ownership is the path's {uid}, which must equal the
+// signed-in person's Firebase UID; there is no owner field to change. Everything else is denied.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedInAs(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function okRows(l) {
+      return l is list && l.size() <= 40;
+    }
+
+    // the exact shape site/arth-save.js writes
+    function okRecord(id) {
+      let d = request.resource.data;
+      let fields = ['id', 'tool', 'title', 'summary', 'inputs', 'outputs', 'state', 'methodVersion', 'createdAt', 'updatedAt', 'v'];
+      return d.keys().hasOnly(fields) && d.keys().hasAll(fields)
+        && d.id == id
+        && id.matches('^[a-z]+-[a-z0-9]{1,40}$')
+        && d.tool in ['planner', 'recovery', 'tradecost', 'practice']
+        && id.matches('^' + d.tool + '-.*')
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 120
+        && d.summary is string && d.summary.size() <= 300
+        && okRows(d.inputs) && okRows(d.outputs)
+        && d.state is map && d.state.size() <= 20
+        && (!('blob' in d.state) || (d.state.blob is string && d.state.blob.size() <= 400000))
+        && d.methodVersion is string && d.methodVersion.size() <= 60
+        && d.v == 1
+        && d.createdAt is timestamp
+        && d.updatedAt == request.time;
+    }
+
+    match /users/{uid}/savedResults/{resultId} {
+      allow read, delete: if signedInAs(uid);
+
+      allow create: if signedInAs(uid) && okRecord(resultId)
+        && request.resource.data.createdAt == request.time;
+
+      // a saved calculation never changes; only practice-desk progress is replaced by a newer save
+      allow update: if signedInAs(uid) && okRecord(resultId)
+        && resource.data.tool == 'practice'
+        && request.resource.data.tool == resource.data.tool
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+  }
+}

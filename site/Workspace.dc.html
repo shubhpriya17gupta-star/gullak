@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="./lattice-loader.css"><script src="./net-status.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="./arth-ui.js" defer></script>
-<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script><script src="./arth-terms.js" defer></script>
 <script src="./arth-results.js" defer></script><script src="./arth-pdf.js" defer></script>
+<script src="./arth-save.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -28,6 +29,7 @@ h1 em,h2 em{font-weight:400}
 .ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
 .ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
@@ -98,7 +100,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .layer{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:6px;align-items:baseline;padding:18px 4px 22px;border-bottom:2px solid transparent;color:#9A9DA3}
 .layer .ln{font-family:'Geist Mono',monospace;font-size:12.5px;letter-spacing:.12em;color:#8A8E94}
 .layer .ll{grid-column:1 / -1;grid-row:2;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(18px,1.8vw,24px);line-height:1.15}
-.layer .ls{grid-column:2;grid-row:1;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94}
+.layer .ls{grid-column:2;grid-row:1;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94}
 .layer.is-now{color:#F4F1EA;border-bottom-color:#D2B47C}
 .layer.is-now .ln,.layer.is-now .ls{color:#D2B47C}
 .layer.is-done{color:#D4D6DA}
@@ -112,17 +114,17 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .sheet{position:sticky;top:calc(var(--hdr,68px) + 20px);flex:1 1 320px;min-width:0;align-self:flex-start;border-radius:20px;overflow:hidden;background-color:#15171A;color:#F4F1EA;
   background-image:linear-gradient(rgba(210,180,124,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(210,180,124,.06) 1px,transparent 1px);background-size:24px 24px;
   box-shadow:0 30px 60px -34px rgba(17,19,22,.6)}
-.sh-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid rgba(244,241,234,.1);font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#B0B3B8}
+.sh-top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid rgba(244,241,234,.1);font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#B0B3B8}
 .sh-top b{font-weight:500;color:#D2B47C}
 .sh-layers{padding:8px 22px 4px}
 .ly{position:relative;padding:16px 0 16px 40px;border-bottom:1px dashed rgba(244,241,234,.12)}
 .ly:last-child{border-bottom:0}
 .ly::before{content:"";position:absolute;left:13px;top:42px;bottom:-10px;width:1px;background:rgba(244,241,234,.12)}
 .ly:last-child::before{display:none}
-.ly-n{position:absolute;left:0;top:14px;width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;border:1px dashed rgba(244,241,234,.3);color:#9A9DA3;background:#15171A}
+.ly-n{position:absolute;left:0;top:14px;width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:12px;border:1px dashed rgba(244,241,234,.3);color:#9A9DA3;background:#15171A}
 .ly-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .ly-name{font-family:'Source Serif 4',Georgia,serif;font-size:19px;line-height:1.2;color:#C4C6CA}
-.ly-st{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94;white-space:nowrap}
+.ly-st{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94;white-space:nowrap}
 .ly-rows{margin-top:8px;display:flex;flex-direction:column;gap:5px}
 .ly-r{display:flex;align-items:baseline;gap:8px;font-family:'Geist Mono',monospace;font-size:12.5px;color:#9A9DA3}
 .ly-r i{flex:1 1 10px;min-width:10px;border-bottom:1px dotted rgba(244,241,234,.2);transform:translateY(-4px)}
@@ -148,8 +150,9 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .rz-edit{display:flex;flex-wrap:wrap;gap:10px}
 .rz-ghost{background:transparent;color:#F4F1EA;border:1px solid rgba(244,241,234,.28);min-height:44px;font-size:14.5px}
 .rz-ghost:hover{border-color:#D2B47C;color:#D2B47C}
+.rz-gold{background:#D2B47C;color:#111316;min-height:44px;font-size:14.5px}.rz-gold:hover{background:#E2C894}
 .rz-ctrl{margin-top:28px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1.3fr);gap:18px;padding:20px;border:1px solid rgba(244,241,234,.12);border-radius:16px;background:rgba(244,241,234,.03)}
-.rz-cl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#9A9DA3}
+.rz-cl{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#9A9DA3}
 .rz-cv{font-family:'Geist',sans-serif;font-size:15px;letter-spacing:0;text-transform:none;color:#F4F1EA;font-weight:600}
 .rz-pre{position:absolute;left:14px;top:0;height:46px;display:flex;align-items:center;color:#9A9DA3;font-weight:600;pointer-events:none}
 .rz-in{width:100%;height:46px;border:1px solid rgba(244,241,234,.22);border-radius:10px;padding:0 14px 0 32px;font:inherit;font-size:17px;font-weight:600;color:#F4F1EA;background:#181A1E;font-variant-numeric:tabular-nums}
@@ -157,7 +160,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .rz-in[aria-invalid="true"]{border-color:#E26A6A;background:#231A1B}
 .rz-err{margin-top:6px;font-size:13.5px;color:#F09A9A}
 .rz .rz-range{accent-color:#D2B47C;height:28px;margin:4px 0 0}
-.rz-scale{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10.5px;color:#6B6E74}
+.rz-scale{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:12px;color:#6B6E74}
 .rz-seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .rz-sg{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:8px 10px;min-height:52px;border-radius:10px;border:1px solid rgba(244,241,234,.16);background:transparent;color:#C4C6CA;cursor:pointer;font-size:13px;text-align:left;transition:border-color .2s,background .2s}
 .rz-sg i{display:inline-block;width:18px;height:3px;border-radius:2px}
@@ -173,7 +176,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .ov{padding:18px;border-radius:14px;background:#181A1E;border:1px solid rgba(244,241,234,.08);min-width:0}
 .ov-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .ov-k{font-size:13.5px;color:#B0B3B8}
-.ov-tag{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.ov-tag{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:999px;white-space:nowrap}
 .ov-tag.is-in{color:#C4C6CA;border:1px solid rgba(244,241,234,.22)}
 .ov-tag.is-est{color:#D2B47C;border:1px dashed rgba(210,180,124,.6)}
 .ov-v{margin-top:10px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(24px,2.4vw,34px);line-height:1.1;color:#F4F1EA;letter-spacing:-0.01em;overflow-wrap:anywhere}
@@ -192,7 +195,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .gx-dash{display:inline-block;width:18px;height:0!important;border-top:2px dashed #6B6D72;background:none!important;vertical-align:middle}
 .gx-wrap{margin-top:18px;display:grid;grid-template-columns:64px minmax(0,1fr)}
 .gx-y{position:relative;height:clamp(240px,30vw,340px)}
-.gx-y>span{position:absolute;right:10px;transform:translateY(-50%);font-family:'Geist Mono',monospace;font-size:11px;color:#6B6E74;white-space:nowrap}
+.gx-y>span{position:absolute;right:10px;transform:translateY(-50%);font-family:'Geist Mono',monospace;font-size:12px;color:#6B6E74;white-space:nowrap}
 .gx-plot{position:relative;height:clamp(240px,30vw,340px);cursor:crosshair;touch-action:pan-y}
 .gx-grid{position:absolute;left:0;right:0;height:0;border-top:1px solid rgba(244,241,234,.07)}
 .gx-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:gxIn 1.2s cubic-bezier(.2,.7,.2,1) both}
@@ -200,14 +203,14 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .gx-cross{position:absolute;top:0;bottom:0;width:0;border-left:1px solid rgba(210,180,124,.45);pointer-events:none}
 .gx-dot{position:absolute;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(17,19,22,.9),0 0 0 5px rgba(244,241,234,.25);pointer-events:none}
 .gx-tip{position:absolute;top:8px;min-width:210px;padding:12px 14px;border-radius:12px;background:rgba(24,26,30,.96);border:1px solid rgba(244,241,234,.14);box-shadow:0 18px 40px -18px rgba(0,0,0,.8);pointer-events:none;font-size:13px}
-.gx-tt{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#D2B47C;margin-bottom:6px}
+.gx-tt{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#D2B47C;margin-bottom:6px}
 .gx-tr{display:flex;justify-content:space-between;gap:14px;padding:3px 0;color:#B0B3B8}
 .gx-tr>span{display:inline-flex;align-items:center;gap:7px}
 .gx-tr i{width:10px;height:3px;border-radius:2px;display:inline-block}
 .gx-tr b{font-weight:600;color:#F4F1EA}
 .gx-tm{border-top:1px solid rgba(244,241,234,.08);margin-top:3px;padding-top:6px}
 .gx-tm+.gx-tm{border-top:0;margin-top:0;padding-top:3px}
-.gx-x{margin-left:64px;display:flex;justify-content:space-between;padding-top:8px;font-family:'Geist Mono',monospace;font-size:11px;color:#6B6E74}
+.gx-x{margin-left:64px;display:flex;justify-content:space-between;padding-top:8px;font-family:'Geist Mono',monospace;font-size:12px;color:#6B6E74}
 .gx-yr{margin:18px 0 0 64px;max-width:520px}
 .gx-yr .rz-cl{justify-content:flex-start}
 .rz-more{margin-top:14px}
@@ -215,7 +218,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .tb-in{min-width:640px}
 .tb-r{display:grid;grid-template-columns:70px repeat(4,minmax(0,1fr));gap:10px;padding:8px 0;border-bottom:1px solid rgba(244,241,234,.08);font-size:13.5px;color:#C4C6CA}
 .tb-r>span:not(:first-child){text-align:right}
-.tb-h{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A8E94}
+.tb-h{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#8A8E94}
 
 .rz-note{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:14px;background:#FFF4DE;border:1px solid #F0D9A8;color:#5A3A0A;font-size:14.5px;line-height:1.6}
 .rz-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
@@ -257,14 +260,14 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .pl-row>span:not(:first-child){text-align:right}
 .pl-row>span:first-child{display:inline-flex;align-items:center;gap:8px;font-weight:600}
 .pl-row i{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
-.pl-hd{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A867D}
+.pl-hd{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#8A867D}
 
 .rk-top{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
 .rz-pd{margin:10px 0 0;font-size:15px;line-height:1.65;color:var(--muted)}
 .rk-bands{display:flex;flex-direction:column;gap:6px}
 .rk-b{display:grid;grid-template-columns:130px 70px minmax(0,1fr);gap:10px;align-items:baseline;padding:10px 12px;border-radius:10px;border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
 .rk-bn{font-weight:600;color:var(--ink)}
-.rk-br{font-family:'Geist Mono',monospace;font-size:11.5px}
+.rk-br{font-family:'Geist Mono',monospace;font-size:12px}
 .rk-b[aria-current="true"]{border-color:#111316;background:#FAF8F3;box-shadow:inset 3px 0 0 #D2B47C}
 .rk-g{margin-top:24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .ga{position:relative;padding:18px;border-radius:16px;background:#FAF8F3;border:1px solid var(--line);text-align:center}
@@ -274,13 +277,14 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .ga-v{margin-top:-28px;font-size:13px;color:var(--muted)}
 .ga-v b{font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:600;color:#111316}
 .ga-n{margin-top:8px;font-weight:600;font-size:15.5px;color:#111316}
-.ga-bd{display:inline-block;margin-left:6px;font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:#8F7444;border:1px solid #E2D3B1;border-radius:999px;padding:2px 7px;vertical-align:2px}
+.ga-bd{display:inline-block;margin-left:6px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:#8F7444;border:1px solid #E2D3B1;border-radius:999px;padding:2px 7px;vertical-align:2px}
 .ga-s{margin-top:2px;font-size:13px;color:var(--muted)}
 .ga-t{margin:10px 0 0;font-size:13.5px;line-height:1.55;color:var(--muted);text-align:left}
 .ga-min{display:flex;flex-direction:column;justify-content:center;background:#fff}
 .ga-eq{display:flex;align-items:baseline;justify-content:center;gap:12px;font-family:'Source Serif 4',Georgia,serif;font-size:34px;font-weight:600;color:#111316}
-.ga-eq i{font-family:'Geist Mono',monospace;font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
+.ga-eq i{font-family:'Geist Mono',monospace;font-style:normal;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
 .rk-warn{margin-top:18px;padding:12px 16px;border-left:3px solid #D2B47C;background:#F7F4EC;border-radius:0 10px 10px 0;font-size:14px;line-height:1.6;color:#4A4843}
+.rk-ex{margin-top:18px;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:#fff}.rk-exh{font-family:'Source Serif 4',Georgia,serif;font-size:21px;line-height:1.2;margin-bottom:12px}.rk-exg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.rk-exg b{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7A5A1E;margin-bottom:6px}.rk-exg p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink)}@media (max-width:820px){.rk-exg{grid-template-columns:minmax(0,1fr)}}
 .rk-more{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 .rk-req{font-size:14.5px;line-height:1.65;color:var(--ink)}
 .rk-flags{display:flex;flex-direction:column;gap:8px}
@@ -290,7 +294,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .rz-dark{background:#111316;border-color:#111316;color:#F4F1EA}
 .rz-h2l{margin:8px 0 0;font-size:clamp(22px,2vw,28px)!important;line-height:1.2!important;color:#F4F1EA}
 .rr{display:block;width:100%;margin-top:18px}
-.rr-x{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 4.4% 0 10.6%;text-align:center;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.08em}
+.rr-x{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 4.4% 0 10.6%;text-align:center;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em}
 .rz-pl{margin:12px 0 0;font-size:14.5px;line-height:1.65;color:#B0B3B8}
 .rz-pl b{color:#F4F1EA;font-weight:600}
 .dn-chips{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
@@ -308,7 +312,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .dn-s>span:last-child{color:var(--red)}
 
 .bg{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
-.bg-l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
+.bg-l{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8A867D}
 .bg-bar{margin:10px 0 8px;display:flex;height:18px;border-radius:5px;overflow:hidden;background:#F4F1EA}
 .bg-bar i{display:block;height:100%}
 .cn{margin:16px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:10px;font-size:15.5px;line-height:1.6;color:var(--ink)}
@@ -319,7 +323,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 .rz-js .rz [data-rv]{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
 .rz-js .rz [data-rv].in{opacity:1;transform:none}
 @media (max-width:1000px){.rz-ctrl{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rz-c-wide{grid-column:1 / -1;order:3}.rz-ov{grid-template-columns:repeat(2,minmax(0,1fr))}.rz-two,.rk-top,.rk-more,.bg{grid-template-columns:minmax(0,1fr)}.rk-g{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ga-min{grid-column:1 / -1}}
-@media (max-width:640px){.rz-ctrl{grid-template-columns:minmax(0,1fr);padding:14px}.rz-c-wide{order:0}.rz-ov{grid-template-columns:minmax(0,1fr)}.rk-g{grid-template-columns:minmax(0,1fr)}.gx-wrap{grid-template-columns:48px minmax(0,1fr)}.gx-x,.gx-yr{margin-left:48px}.gx-y,.gx-plot{height:280px}.gx-tip{min-width:0;width:158px;left:4px!important;right:auto!important;top:2px;padding:8px 10px;font-size:11.5px;background:rgba(24,26,30,.88)}.gx-tr{gap:8px;padding:2px 0}.gx-tt{margin-bottom:3px}.gx-tm{display:none}.rk-b{grid-template-columns:minmax(0,1fr) auto}.rk-bt{grid-column:1 / -1}.pl{gap:6px}.pl-c{padding:6px 2px}.pl-v{font-size:13.5px}.pl-row{font-size:12.5px}}
+@media (max-width:640px){.rz-ctrl{grid-template-columns:minmax(0,1fr);padding:14px}.rz-c-wide{order:0}.rz-ov{grid-template-columns:minmax(0,1fr)}.rk-g{grid-template-columns:minmax(0,1fr)}.gx-wrap{grid-template-columns:48px minmax(0,1fr)}.gx-x,.gx-yr{margin-left:48px}.gx-y,.gx-plot{height:280px}.gx-tip{min-width:0;width:158px;left:4px!important;right:auto!important;top:2px;padding:8px 10px;font-size:12px;background:rgba(24,26,30,.88)}.gx-tr{gap:8px;padding:2px 0}.gx-tt{margin-bottom:3px}.gx-tm{display:none}.rk-b{grid-template-columns:minmax(0,1fr) auto}.rk-bt{grid-column:1 / -1}.pl{gap:6px}.pl-c{padding:6px 2px}.pl-v{font-size:13.5px}.pl-row{font-size:12.5px}}
 @media (prefers-reduced-motion:reduce){.gx-svg,.ga-arc{animation:none}.bk-bar i,.pl-bar,.dn-bar i{transition:none}.rz-js .rz [data-rv]{opacity:1;transform:none;transition:none}}
 @media (max-width:900px){.layers{grid-template-columns:repeat(2,minmax(0,1fr))}.sheet{position:relative;top:0}}
 
@@ -518,7 +522,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
 
       <div style="margin-top:28px;display:flex;flex-wrap:wrap;gap:18px 20px">
         <div style="flex:1 1 260px;min-width:0">
-          <label class="lbl" for="in-infl">Assumed yearly inflation</label>
+          <label class="lbl" for="in-infl">Assumed yearly inflation<button class="gl" type="button" data-term="inflation" aria-label="What is inflation?">?</button></label>
           <div style="position:relative">
             <input id="in-infl" class="inp plain sfx" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 6.08" value="{{inflValue}}" onInput="{{onInfl}}" aria-invalid="{{inflInvalid}}" aria-describedby="d-infl">
             <span class="suf" aria-hidden="true">% a year</span>
@@ -587,7 +591,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
           <h1 id="rz-h" class="rz-h1">{{r.title}}</h1>
           <p class="rz-sub">{{r.sub}}</p>
         </div>
-        <div class="rz-edit"><button class="btn rz-ghost" type="button" onClick="{{back4}}">Edit assumptions</button><button class="btn rz-ghost" type="button" onClick="{{toStep1}}">Edit profile</button><button class="btn rz-ghost" type="button" data-rz-pdf="1">Download a PDF</button></div>
+        <div class="rz-edit"><button class="btn rz-ghost" type="button" onClick="{{back4}}">Edit assumptions</button><button class="btn rz-ghost" type="button" onClick="{{toStep1}}">Edit profile</button><button class="btn rz-ghost" type="button" data-rz-pdf="1">Download a PDF</button><button class="btn rz-gold" type="button" onClick="{{saveMine}}">Save my results</button></div>
       </div>
 
       <div class="rz-ctrl">
@@ -749,7 +753,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
               <path class="ga-arc" d="M10 62 A50 50 0 0 1 110 62" fill="none" stroke="#111316" stroke-width="9" stroke-linecap="round" pathLength="100" style="--d:{{g.dash}}"></path>
             </svg>
             <div class="ga-v"><b class="num cu">{{g.score}}</b><span> / 100</span></div>
-            <div class="ga-n">{{g.name}} <span class="ga-bd">{{g.band}}</span></div>
+            <div class="ga-n">{{g.name}}<button class="gl" type="button" data-term="{{g.term}}" aria-label="What is {{g.name}}?">?</button> <span class="ga-bd">{{g.band}}</span></div>
             <div class="ga-s">{{g.sub}}</div>
             <p class="ga-t">{{g.text}}</p>
           </div>
@@ -760,6 +764,7 @@ p[style*="font-size:19px"],p[style*="font-size:20px"],p[style*="font-size:18px"]
           <p class="ga-t">Taking more risk than you can afford, or more than you are comfortable with, is what the profile tries to avoid. So the profile is the lower of the two scores: <b class="num">{{r.klassScore}}</b>, {{v.className}}.</p>
         </div>
       </div>
+      <div class="rk-ex"><div class="rk-exh">{{r.explain.title}}</div><div class="rk-exg"><div><b>In everyday words</b><p>{{r.explain.meaning}}</p></div><div><b>Why you got this</b><p>{{r.explain.why}}</p></div><div><b>What it cannot tell you</b><p>{{r.explain.limits}}</p></div></div></div>
       <div class="rk-warn">A profile describes your situation and your comfort today. It does not predict or guarantee how any investment will perform, and it is not a SEBI category or a suitability assessment.</div>
       <div class="rk-more">
         <div class="rk-req"><b>What your goal would need.</b> {{v.requirementText}}</div>
@@ -1068,6 +1073,19 @@ class Component extends DCLogic {
     };
   }
 
+  /* Save my results (arth-save.js): finish a save started before signing in, or open a result from My Gullak */
+  componentDidMount() { if (window.ArthSave) window.ArthSave.resume('planner', (st) => this.restore(st)); }
+  restore(st) {
+    const blank = { f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
+      obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null }, tab: 1, yr: null };
+    const p = window.ArthSave.pick(blank, st);
+    if (!(Number.isInteger(p.obj) && p.obj >= 0 && p.obj < OBJECTIVES.length)) p.obj = null;
+    if (![10, 25, 40].includes(p.drop)) p.drop = 25;
+    if (![0, 1, 2].includes(p.tab)) p.tab = 1;
+    if (!(Number.isInteger(p.yr) && p.yr >= 1)) p.yr = null;
+    this.setState(Object.assign(p, { step: 4, showErr: false, fail: false }));
+  }
+
   renderVals() {
     const s = this.state, f = s.f, a = s.a;
     const setF = (key) => (e) => this.setState({ f: { ...this.state.f, [key]: e.target.value }, fail: false });
@@ -1357,10 +1375,26 @@ class Component extends DCLogic {
     // risk profile
     const bandText = ['Lower capacity or comfort for ups and downs', 'Some room for ups and downs', 'More room for ups and downs'];
     const bands = CLASSES.map((name, i) => ({ name, range: ['0 to 39', '40 to 69', '70 to 100'][i], text: bandText[i], cur: R.classBand === i ? 'true' : 'false' }));
+    const explainCap = Math.round(R.cap), explainTol = Math.round(R.tol);
+    const MEAN = [
+      'Your answers point to a cautious position. Your finances may have little room to absorb a fall, or a fall would worry you a lot, or both. Large ups and downs would be hard to sit through right now.',
+      'Your answers sit in the middle. You have some room, in your money and in your comfort, to sit through ups and downs, but not unlimited room. A large, long fall would still be hard.',
+      'Your answers show a lot of room for ups and downs, both in your finances and in how you feel about them. That does not make any investment right for you, and it does not make a loss less likely.'
+    ];
+    const whyText = R.binding === 'capacity'
+      ? 'Your finances scored ' + explainCap + ', lower than your comfort score of ' + explainTol + ', so your finances set the result. In plain terms: you may feel ready for more ups and downs than your money can absorb today.' + (R.caps.length ? ' Held down by: ' + R.caps.join(' ') : '')
+      : R.binding === 'tolerance'
+        ? 'Your comfort scored ' + explainTol + ', lower than the ' + explainCap + ' for your finances, so your comfort set the result. In plain terms: your finances could absorb more ups and downs than you feel relaxed about.'
+        : 'Your finances and your comfort both scored ' + explainCap + ', so neither held the other back.';
+    const explain = {
+      title: 'What “' + CLASSES[R.classBand] + '” means here',
+      meaning: MEAN[R.classBand], why: whyText,
+      limits: 'It reflects only the answers you gave today. It does not predict how any investment will behave, and it is not a SEBI category or a suitability check.'
+    };
     const rGauges = [
-      { name: 'Risk capacity', sub: 'What your finances could absorb', score: Math.round(R.cap), dash: R.cap.toFixed(2), band: CLASSES[R.capBand], text: gauges[0].text,
+      { name: 'Risk capacity', term: 'riskcapacity', sub: 'What your finances could absorb', score: Math.round(R.cap), dash: R.cap.toFixed(2), band: CLASSES[R.capBand], text: gauges[0].text,
         aria: 'Risk capacity ' + Math.round(R.cap) + ' out of 100, ' + CLASSES[R.capBand] + ' range' },
-      { name: 'Risk tolerance', sub: 'What you say feels comfortable', score: Math.round(R.tol), dash: R.tol.toFixed(2), band: CLASSES[R.tolBand], text: gauges[1].text,
+      { name: 'Risk tolerance', term: 'risktolerance', sub: 'What you say feels comfortable', score: Math.round(R.tol), dash: R.tol.toFixed(2), band: CLASSES[R.tolBand], text: gauges[1].text,
         aria: 'Risk tolerance ' + Math.round(R.tol) + ' out of 100, ' + CLASSES[R.tolBand] + ' range' },
     ];
     const rr = [0, 1, 2].map((i) => ({ x: (34 + i * 90.67).toFixed(2), w: '90.67', tx: (34 + i * 90.67 + 45.33).toFixed(2), label: ['CONSERVATIVE', 'MODERATE', 'GROWTH'][i],
@@ -1396,7 +1430,7 @@ class Component extends DCLogic {
       tabs: rTabs, ov, chart: rChart, tip, t, timesAttr: J.times.map((x) => x / T).join('|'), selName: SHORT[tab] + ' assumption, ' + pct(sc.bp),
       fvText: rs0(sc.fv), pvText, bk, pillars,
       spread: 'The same ' + pvText + ' ends between ' + rs0(lo.fv) + ' and ' + rs0(hi.fv) + ', depending only on which rate you assume. A small difference in the yearly rate becomes a large difference over a long horizon.',
-      bands, gauges: rGauges, capScore: Math.round(R.cap), tolScore: Math.round(R.tol), klassScore: Math.round(R.klass),
+      bands, explain, gauges: rGauges, capScore: Math.round(R.cap), tolScore: Math.round(R.tol), klassScore: Math.round(R.klass),
       rr, gap: rs0(hi.fv - lo.fv), drops, downs: rDowns, nowAfter: rs0(half(P.pv * dnum, 100n)),
       flow: { parts: flowParts, aria: 'Monthly income ' + rs0(P.income) + ': ' + flowParts.map((x) => x.label + ' ' + x.v).join(', ') },
       pots: pots.map((p) => ({ ...p, col: p.color })),
@@ -1442,6 +1476,31 @@ class Component extends DCLogic {
       next3: () => { if (live.s1 && live.s3 && s.obj !== null && ansComplete) { this.setState({ step: 4, showErr: false, fail: false, yr: null }); } else this.setState({ showErr: true, fail: true }); },
       back4: go(3), onYear: (e) => this.setState({ yr: parseInt(e.target.value, 10) }),
       v, r,
+      // the record is built from the figures already on screen; nothing is recalculated for saving
+      saveMine: () => {
+        if (!window.ArthSave) return;
+        if (!useLive) { window.ArthSave.save(null); return; }
+        const inputs = [
+          { k: 'Monthly income', v: rs0(P.income) }, { k: 'Essential expenses', v: rs0(P.ess) }, { k: 'EMIs and fixed obligations', v: rs0(P.emi) },
+          { k: 'Emergency savings', v: rs0(P.es) }, { k: 'Other savings', v: rs0(P.sv) }, { k: 'Existing investments', v: rs0(P.inv) },
+          { k: 'One-time amount considered', v: pvText }, { k: 'Horizon', v: yearsText },
+        ].concat(bb.SF !== undefined ? [{ k: 'Your own emergency target', v: f.tgt + ' months' }] : []).concat([
+          { k: 'Main aim', v: OBJECTIVES[OBJ] },
+          { k: 'Assumed yearly rates', v: pct(P.lo) + ' · ' + pct(P.mid) + ' · ' + pct(P.hi) }, { k: 'Inflation assumption', v: pct(P.infl) },
+        ]).concat(P.goal !== undefined ? [{ k: 'Goal amount', v: rs0(P.goal) }] : []).concat([{ k: 'Hypothetical fall', v: dropText }]);
+        const outputs = kpis.map((x) => ({ k: x.label, v: x.value })).concat([
+          { k: 'Risk capacity score', v: Math.round(R.cap) + ' of 100 (' + CLASSES[R.capBand] + ')' },
+          { k: 'Risk tolerance score', v: Math.round(R.tol) + ' of 100 (' + CLASSES[R.tolBand] + ')' },
+        ]).concat(J.scen.map((c) => ({ k: c.name + ', ' + pct(c.bp) + ' a year', v: rs0(c.fv) + ' after ' + yearsText + ' (' + rs0(c.realFv) + ' in today\'s rupees)' })))
+          .concat(downs.map((d) => ({ k: 'After a ' + dropText + ' fall · ' + d.name, v: d.end })))
+          .concat([{ k: 'Growth needed for your goal', v: requirementText }, { k: 'Points to note', v: flags.map((x) => x.text).join(' ') }]);
+        window.ArthSave.save({
+          tool: 'planner', title: pvText + ' for ' + yearsText,
+          summary: CLASSES[R.classBand] + ' profile. Ends between ' + rs0(lo.fv) + ' and ' + rs0(hi.fv) + ' at your rates of ' + pct(P.lo) + ' to ' + pct(P.hi) + '.',
+          inputs, outputs, methodVersion: 'Financial method 0.1 · Risk method 0.1',
+          state: { f: s.f, obj: s.obj, drop: s.drop, a: s.a, k: s.k, tab: s.tab, yr: s.yr },
+        });
+      },
     };
   }
 }

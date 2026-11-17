@@ -1,4 +1,4 @@
-/* Gullak accounts: Firebase email+password and Google sign-in, header buttons, left sidebar,
+/* Gullak accounts: Firebase email+password and Google sign-in (offered only when saving a result), left sidebar,
    and (optionally) a gate. Every sign-up or sign-in is also sent to Google Sheets through
    Apps Script (cfg.endpoint). Settings live in auth-config.js. Setup: docs/SETUP-signup.md.
 
@@ -13,7 +13,7 @@
   var SDK = 'https://www.gstatic.com/firebasejs/10.12.2/';
   var KEY = 'arth.user';
   /* Netlify serves "Workspace.dc.html" as "/workspace.dc" (no .html, lower case), so match the address to the real file name */
-  var FILES = ['Main.dc.html', 'Workspace.dc.html', 'Recovery.dc.html', 'TradeCost.dc.html', 'Candlesticks.dc.html', 'Practice.dc.html', 'Methodology.html', 'SignIn.html'];
+  var FILES = ['Main.dc.html', 'Workspace.dc.html', 'Recovery.dc.html', 'TradeCost.dc.html', 'Candlesticks.dc.html', 'Practice.dc.html', 'Methodology.html', 'SignIn.html', 'MyGullak.html'];
   var rawPage = location.pathname.split('/').pop();
   var keyPage = rawPage.toLowerCase().replace(/\.html$/, '');
   var page = FILES.filter(function (f) { return f.toLowerCase().replace(/\.html$/, '') === keyPage; })[0] || rawPage || 'Main.dc.html';
@@ -24,7 +24,7 @@
   try { current = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
   if (current && !current.uid) current = null;               // an old email-only entry is not a real account
   var listeners = [];
-  var mods = null, auth = null;
+  var mods = null, auth = null, app = null;
 
   function slim(u) { return u ? { uid: u.uid, name: u.displayName || '', email: u.email || '', verified: !!u.emailVerified } : null; }
   function store(u) { try { if (u) localStorage.setItem(KEY, JSON.stringify(u)); else localStorage.removeItem(KEY); } catch (e) {} }
@@ -43,7 +43,8 @@
   var ready = !configured ? Promise.resolve(current) :
     Promise.all([import(SDK + 'firebase-app.js'), import(SDK + 'firebase-auth.js')]).then(function (m) {
       mods = { app: m[0], auth: m[1] };
-      auth = mods.auth.getAuth(mods.app.initializeApp({ apiKey: fb.apiKey, authDomain: fb.authDomain, projectId: fb.projectId, appId: fb.appId }));
+      app = mods.app.initializeApp({ apiKey: fb.apiKey, authDomain: fb.authDomain, projectId: fb.projectId, appId: fb.appId });
+      auth = mods.auth.getAuth(app);
       return new Promise(function (resolve) {
         var first = true;
         mods.auth.onAuthStateChanged(auth, function (u) {
@@ -60,12 +61,14 @@
 
   /* send the verified identity to the Google Sheet. The server checks the token with Firebase, so
      the sheet cannot be filled with made-up rows. A failure here never blocks the person. */
+  /* the anonymous visitor ID from arth-track.js, so the Visitors row is linked to this account */
+  function vid() { try { var v = localStorage.getItem('arth.vid'); return /^[a-f0-9]{32}$/.test(v || '') ? v : ''; } catch (e) { return ''; } }
   function sync(user, action, consent) {
     if (!cfg.endpoint || !user) return Promise.resolve();
     return user.getIdToken().then(function (tok) {
       // text/plain avoids a CORS preflight; Apps Script reads the body as JSON
       return fetch(cfg.endpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ idToken: tok, action: action, consent: !!consent, source: page.slice(0, 60) }) });
+        body: JSON.stringify({ idToken: tok, action: action, consent: !!consent, source: page.slice(0, 60), vid: vid() }) });
     }).catch(function (e) { console.warn('Gullak: could not reach the sign-up sheet.', e); });
   }
   function need() {
@@ -81,6 +84,7 @@
   window.ArthAuth = {
     configured: function () { return configured; },
     tools: TOOLS,
+    page: page,
     ready: ready,
     user: function () { return current; },
     onChange: function (fn) { listeners.push(fn); },
@@ -111,6 +115,19 @@
     reset: function (email) {
       return need().then(function () { return mods.auth.sendPasswordResetEmail(auth, email); });
     },
+    /* for arth-save.js: the same Firebase app, so saved results use this sign-in */
+    firebase: function () {
+      return need().then(function () { return { app: app, auth: auth, sdk: SDK }; });
+    },
+    /* My Gullak > Delete my account. The caller deletes saved results first. The Sheet row is removed
+       (while the token is still valid), then the Firebase account. Firebase may ask for a fresh sign-in. */
+    deleteAccount: function () {
+      return need().then(function () {
+        var u = auth.currentUser;
+        if (!u) { var e = new Error('signed out'); e.code = 'arth/signed-out'; throw e; }
+        return sync(u, 'delete', false).then(function () { return u.delete(); }).then(function () { current = null; store(null); emit(); });
+      });
+    },
     signOut: function () {
       return ready.then(function () {
         current = null; store(null);
@@ -137,13 +154,17 @@
         'auth/cancelled-popup-request': 'The Google window was closed before finishing.',
         'auth/unauthorized-domain': 'This website address is not approved for sign-in yet. The site owner needs to add it in Firebase.',
         'auth/operation-not-allowed': 'This sign-in method is not switched on yet. The site owner needs to enable it in Firebase.',
-        'auth/user-disabled': 'This account has been disabled.'
+        'auth/user-disabled': 'This account has been disabled.',
+        'auth/requires-recent-login': 'For your safety, please sign out, sign in again, then choose Delete my account once more.'
       };
       return map[c] || 'Something went wrong. Please try again.';
     }
   };
 
   if (onSignIn) return;
+
+  /* anonymous visitor log + "Get new tools by email" card */
+  (function () { var s = document.createElement('script'); s.src = './arth-track.js'; s.async = true; document.head.appendChild(s); })();
 
   /* ---------- header buttons + left sidebar ---------- */
   var PAGES = [
@@ -194,6 +215,10 @@
     '.ax-ft small{display:block;margin-top:10px;color:#8A8E94;font-size:12px;line-height:1.5}' +
     '.ax-tg:focus-visible,.ax-b:focus-visible,.ax-me:focus-visible,.ax-x:focus-visible,.ax-out:focus-visible,.ax-nav a:focus-visible,.ax-sh a:focus-visible{outline:2px solid #D2B47C;outline-offset:2px}' +
     '.nav .nav-links{gap:4px 22px}' +
+    /* signed out the account slot is empty: hide it so the page links sit at the far right, on one line */
+    '.ax-ah:empty{display:none}' +
+    '@media (min-width:1001px){header.hd>div{flex-wrap:nowrap!important}header.hd nav,.nav .nav-links{flex-wrap:nowrap!important;white-space:nowrap;margin-left:auto}}' +
+    '@media (min-width:1001px) and (max-width:1180px){header.hd nav,.nav .nav-links{gap:4px 18px!important}}' +
     '@media (max-width:760px){.ax-ah .ax-b-gold{display:none}.ax-ah .ax-b-line{min-height:38px;padding:0 14px;border-color:transparent;font-size:14px}.ax-me span:last-child{display:none}.ax-me{padding:0 6px}}' +
     '@media (max-width:900px){.nav .menu-btn{display:none!important}}' +   /* the sidebar replaces the home page\'s own mobile menu */
     /* phones: no room to move the page, so the menu overlaps it; an invisible area (no dimming) closes it when the page is tapped */
@@ -205,7 +230,6 @@
   var logo = '<svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg>';
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function label(u) { return u.name || (u.email ? u.email.split('@')[0] : 'Account'); }
-  function signInUrl(mode) { return 'SignIn.html?' + (mode ? 'mode=' + mode + '&' : '') + 'next=' + encodeURIComponent(here); }
 
   var toggle, grp, sb, lastFocus;
 
@@ -215,7 +239,7 @@
       grp.innerHTML = '<button type="button" class="ax-me" aria-label="Open menu, signed in as ' + esc(current.email) + '"><span class="ax-av" aria-hidden="true">' + esc(label(current).charAt(0)) + '</span><span>' + esc(label(current)) + '</span></button>';
       grp.firstChild.addEventListener('click', openSb);
     } else {
-      grp.innerHTML = '<a class="ax-b ax-b-line" href="' + signInUrl() + '">Sign in</a><a class="ax-b ax-b-gold" href="' + signInUrl('signup') + '">Sign up</a>';
+      grp.innerHTML = '';                                      // no account needed; sign-in is offered only when someone saves a result
     }
   }
 
@@ -223,16 +247,17 @@
     var h = '<div class="ax-sh"><a href="Main.dc.html">' + logo + 'Gullak</a><button type="button" class="ax-x" aria-label="Close menu">&times;</button></div>';
     h += '<div class="ax-st"><a class="ax-b ax-b-gold" href="Workspace.dc.html">Start planning</a></div>';
     if (current) {
-      h += '<div class="ax-ac"><div class="ax-who"><span class="ax-av" aria-hidden="true">' + esc(label(current).charAt(0)) + '</span><div><strong>' + esc(label(current)) + '</strong><small>' + esc(current.email) + '</small></div></div></div>';
+      h += '<div class="ax-ac"><div class="ax-who"><span class="ax-av" aria-hidden="true">' + esc(label(current).charAt(0)) + '</span><div><strong>' + esc(label(current)) + '</strong><small>' + esc(current.email) + '</small></div></div>' +
+        '<div class="ax-row" style="margin-top:12px"><a class="ax-b ax-b-line" href="MyGullak.html"' + (page === 'MyGullak.html' ? ' aria-current="page"' : '') + '>My Gullak: saved results</a></div></div>';
     }
     h += '<nav class="ax-nav" aria-label="All pages"><h3>Pages</h3>';
-    PAGES.forEach(function (p) { h += '<a href="' + p[1] + '"' + (p[1] === page ? ' aria-current="page"' : '') + '>' + p[0] + '</a>'; });
+    (current ? PAGES : PAGES.concat([['Saved results', 'MyGullak.html']])).forEach(function (p) { h += '<a href="' + p[1] + '"' + (p[1] === page ? ' aria-current="page"' : '') + '>' + p[0] + '</a>'; });
     h += '<h3>Trust</h3>';
     MORE.forEach(function (p) { h += '<a href="' + p[1] + '">' + p[0] + '</a>'; });
     h += '</nav>';
     h += '<div class="ax-ft">' + (current
       ? '<button type="button" class="ax-out">Sign out</button>'
-      : '<p>Create a free account to keep your place across visits.</p><div class="ax-row"><a class="ax-b ax-b-line" href="' + signInUrl() + '">Sign in</a><a class="ax-b ax-b-gold" href="' + signInUrl('signup') + '">Sign up</a></div>') +
+      : '<p>Every tool is free to use, no account needed.</p>') +
       '<small>Investor education, not investment advice.</small></div>';
     sb.innerHTML = h;
     sb.querySelector('.ax-x').addEventListener('click', closeSb);

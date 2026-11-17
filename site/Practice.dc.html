@@ -12,6 +12,7 @@
 <script src="./arth-ui.js" defer></script>
 <script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
 <script src="./arth-floor.js" defer></script>
+<script src="./arth-save.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -28,6 +29,7 @@ h1 em,h2 em{font-weight:400}
 .ap-nav a:hover{color:#fff;border-bottom-color:rgba(210,180,124,.6)}
 .ap-eyebrow{font-family:'Geist Mono',ui-monospace,monospace!important;font-weight:500!important;font-size:12.5px!important;letter-spacing:.16em!important;color:#8F7444!important}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background .18s,box-shadow .18s}
@@ -47,7 +49,7 @@ button{font-family:inherit}
 .inp:hover{border-color:#A39E92}
 .inp[aria-invalid="true"]{border-color:var(--red);background:#FFFAFA}
 .ro{height:52px;border:1.5px dashed #D3CEC3;border-radius:10px;padding:0 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:18px;font-weight:600;color:var(--ink);background:var(--bg)}
-.chip{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--amber);background:var(--amberTint);border-radius:6px;padding:3px 7px}
+.chip{font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--amber);background:var(--amberTint);border-radius:6px;padding:3px 7px}
 .err{margin-top:6px;font-size:14px;color:var(--red);font-weight:500}
 .hint{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.45}
 .opt{border:1.5px solid #D3CEC3;border-radius:10px;padding:10px 16px;background:#fff;font-size:15.5px;font-weight:500;cursor:pointer;color:var(--ink);min-height:46px}
@@ -89,22 +91,22 @@ button{font-family:inherit}
 .readout .k{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#B0B3B8}
 .readout .v{margin-top:4px;font-family:'Source Serif 4',Georgia,serif;font-size:clamp(56px,6.4vw,96px);line-height:.95;letter-spacing:-0.03em;color:#D2B47C;font-variant-numeric:tabular-nums}
 .readout .v.dim{color:rgba(244,241,234,.28)}
-.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
+.legend2{position:absolute;right:clamp(18px,2.4vw,30px);top:clamp(20px,2.4vw,28px);display:flex;flex-direction:column;gap:8px;align-items:flex-end;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;color:#B0B3B8;pointer-events:none;z-index:2}
 .legend2 i{display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle}
 .res{position:relative;z-index:2;padding:20px clamp(18px,2.4vw,30px) 24px;border-top:1px solid rgba(244,241,234,.12);background:linear-gradient(180deg,rgba(17,19,22,0),#15171A)}
 .res-s{margin:0;font-size:17px;line-height:1.55;color:#EDE8DD;max-width:62ch}
 .chips{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .chip{border:1px solid rgba(244,241,234,.12);border-radius:14px;padding:12px 14px;background:rgba(244,241,234,.03)}
-.chip .l{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
+.chip .l{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#B0B3B8}
 .chip .n{margin-top:6px;font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;color:#F4F1EA}
 .yrs{margin-top:16px;padding:14px 16px;border-radius:14px;border:1px solid rgba(210,180,124,.35);background:rgba(210,180,124,.06)}
-.yrs .h{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
+.yrs .h{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#D2B47C}
 .yrs .t{margin-top:6px;font-size:17px;line-height:1.5;color:#F4F1EA}
 .yrs .n2{margin-top:6px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-note{margin-top:12px;font-size:13.5px;line-height:1.5;color:#B0B3B8}
 .res-empty{margin:0;font-size:19px;line-height:1.5;color:#CFCABE;max-width:46ch}
 .res-msg{margin:0;font-size:18px;line-height:1.55;color:#F4F1EA;max-width:60ch}
-.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#8A8E94}
+.hint-drag{margin-top:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.06em;color:#8A8E94}
 
 .below{padding:clamp(56px,8vw,110px) 0}
 .why-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
@@ -115,7 +117,7 @@ button{font-family:inherit}
 .g-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .g-h{margin:0;font-size:clamp(26px,2.6vw,34px)!important;line-height:1.1!important;color:var(--ink)}
 .g-sub{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#5C5A55}
-.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:11.5px;color:#5C5A55}
+.g-key{display:flex;gap:14px;font-family:'Geist Mono',monospace;font-size:12px;color:#5C5A55}
 .g-key i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle}
 .g-rows{margin-top:18px;display:flex;flex-direction:column}
 .g-row{display:grid;grid-template-columns:64px minmax(0,1fr) 98px;gap:14px;align-items:center;width:100%;padding:10px 8px;margin:0 -8px;border:0;border-top:1px solid var(--line);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:10px;transition:background .2s}
@@ -170,7 +172,7 @@ button{font-family:inherit}
 .ph-body::after{content:"";position:absolute;inset:0;border-radius:44px;pointer-events:none;background:linear-gradient(calc(115deg + var(--ry,0) * 30deg),rgba(255,255,255,0) 35%,rgba(255,255,255,.10) 48%,rgba(255,255,255,0) 60%)}
 .ph-notch{position:absolute;left:50%;top:20px;width:86px;height:22px;margin-left:-43px;border-radius:12px;background:#0B0C0E;z-index:2}
 .ph-screen{position:relative;border-radius:33px;background:#FBF9F4;min-height:560px;padding:52px 18px 18px;display:flex;flex-direction:column;overflow:hidden}
-.ph-top{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#8F7444}
+.ph-top{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;color:#8F7444}
 .ph-now{margin-top:12px;font-family:'Source Serif 4',Georgia,serif;font-size:26px;line-height:1.1;color:#111316}
 .ph-bar{margin-top:14px;height:4px;border-radius:4px;background:#E6E1D6;overflow:hidden}
 .ph-bar i{display:block;height:100%;background:#D2B47C;border-radius:4px;transition:width .6s cubic-bezier(.16,1,.3,1)}
@@ -178,7 +180,7 @@ button{font-family:inherit}
 .ph-steps li{display:flex;align-items:center;gap:10px;padding:6px 2px;font-size:14px}
 .ph-steps li .num{flex:0 0 24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .ph-steps li[aria-current="step"]{background:#F1EDE4;border-radius:10px;padding-left:8px}
-.ph-foot{margin-top:auto;padding-top:14px;text-align:center;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#9A968C}
+.ph-foot{margin-top:auto;padding-top:14px;text-align:center;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;color:#9A968C}
 .ph-shadow{position:absolute;left:12%;right:12%;bottom:-26px;height:26px;border-radius:50%;background:radial-gradient(closest-side,rgba(17,19,22,.28),rgba(17,19,22,0));transform:translateZ(-40px)}
 .step-card{padding:clamp(22px,3vw,36px);border-radius:24px;background:#FBF9F4}
 .step-card h2{font-size:clamp(28px,2.6vw,36px)!important}
@@ -512,6 +514,7 @@ button{font-family:inherit}
         <button class="btn btn-ghost" type="button" onClick="{{toggleRun}}" style="min-height:42px;padding:0 16px;font-size:15px">{{runLabel}}</button>
         <button class="btn btn-primary" type="button" onClick="{{nextDay}}" style="min-height:42px;padding:0 16px;font-size:15px">Close market, go to next day</button>
         <button class="btn btn-ghost" type="button" onClick="{{reset}}" style="min-height:42px;padding:0 16px;font-size:15px;color:{{resetCol}}">{{resetLabel}}</button>
+        <button class="btn btn-ghost" type="button" onClick="{{saveMine}}" style="min-height:42px;padding:0 16px;font-size:15px">Save to my Gullak account</button>
       </div>
     </div>
 
@@ -1031,7 +1034,24 @@ class Component extends DCLogic {
     if (ok && saved.book && !saved.book.intra) { saved.book.intra = {}; saved.book.intraPnl = 0n; }   // ... or before intraday existed
     this.state = ok ? Object.assign(freshState(this.rng), saved, { busy: '', confirmReset: false }) : freshState(this.rng);
   }
-  componentDidMount() { this.timer = setInterval(() => this.tick(), 2000); }
+  componentDidMount() {
+    this.timer = setInterval(() => this.tick(), 2000);
+    /* Save to my Gullak account (arth-save.js). Progress in this browser stays the main copy: opening the
+       account copy from My Gullak replaces it only after the person agrees. */
+    if (window.ArthSave) window.ArthSave.resume('practice', (st) => this.restoreSaved(st), { confirmOpen: {
+      title: 'Use your saved practice progress?', yes: 'Replace with saved progress',
+      paras: ['This replaces the practice-desk progress in this browser with the copy saved in your Gullak account.', 'Anything you did here since that save will be lost. Nothing is changed in your account.'] } });
+  }
+  restoreSaved(st) {
+    let saved = null;
+    try { saved = JSON.parse(String(st && st.blob || ''), (k, v) => (typeof v === 'string' && /^n:-?\d+$/.test(v) ? BigInt(v.slice(2)) : v)); } catch (e) { saved = null; }
+    const ok = saved && saved.mkt && saved.mkt.px && STOCKS.every((x) => typeof saved.mkt.px[x.sym] === 'bigint');
+    if (!ok) { window.ArthSave.toast('That saved progress could not be read, so nothing was changed.', { err: true }); return; }
+    if (!saved.mkt.bse) saved.mkt.bse = Object.assign({}, saved.mkt.px);
+    if (saved.book && !saved.book.intra) { saved.book.intra = {}; saved.book.intraPnl = 0n; }
+    const next = Object.assign(freshState(this.rng), saved, { busy: '', confirmReset: false });
+    save(next); this.setState(next);
+  }
   componentWillUnmount() { clearInterval(this.timer); clearTimeout(this.busyTimer); }
   put(patch) { const next = Object.assign({}, this.state, patch); save(next); this.setState(patch); }
   tick() {
@@ -1220,6 +1240,18 @@ class Component extends DCLogic {
       day: b ? b.day : 1, mktText: run ? 'Market open (practice)' : 'Paused', mktCol: run ? '#0A7A55' : '#8A4B00', mktDot: run ? 'live' : '',
       runLabel: run ? 'Pause prices' : 'Resume prices', toggleRun: go({ running: !run }), nextDay: () => this.closeNow(),
       resetLabel: s.confirmReset ? 'Tap again to erase everything' : 'Start over', resetCol: s.confirmReset ? '#A12A2A' : '#111316',
+      saveMine: () => {
+        if (!window.ArthSave) return;
+        const keep = {}; Object.keys(s).forEach((k) => { if (!['busy', 'confirmReset', 'otp', 'otpErr', 'esign', 'esignErr', 'tErr', 'note'].includes(k)) keep[k] = s[k]; });
+        const blob = JSON.stringify(keep, (k, v) => (typeof v === 'bigint' ? 'n:' + v : v));
+        window.ArthSave.save({
+          tool: 'practice', id: 'practice-progress', title: 'Practice desk progress',
+          summary: desk ? 'Trading day ' + b.day + '. ' + inv.sum + '.' : 'Account opening: ' + STEP_LABELS[Math.min(s.step, 9)] + '.',
+          inputs: [{ k: 'Practice money', v: 'Simulated ₹1,00,000. No real money.' }],
+          outputs: desk ? [{ k: 'Trading day', v: String(b.day) }, { k: 'Investments', v: inv.sum }].concat(tiles.map((t) => ({ k: t.label, v: t.value }))) : [{ k: 'Account opening step', v: STEP_LABELS[Math.min(s.step, 9)] }],
+          methodVersion: 'Practice desk v1', state: { blob },
+        });
+      },
       reset: () => { if (!s.confirmReset) { this.setState({ confirmReset: true }); clearTimeout(this.resetTimer); this.resetTimer = setTimeout(() => this.setState({ confirmReset: false }), 4000); return; } const f = freshState(this.rng); save(f); this.setState(f); },
       inv,
       tiles: tiles.length ? tiles : [{ label: '', value: '', note: '', col: '#111316' }],

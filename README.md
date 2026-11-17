@@ -1,6 +1,6 @@
 # Gullak
 
-Free investor-education site for beginner Indian investors. Static HTML pages, no build step, no backend. Every calculation runs in the browser and uses exact whole-paise arithmetic (BigInt).
+Free investor-education site for beginner Indian investors. Static HTML pages, no build step. Every calculation runs in the browser and uses exact whole-paise arithmetic (BigInt). Accounts are optional: Firebase sign-in, a Google Sheet of accounts, and Firestore for results people choose to save (setup: `docs/SETUP-signup.md`).
 
 ## Run it
 
@@ -10,7 +10,7 @@ You need Python 3 and Node 20 (both already installed on this machine).
 |---|---|---|
 | Start the site | `Ctrl+Shift+B` (task "Gullak: start local server") | `python serve.py 5173` |
 | Open it | `F5` starts the server and opens Edge | http://localhost:5173 |
-| Run all tests | Terminal > Run Task > "Gullak: run all tests" | `node tools/tests/tradecost.test.js` (and the other three) |
+| Run all tests | Terminal > Run Task > "Gullak: run all tests" | `node tools/tests/tradecost.test.js` (and the others in `tools/tests/`) |
 
 The server turns caching off, so after saving a file just refresh the browser.
 
@@ -24,6 +24,7 @@ site/                      the website (this folder is what gets published)
   TradeCost.dc.html        Charges calculator (contract-note charges and tax)
   Candlesticks.dc.html     candlestick lessons
   Practice.dc.html         practice desk
+  MyGullak.html            saved results for signed-in people (arth-save.js does the saving)
   arth-*.js                motion, charts and interaction helpers
   support.js               page runtime (React 18.3.1 + DC runtime). Do not edit.
 tools/tests/               calculation tests, one per calculator
@@ -31,6 +32,7 @@ tools/*.py                 one-off scripts used to patch pages
 docs/methodology/          every formula, with worked examples (golden vectors)
 docs/research/             research, sources and the source registry
 serve.py                   local no-cache server
+firestore.rules            Firestore security rules for saved results (paste into the Firebase console)
 ```
 
 ## How a page is built (`*.dc.html`)

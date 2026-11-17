@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#111316">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Gullak · Saved results</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@500&amp;display=swap">
+<style>
+:root{--ink:#111316;--ink2:#191B1F;--ivory:#F4F1EA;--paper:#FBF9F4;--gold:#D2B47C;--goldD:#8A6A2B;--muted:#55585E;--mutedD:#B0B3B8;--line:rgba(17,19,22,.12);--lineD:rgba(244,241,234,.12);--err:#A12A2A}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding-left:clamp(16px,4vw,48px);padding-right:clamp(16px,4vw,48px)}
+.nav{position:sticky;top:0;z-index:50;background:rgba(17,19,22,.96);border-bottom:1px solid var(--lineD);color:var(--ivory)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:'Source Serif 4',Georgia,serif;font-size:24px;letter-spacing:-.01em}
+.hero{background:var(--ink);color:var(--ivory);padding:clamp(40px,6vw,72px) 0 clamp(32px,4vw,48px)}
+.eyebrow{font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.hero h1{margin:12px 0 0;font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:clamp(34px,5vw,56px);line-height:1.05;letter-spacing:-.02em}
+.hero h1 em{color:var(--gold);font-weight:400}
+.hero p{margin:16px 0 0;max-width:60ch;font-size:16.5px;line-height:1.6;color:var(--mutedD)}
+main{padding:clamp(28px,5vw,56px) 0 72px}
+.state{padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--paper);font-size:15.5px;line-height:1.6}
+.state p{margin:0 0 14px}.state p:last-child{margin-bottom:0}
+.state.err{border-color:rgba(161,42,42,.35)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:999px;font:500 15px 'Geist',sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.btn:hover{border-color:var(--goldD)}
+.btn-gold{background:var(--gold);border-color:var(--gold)}.btn-gold:hover{background:#E2C894}
+.btn-del{color:var(--err)}.btn-del:hover{border-color:var(--err)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn:focus-visible,.brand:focus-visible{outline:2px solid var(--goldD);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+h2.grp{margin:36px 0 14px;font-family:'Source Serif 4',Georgia,serif;font-weight:400;font-size:26px;letter-spacing:-.01em}
+h2.grp:first-child{margin-top:0}
+.cards{display:grid;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.card .top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px}
+.card h3{margin:0;font-size:18px;font-weight:600;line-height:1.35}
+.card time{font-size:13.5px;color:var(--muted)}
+.card .sum{margin:8px 0 14px;font-size:15px;line-height:1.55;color:#24272C}
+.card .row .btn{min-height:40px;font-size:14.5px;padding:0 15px}
+.det{margin-top:16px;border-top:1px solid var(--line);padding-top:14px;display:grid;gap:18px}
+@media (min-width:760px){.det{grid-template-columns:1fr 1fr}}
+.det h4{margin:0 0 8px;font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldD);font-weight:500}
+.det dl{margin:0;display:grid;gap:8px}
+.det dl div{display:grid;gap:2px}
+.det dt{font-size:13px;color:var(--muted)}
+.det dd{margin:0;font-size:14.5px;line-height:1.5;overflow-wrap:anywhere}
+.det .ver{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+.data{margin-top:48px;padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.data h2{margin:0 0 10px;font-family:'Source Serif 4',Georgia,serif;font-weight:400;font-size:24px}
+.data p,.data li{font-size:15px;line-height:1.6;color:#24272C}
+.data ul{margin:0 0 14px;padding-left:20px}
+.msg{margin-top:12px;font-size:14.5px;line-height:1.5;min-height:1px}
+.msg.err{color:var(--err)}
+.note{margin-top:28px;font-size:13.5px;color:var(--muted);line-height:1.6}
+[hidden]{display:none!important}
+</style>
+<script src="./auth-config.js"></script><script src="./arth-auth.js" defer></script>
+<script src="./arth-save.js"></script>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="Main.dc.html" aria-label="Gullak home"><svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true"><path d="M13.56 26A22 22 0 0 1 50.44 26Z" fill="#F4F1EA"></path><path d="M11.51 30A22 22 0 0 0 20.91 57H43.09A22 22 0 0 0 52.49 30Z" fill="#F4F1EA"></path><circle cx="32" cy="8" r="5" fill="#D2B47C"></circle></svg><span>Gullak</span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Your account</div>
+    <h1>My <em>Gullak</em></h1>
+    <p>The results you chose to save. Only you can see them. Open one to see it again in its tool, or delete it at any time.</p>
+  </div>
+</section>
+
+<main class="wrap">
+  <div id="out" aria-live="polite"><div class="state">Loading your saved results...</div></div>
+
+  <section class="data" id="data" hidden aria-labelledby="data-h">
+    <h2 id="data-h">Your data</h2>
+    <p>When you choose "Save my results", Gullak stores in your account:</p>
+    <ul>
+      <li>the figures you entered in that tool and the results it showed you,</li>
+      <li>the date you saved them, and which version of the method was used.</li>
+    </ul>
+    <p>They are linked to your account only, not shared or sold, and used only to show them back to you here. Your name and email are kept separately to run your account. Gullak never asks for PAN, Aadhaar, bank or broker details.</p>
+    <div class="row">
+      <button class="btn btn-del" type="button" id="del-all">Delete all saved results</button>
+      <button class="btn btn-del" type="button" id="del-acct">Delete my account</button>
+    </div>
+    <div class="msg" id="data-msg" role="status"></div>
+    <p class="note">Need help, or want us to delete your data for you? Email <a href="mailto:foundersgullak@gmail.com?subject=Delete%20my%20Gullak%20data">foundersgullak@gmail.com</a>.</p>
+  </section>
+
+  <p class="note">Saved results are a record of what the tool showed on the day you saved it. They are illustrations, not predictions, and not investment advice.</p>
+</main>
+
+<script>
+(function () {
+  var S = window.ArthSave, out = document.getElementById('out');
+  var ORDER = ['planner', 'recovery', 'tradecost', 'practice'];
+  var fmt = new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (k === 'cls') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function state(paras, kind, actions) {
+    out.innerHTML = '';
+    var box = el('div', { cls: 'state' + (kind ? ' ' + kind : '') });
+    paras.forEach(function (t) { box.appendChild(el('p', null, t)); });
+    if (actions) { var r = el('div', { cls: 'row' }); actions.forEach(function (a) { r.appendChild(a); }); box.appendChild(r); }
+    out.appendChild(box);
+  }
+  function link(href, text, gold) { return el('a', { href: href, cls: 'btn' + (gold ? ' btn-gold' : '') }, text); }
+
+  function details(rec) {
+    var d = el('div', { cls: 'det' });
+    [['What you entered', rec.inputs], ['What the tool showed', rec.outputs]].forEach(function (part) {
+      var box = el('div'); box.appendChild(el('h4', null, part[0]));
+      var dl = el('dl');
+      (part[1] || []).forEach(function (r) { var w = el('div'); w.appendChild(el('dt', null, r.k)); w.appendChild(el('dd', null, r.v)); dl.appendChild(w); });
+      box.appendChild(dl); d.appendChild(box);
+    });
+    d.appendChild(el('p', { cls: 'ver' }, 'Method: ' + (rec.methodVersion || 'not recorded') + '. Saved figures are kept as shown on the day; opening it in the tool shows today\'s calculation of the same inputs.'));
+    return d;
+  }
+
+  function card(rec) {
+    var tool = S.tools[rec.tool] || { name: rec.tool, page: 'Main.dc.html' };
+    var c = el('article', { cls: 'card' });
+    var top = el('div', { cls: 'top' });
+    top.appendChild(el('h3', null, rec.title));
+    var t = el('time', rec.time ? { datetime: new Date(rec.time).toISOString() } : null, rec.time ? (rec.tool === 'practice' ? 'Last saved ' : 'Saved ') + fmt.format(new Date(rec.time)) : 'Saving...');
+    top.appendChild(t); c.appendChild(top);
+    c.appendChild(el('p', { cls: 'sum' }, rec.summary || ''));
+    var row = el('div', { cls: 'row' });
+    row.appendChild(link(tool.page + '?open=' + encodeURIComponent(rec.id), 'Open in ' + tool.name, true));
+    var view = el('button', { type: 'button', cls: 'btn', 'aria-expanded': 'false' }, 'View details');
+    var del = el('button', { type: 'button', cls: 'btn btn-del' }, 'Delete');
+    row.appendChild(view); row.appendChild(del); c.appendChild(row);
+    var det = null;
+    view.addEventListener('click', function () {
+      if (!det) { det = details(rec); c.appendChild(det); } else det.hidden = !det.hidden;
+      var open = !det.hidden; view.setAttribute('aria-expanded', String(open)); view.textContent = open ? 'Hide details' : 'View details';
+    });
+    del.addEventListener('click', function () {
+      S.ask('Delete this saved result?', ['"' + rec.title + '" will be removed from My Gullak. This cannot be undone.'],
+        [{ label: 'Delete', value: 1, kind: 'gold' }, { label: 'Cancel', value: null, kind: 'quiet' }]).then(function (yes) {
+        if (!yes) return;
+        del.disabled = true;
+        S.remove(rec.id).then(function () { S.toast('Deleted. It is no longer in My Gullak.'); load(); }, function (e) {
+          console.warn('Gullak: delete failed', e && (e.code || e.message));
+          del.disabled = false; S.toast('We couldn\'t delete that. Please try again.', { err: true });
+        });
+      });
+    });
+    return c;
+  }
+
+  function render(list) {
+    out.innerHTML = '';
+    if (!list.length) {
+      state(['You have not saved any results yet.', 'Every tool works without saving. When you want to keep a result, choose "Save my results" on it and it will appear here.'], '',
+        [link('Workspace.dc.html', 'Open the Planner', true), link('Recovery.dc.html', 'Break-even calculator'), link('TradeCost.dc.html', 'Charges calculator'), link('Practice.dc.html', 'Practice desk')]);
+      return;
+    }
+    ORDER.forEach(function (tool) {
+      var mine = list.filter(function (r) { return r.tool === tool; });
+      if (!mine.length) return;
+      out.appendChild(el('h2', { cls: 'grp' }, S.tools[tool].name + (mine.length > 1 ? ' (' + mine.length + ')' : '')));
+      var box = el('div', { cls: 'cards' });
+      mine.forEach(function (r) { box.appendChild(card(r)); });
+      out.appendChild(box);
+    });
+  }
+
+  function load() {
+    return S.list().then(render, function (e) {
+      console.warn('Gullak: could not load saved results', e && (e.code || e.message));
+      var b = el('button', { type: 'button', cls: 'btn btn-gold' }, 'Try again');
+      b.addEventListener('click', function () { state(['Loading your saved results...']); load(); });
+      state(['We couldn\'t load your saved results just now. Check your internet connection and try again.'], 'err', [b]);
+    });
+  }
+
+  function start() {
+    var A = window.ArthAuth;
+    if (!A || !A.configured()) { state(['Accounts are not switched on for this site yet, so there is nothing saved here. You can still use every tool without an account.'], '', [link('Main.dc.html', 'Back to home', true)]); return; }
+    A.ready.then(function () {
+      var u = A.user();                                  // ready resolves once; read the current user each time
+      if (!u) {
+        document.getElementById('data').hidden = true;
+        state(['Sign in to see the results you have saved.', 'Every tool is free to use without an account. An account is only needed to save results.'], '',
+          [link('SignIn.html?next=MyGullak.html', 'Sign in', true), link('SignIn.html?mode=signup&next=MyGullak.html', 'Create a free account')]);
+        return;
+      }
+      document.getElementById('data').hidden = false;
+      load();
+    });
+  }
+  // signing out from the sidebar on this page
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.ArthAuth) { window.ArthAuth.onChange(function (u) { if (!u) start(); }); }
+    start();
+  });
+
+  var dmsg = document.getElementById('data-msg');
+  function say(t, err) { dmsg.textContent = t; dmsg.className = 'msg' + (err ? ' err' : ''); }
+  document.getElementById('del-all').addEventListener('click', function () {
+    var btn = this;
+    S.ask('Delete all saved results?', ['Every result in My Gullak will be removed. Your account stays, and progress kept in this browser is not touched. This cannot be undone.'],
+      [{ label: 'Delete all', value: 1, kind: 'gold' }, { label: 'Cancel', value: null, kind: 'quiet' }]).then(function (yes) {
+      if (!yes) return;
+      btn.disabled = true; say('Deleting...');
+      S.removeAll().then(function (n) { btn.disabled = false; say(n ? 'All ' + n + ' saved results were deleted.' : 'There was nothing to delete.'); load(); },
+        function (e) { console.warn('Gullak: delete all failed', e && (e.code || e.message)); btn.disabled = false; say('We couldn\'t delete your saved results. Please try again.', true); });
+    });
+  });
+  document.getElementById('del-acct').addEventListener('click', function () {
+    var btn = this, A = window.ArthAuth;
+    S.ask('Delete your Gullak account?', ['This deletes all your saved results, your sign-in, and your name and email from our account list. This cannot be undone.', 'Practice progress kept in this browser stays on this device until you choose "Start over" there.'],
+      [{ label: 'Delete my account', value: 1, kind: 'gold' }, { label: 'Cancel', value: null, kind: 'quiet' }]).then(function (yes) {
+      if (!yes) return;
+      btn.disabled = true; say('Deleting your saved results...');
+      S.removeAll().then(function () {
+        say('Deleting your account...');
+        return A.deleteAccount();
+      }).then(function () {
+        out.innerHTML = ''; document.getElementById('data').hidden = true;
+        state(['Your account and all your saved results have been deleted.', 'You can keep using every Gullak tool without an account.'], '', [link('Main.dc.html', 'Back to home', true)]);
+      }, function (e) {
+        console.warn('Gullak: account deletion stopped', e && (e.code || e.message));
+        btn.disabled = false;
+        say(e && e.code === 'auth/requires-recent-login'
+          ? 'Your saved results were deleted. To finish deleting your account, Firebase needs a fresh sign-in: sign out, sign in again, then choose Delete my account once more.'
+          : 'We couldn\'t finish deleting your account. Please try again, or email us and we will do it for you.', true);
+        load();
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

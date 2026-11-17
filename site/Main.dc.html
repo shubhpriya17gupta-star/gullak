@@ -23,6 +23,7 @@
 <style>
 :root{--ink:#111316;--ink2:#191B1F;--ivory:#F4F1EA;--paper:#FBF9F4;--gold:#D2B47C;--goldD:#8A6A2B;--muted:#55585E;--mutedD:#B0B3B8;--line:rgba(17,19,22,.12);--lineD:rgba(244,241,234,.12);--ease:cubic-bezier(.16,1,.3,1);--c1:1;--c2:0;--c3:0;--explode:0;--rx:0deg;--ry:0deg}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html{scroll-behavior:auto}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
@@ -75,12 +76,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .h-big{margin:0;font-family:'Source Serif 4',Georgia,serif;font-weight:400;font-size:clamp(46px,7.4vw,118px);line-height:.94;letter-spacing:-0.03em;max-width:12ch}
 .h-big em{font-style:italic;color:var(--gold)}
 .h-sub{margin:26px 0 0;max-width:470px;font-size:clamp(16.5px,1.35vw,19px);line-height:1.6;color:var(--mutedD)}
-.rail{position:absolute;right:clamp(16px,3vw,40px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em;color:rgba(244,241,234,.45)}
+.rail{position:absolute;right:clamp(16px,3vw,40px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;color:rgba(244,241,234,.45)}
 .rail span{display:flex;align-items:center;gap:10px;justify-content:flex-end}
 .rail i{display:block;width:22px;height:1px;background:currentColor;transition:width .5s var(--ease),background-color .3s}
 #hero-pin[data-ch="1"] .r1,#hero-pin[data-ch="2"] .r2,#hero-pin[data-ch="3"] .r3{color:var(--gold)}
 #hero-pin[data-ch="1"] .r1 i,#hero-pin[data-ch="2"] .r2 i,#hero-pin[data-ch="3"] .r3 i{width:44px}
-.cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.16em;color:rgba(244,241,234,.55);opacity:var(--c1)}
+.cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(244,241,234,.55);opacity:var(--c1)}
 .cue b{display:block;width:1px;height:46px;background:linear-gradient(var(--gold),rgba(210,180,124,0));animation:cue 2.2s var(--ease) infinite;transform-origin:top}
 @keyframes cue{0%{transform:scaleY(0)}55%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 #hero-readout{position:absolute;left:50%;top:50%;transform:translate(-50%,calc(-100% - 10px));background:rgba(17,19,22,.82);border:1px solid rgba(210,180,124,.45);color:var(--ivory);padding:10px 16px;border-radius:999px;font-family:'Geist Mono',monospace;font-size:13px;opacity:0;transition:opacity .25s,transform .35s var(--ease);pointer-events:none;white-space:nowrap}
@@ -172,7 +173,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 @keyframes sheen{to{transform:translateX(130%)}}
 .layer-glass[data-on]{border-color:rgba(138,106,43,.55);box-shadow:0 0 0 1px rgba(210,180,124,.45),0 40px 80px -34px rgba(17,19,22,.6)}
 .layer-ink[data-on]{box-shadow:0 0 0 1px rgba(210,180,124,.8),0 50px 90px -30px rgba(17,19,22,.85)}
-.layer-tag{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.12em}
+.layer-tag{display:flex;justify-content:space-between;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em}
 .lrow{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:7px 0;border-bottom:1px solid rgba(17,19,22,.08)}
 .lrow .mono{color:var(--muted)}
 .layer-ink .lrow{border-color:rgba(244,241,234,.12)}.layer-ink .lrow .mono{color:var(--gold)}
@@ -188,18 +189,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .formulas{background:var(--ink);color:var(--ivory);padding:clamp(48px,6vw,80px) 0}
 .f-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px}
 .f-sample{margin:28px 0 0;padding:12px 16px;border:1px solid var(--lineD);border-radius:12px;font-size:14px;line-height:1.6;color:var(--mutedD)}
-.f-sample>span{margin-right:12px;font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.f-sample>span{margin-right:12px;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 .f-grid{margin-top:28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .f-card{display:flex;flex-direction:column;padding:22px;border-radius:16px;background:var(--ink2);border:1px solid var(--lineD);min-width:0;transition:border-color .25s}
 .f-card:hover{border-color:rgba(210,180,124,.45)}
 .f-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .f-id{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.1em;color:#111316;background:var(--gold);border-radius:6px;padding:3px 8px}
-.f-where{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94;text-align:right}
+.f-where{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8A8E94;text-align:right}
 .f-name{margin:16px 0 0;font-family:'Source Serif 4',serif;font-weight:600;font-size:22px;line-height:1.2;color:var(--ivory)}
 .f-eq{margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(244,241,234,.05);border-left:2px solid var(--gold);font-family:'Geist Mono',monospace;font-size:13.5px;line-height:1.6;color:#F4F1EA;overflow-wrap:anywhere}
 .f-plain{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--mutedD);flex:1 1 auto}
 .f-ex{margin-top:16px;padding-top:14px;border-top:1px dashed var(--lineD)}
-.f-exl{display:block;font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.f-exl{display:block;font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 .f-exv{margin-top:6px;font-size:14px;line-height:1.55;color:#E6E3DC;font-variant-numeric:tabular-nums}
 .f-foot{margin:24px 0 0;font-size:15px;line-height:1.6}
 .f-more{display:inline-flex;align-items:center;gap:8px;color:var(--gold);border-bottom:1px solid rgba(210,180,124,.5);padding-bottom:2px;transition:color .2s,border-color .2s}
@@ -209,7 +210,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 
 .ledger{background:var(--paper);color:var(--ink);padding:clamp(80px,10vw,140px) 0}
 .l-row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1.6fr) minmax(0,.65fr);gap:32px;padding:26px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.l-head{padding:14px 0;font-family:'Geist Mono',monospace;font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--goldD)}
+.l-head{padding:14px 0;font-family:'Geist Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--goldD)}
 .l-head span:last-child{text-align:right}
 .l-name{font-family:'Source Serif 4',serif;font-size:23px;line-height:1.25;color:var(--ink)}
 .l-use{font-size:17px;line-height:1.65;color:#34363B}
@@ -245,6 +246,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
 .closing-h em{font-style:italic;color:var(--gold);text-shadow:calc(var(--sx)*1px) calc(var(--sy)*1px) 0 #8a6a2b,calc(var(--sx)*2px) calc(var(--sy)*2px) 0 #7f6127,calc(var(--sx)*3px) calc(var(--sy)*3px) 0 #745823,calc(var(--sx)*4px) calc(var(--sy)*4px) 0 #694f1f,calc(var(--sx)*5px) calc(var(--sy)*5px) 0 #5e461b,calc(var(--sx)*6px) calc(var(--sy)*6px) 0 #533d17,calc(var(--sx)*7px) calc(var(--sy)*7px) 0 #483413,calc(var(--sx)*8px) calc(var(--sy)*8px) 0 #3d2b0f,calc(var(--sx)*22px) calc(var(--sy)*26px) 30px rgba(0,0,0,.55)}
 .foot{background:#0B0C0E;color:#B0B3B8;font-size:14.5px}
 .foot a:hover{color:#fff}
+.foot a{display:inline-block;padding:11px 0}
+.foot div[style*="flex-direction:column"]{gap:0!important}
+.foot a.foot-mail{text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(210,180,124,.5)}
 
 [data-reveal]{opacity:0;transform:translate3d(0,34px,0);transition:opacity 1s var(--ease),transform 1.2s var(--ease)}
 [data-reveal][data-in]{opacity:1;transform:none}
@@ -387,7 +391,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
         <p class="eyebrow" style="margin:0 0 14px;color:var(--goldD)">Five tools</p>
         <h2 id="tools-h" class="serif" style="margin:0;font-size:clamp(36px,4.6vw,64px);line-height:1;letter-spacing:-0.02em;max-width:16ch">Pick the question you have <em style="color:var(--goldD)">today.</em></h2>
       </div>
-      <p style="margin:0;max-width:340px;font-size:15.5px;line-height:1.6;color:var(--muted)">Each one is free, runs in your browser and uses only the numbers you enter. No sign-up, nothing stored.</p>
+      <p style="margin:0;max-width:340px;font-size:15.5px;line-height:1.6;color:var(--muted)">Each one is free, runs in your browser and uses only the numbers you enter. A free account is needed; your numbers stay in your browser.</p>
     </div>
     <div id="tools-track">
       <sc-for list="{{products}}" as="p" hint-placeholder-count="5">
@@ -531,6 +535,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <div>
         <p style="margin:0;font-size:17px;line-height:1.65;font-weight:600">These figures are illustrations based only on the numbers and rates you enter. They are not predictions, not guaranteed, and not investment advice. Markets do not have a fixed or predictable rate of return, and you can lose money. Costs, charges and taxes are not included.</p>
         <p style="margin:12px 0 0;font-size:15.5px;line-height:1.65;color:#4A3410">This site is not registered with SEBI as an investment adviser or research analyst and does not recommend any security, fund or product. Investments in securities markets are subject to market risks. For official investor education, visit <a href="https://investor.sebi.gov.in" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">investor.sebi.gov.in</a>.</p>
+        <p style="margin:12px 0 0;font-size:15.5px;line-height:1.65;color:#4A3410">To understand how the site is used, Gullak keeps an anonymous record of each browser's visits (a random ID, the pages opened, the date, the type of device and the website you came from). It holds no name or email unless you choose to share them. The numbers you type into the tools are not part of this record. If your browser sends Global Privacy Control or Do Not Track, visits are not recorded.</p>
       </div>
     </div>
   </div>
@@ -540,7 +545,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
   <div class="wrap" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:40px">
     <h2 id="closing-h" class="closing-h" data-reveal="1">Start with <em>your own</em> numbers.</h2>
     <div data-reveal="2" style="max-width:360px">
-      <p style="margin:0;font-size:17px;line-height:1.6;color:var(--mutedD)">About five minutes. No sign-up. Nothing stored.</p>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:var(--mutedD)">About five minutes. No account needed. Your numbers stay in your browser.</p>
       <a class="btn btn-gold" data-magnet href="Workspace.dc.html" style="margin-top:22px">Calculate my investment plan <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
     </div>
   </div>
@@ -554,11 +559,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
       <p style="margin:12px 0 0;line-height:1.6">A financial education and planning tool for people new to investing in India.</p>
     </div>
     <div style="flex:1 1 150px"><div class="eyebrow" style="color:var(--gold)">Explore</div>
-      <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px"><a href="Workspace.dc.html">Planner</a><a href="Recovery.dc.html">Recovery calculator</a><a href="TradeCost.dc.html">Trade cost calculator</a><a href="Candlesticks.dc.html">Candlestick lab</a><a href="Practice.dc.html">Practice desk</a></div></div>
+      <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px"><a href="Workspace.dc.html">Planner</a><a href="Recovery.dc.html">Recovery calculator</a><a href="TradeCost.dc.html">Trade cost calculator</a><a href="Candlesticks.dc.html">Candlestick lab</a><a href="Practice.dc.html">Practice desk</a><a href="Glossary.html">Plain-language terms</a></div></div>
     <div style="flex:1 1 160px"><div class="eyebrow" style="color:var(--gold)">Trust</div>
       <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px"><a href="Methodology.html">Methodology and formulas</a><a href="#sources">Sources and data</a><a href="#disclaimers">Disclaimers</a><a href="https://investor.sebi.gov.in" target="_blank" rel="noopener">SEBI investor website</a></div></div>
     <div style="flex:1 1 200px"><div class="eyebrow" style="color:var(--gold)">Contact</div>
-      <div style="margin-top:14px;line-height:1.6">foundersgullak@gmail.com<br>Grievance contact: 6378303122</div></div>
+      <div style="margin-top:14px;line-height:1.6"><a class="foot-mail" href="mailto:foundersgullak@gmail.com?subject=Gullak%20enquiry" onclick="if(!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){window.open('https://mail.google.com/mail/?view=cm&fs=1&to=foundersgullak@gmail.com&su=Gullak%20enquiry','_blank','noopener');return false;}">foundersgullak@gmail.com</a><br><a class="foot-mail" href="tel:+916378303122">Grievance contact: 6378303122</a></div></div>
   </div>
   <div class="wrap" style="padding-bottom:36px">
     <div style="border-top:1px solid rgba(244,241,234,.1);padding-top:22px;font-size:13px;line-height:1.6;color:#8A8E94">Investments in securities markets are subject to market risks. This site provides education and illustrative calculations only. It does not provide investment advice or recommend any product. Qualified legal review is pending before public launch.</div>
@@ -621,9 +626,9 @@ class Component extends DCLogic {
       labels: [L(0, 20, '₹1,00,000'), L(120, 126, '₹75,000', null, 'middle'), L(40, 88, '−25%'), L(222, 88, '+33.33%', goldC)]
     };
     const vizCost = {
-      rects: [{ x: 0, y: 40, w: 300, h: 22, fill: dim }, { x: 0, y: 86, w: 236.48, h: 22, fill: goldC }, { x: 238.48, y: 86, w: 61.52, h: 22, fill: mid }],
+      rects: [{ x: 0, y: 40, w: 300, h: 22, fill: dim }, { x: 0, y: 86, w: 232.89, h: 22, fill: goldC }, { x: 234.89, y: 86, w: 65.11, h: 22, fill: mid }],
       paths: [],
-      labels: [L(0, 30, 'Profit before costs ₹10,000'), L(0, 126, 'You keep ₹7,882.62', goldC), L(300, 126, 'Costs ₹2,117.38', null, 'end')]
+      labels: [L(0, 30, 'Profit before costs ₹10,000'), L(0, 126, 'You keep ₹7,763.01', goldC), L(300, 126, 'Costs ₹2,236.99', null, 'end')]
     };
     const cdl = [[24, 26, 58, 18, 66], [78, 48, 80, 40, 88], [132, 66, 98, 60, 104], [186, 84, 108, 78, 114]];
     const vizCandles = {
@@ -640,7 +645,7 @@ class Component extends DCLogic {
       labels: [L(0, 14, 'FICTIONAL PRICE · MOVES EVERY 2 S')]
     };
     const vizs = [vizPlanner, vizRecovery, vizCost, vizCandles, vizPractice];
-    const vizLabels = ['Bar chart: income ₹80,000 split into essentials ₹45,000, EMIs ₹15,000 and surplus ₹20,000', 'Line: ₹1,00,000 falls 25% to ₹75,000, then must rise 33.33% to recover', 'Bars: ₹10,000 profit before costs, of which ₹7,882.62 is kept and ₹2,117.38 goes to costs', 'Four falling candles followed by a hammer candle', 'A fictional practice price line'];
+    const vizLabels = ['Bar chart: income ₹80,000 split into essentials ₹45,000, EMIs ₹15,000 and surplus ₹20,000', 'Line: ₹1,00,000 falls 25% to ₹75,000, then must rise 33.33% to recover', 'Bars: ₹10,000 profit before costs, of which ₹7,763.01 is kept and ₹2,236.99 goes to costs', 'Four falling candles followed by a hammer candle', 'A fictional practice price line'];
 
     return {
       menuCls: menu ? 'open' : '',
@@ -664,7 +669,7 @@ class Component extends DCLogic {
       products: [
         { num: '01', tag: 'Planner', name: 'Investment planner', desc: 'Four short steps from your budget to a one-page dashboard: what you can set aside, how much risk fits you, and what an amount could become.', points: ['Monthly surplus and emergency cover', 'Risk capacity, tolerance and requirement, scored separately', 'Three scenarios in rupees, with and without inflation'], sampleLabel: 'Sample numbers', sampleValue: '₹20,000 surplus', sampleNote: 'Income ₹80,000, essentials ₹45,000, EMIs ₹15,000. Emergency savings of ₹2,40,000 cover 4.00 months.', href: 'Workspace.dc.html', cta: 'Open the planner', icon: 'M4 19V5M4 19h16M8 15l4-4 3 3 5-6' },
         { num: '02', tag: 'Calculator', name: 'Recovery calculator', desc: 'Find out how big a gain it takes to get back to even after a fall in value. It is always bigger than the fall.', points: ['Enter a percentage, or your own amounts', 'Gain needed, in percent and in rupees', 'Optional: years to recover at a rate you choose'], sampleLabel: 'Sample', sampleValue: '25% fall needs +33.33%', sampleNote: 'The gain is measured on the smaller amount left, so ₹75,000 must grow by ₹25,000.', href: 'Recovery.dc.html', cta: 'Open the calculator', icon: 'M3 7l6 6 4-4 8 8M21 11v6h-6' },
-        { num: '03', tag: 'Calculator', name: 'Trade cost calculator', desc: 'See what one stock trade costs once brokerage, GST, capital-gains tax and cess are counted, and what you keep.', points: ['Brokerage per executed order, plus GST', 'Short-term and long-term tax, only on a profit', 'Break-even sell price'], sampleLabel: 'Sample', sampleValue: 'Keep ₹7,882.62 of ₹10,000', sampleNote: '100 shares bought at ₹500 and sold at ₹600, held 12 months or less. Total cost ₹2,117.38.', href: 'TradeCost.dc.html', cta: 'Open the calculator', icon: 'M12 3v18M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3 2 2.7 4.5 3 4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3' },
+        { num: '03', tag: 'Calculator', name: 'Trade cost calculator', desc: 'See what one stock trade costs once brokerage, GST, capital-gains tax and cess are counted, and what you keep.', points: ['Brokerage per executed order, plus GST', 'Short-term and long-term tax, only on a profit', 'Break-even sell price'], sampleLabel: 'Sample', sampleValue: 'Keep ₹7,763.01 of ₹10,000', sampleNote: '100 shares bought at ₹500 and sold at ₹600, held 12 months or less. Total cost ₹2,236.99.', href: 'TradeCost.dc.html', cta: 'Open the calculator', icon: 'M12 3v18M16.5 7.5c0-1.7-2-3-4.5-3s-4.5 1.3-4.5 3 2 2.7 4.5 3 4.5 1.3 4.5 3-2 3-4.5 3-4.5-1.3-4.5-3' },
         { num: '04', tag: 'Learn', name: 'Candlestick lab', desc: 'Learn candlestick patterns by watching them draw themselves, one candle at a time, then test what you remember.', points: ['41 patterns, grouped by what traders think the market is saying', 'Play with a single candle to see how it forms', 'A quick quiz, two taps per question'], sampleLabel: 'Example', sampleValue: 'Hammer or Hanging Man?', sampleNote: 'The same shape gets a different name depending on whether it follows a rise or a fall.', href: 'Candlesticks.dc.html', cta: 'Open the lab', icon: 'M7 4v3M7 17v3M5 7h4v10H5zM17 3v4M17 15v5M15 7h4v8h-4z' },
         { num: '05', tag: 'Practice', name: 'Practice desk', desc: 'Walk through opening a demat and trading account, then buy and sell made-up shares with ₹1,00,000 of practice money.', points: ['Every account-opening step, with sample details', 'Market and limit orders on live-moving practice prices', 'See T+1 settlement and charges as they happen'], sampleLabel: 'Try it', sampleValue: '₹1,00,000 practice money', sampleNote: 'Fictional companies and random prices. No real money, shares or market data.', href: 'Practice.dc.html', cta: 'Open the practice desk', icon: 'M3 6h18v12H3zM3 10h18M7 15h3' },
       ].map((p, i) => Object.assign(p, { viz: vizs[i], vizLabel: vizLabels[i] })),
