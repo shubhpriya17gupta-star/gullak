@@ -1067,7 +1067,7 @@ class Component extends DCLogic {
     super(props);
     this.state = {
       step: 1, showErr: false, fail: false,
-      f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
+      f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'days', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
       obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null },
       tab: 1, yr: null,
     };
@@ -1076,7 +1076,7 @@ class Component extends DCLogic {
   /* Save my results (arth-save.js): finish a save started before signing in, or open a result from My Gullak */
   componentDidMount() { if (window.ArthSave) window.ArthSave.resume('planner', (st) => this.restore(st)); }
   restore(st) {
-    const blank = { f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
+    const blank = { f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'days', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' },
       obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null }, tab: 1, yr: null };
     const p = window.ArthSave.pick(blank, st);
     if (!(Number.isInteger(p.obj) && p.obj >= 0 && p.obj < OBJECTIVES.length)) p.obj = null;
@@ -1100,7 +1100,7 @@ class Component extends DCLogic {
       const opt = o || {};
       return { id: 'in-' + key, descId: 'd-' + key, label, ph, hint, help, value: f[key], onInput: setF(key), err, hasErr: !!err, invalid: err ? 'true' : 'false',
         opt: opt.optional ? ' (optional)' : '', hasPre: !opt.suf && !opt.unit, hasSuf: !!opt.suf, suf: opt.suf || '', cls: opt.unit ? 'inp plain unitpad' : opt.suf ? 'inp plain sfx' : 'inp',
-        hasUnit: !!opt.unit, unit: f.yunit || 'years', onUnit: (e) => this.setState({ f: { ...this.state.f, yunit: e.target.value }, fail: false }) };
+        hasUnit: !!opt.unit, unit: f.yunit || 'days', onUnit: (e) => this.setState({ f: { ...this.state.f, yunit: e.target.value }, fail: false }) };
     };
     const groups = [
       { title: 'Every month', fields: [
@@ -1461,7 +1461,7 @@ class Component extends DCLogic {
     return {
       stepper, bp, is1: s.step === 1, is2: s.step === 2, is3: s.step === 3, is4: s.step === 4,
       groups, objectives, objErr, live: liveV, s1fail: s.fail && s.step === 1, s2fail: s.fail && s.step === 2, s3fail: s.fail && s.step === 3,
-      reset: () => this.setState({ step: 1, showErr: false, fail: false, f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'years', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' }, obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null }, tab: 1, yr: null }),
+      reset: () => this.setState({ step: 1, showErr: false, fail: false, f: { income: '', ess: '', emi: '', es: '', sv: '', inv: '', pv: '', years: '', yunit: 'days', tgt: '', lo: '', mid: '', hi: '', infl: '', goal: '' }, obj: null, drop: 25, a: { c4: null, c5: null, c7: null, t1: null, t2: null, t3: null, t4: null }, k: { k1: null, k2: null, k3: null }, tab: 1, yr: null }),
       loadSample: () => this.setState({ f: { ...this.state.f, income: SAMPLE_F.income, ess: SAMPLE_F.ess, emi: SAMPLE_F.emi, es: SAMPLE_F.es, sv: SAMPLE_F.sv, inv: SAMPLE_F.inv, pv: SAMPLE_F.pv, years: SAMPLE_F.years, yunit: 'years' }, obj: 2, fail: false }),
       next1: () => { if (live.s1 && s.obj !== null) go(2)(); else this.setState({ showErr: true, fail: true }); },
       qsections, answeredCount: answered, answeredPct: Math.round(answered / 7 * 100) + '%',
